@@ -12,13 +12,13 @@ slack:
 pipelines:
   - habitat/build
 
-  github:
-    delete_branch_on_merge: true
+github:
+  delete_branch_on_merge: true
 
-  promote:
-    channels:
-      - unstable
-      - stable
+promote:
+  channels:
+    - unstable
+    - stable
 
 merge_actions:
   - trigger_pipeline:habitat/build:
