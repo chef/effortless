@@ -3,9 +3,6 @@
 project:
   alias: scaffolding-chef
 
-product_key:
-  - scaffolding-chef
-
 slack:
   notify_channel: effortless-notify
 
