@@ -2,7 +2,7 @@
 
 `scaffolding-chef` is a Chef Habitat scaffolding for implementing the Effortless pattern for Chef Infra.
 
-Effortless for Chef Infra is a strong way to compile, run, and manage the chef-client and your cookbooks as a single, deployable package. It is optimized for running without the need for a Chef Server and it provides a pull-based update strategy for continuous delivery of the chef-client and your cookbooks to your infrastructure nodes. It is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way. It is built on a solid foundation of battle-tested tools, and it is production and enterprise ready.
+Effortless for Chef Infra is a strong way to build, run, and manage the chef-client and your cookbooks as a single, deployable package. It is optimized for running without the need for a Chef Server and it provides a pull-based update strategy for continuous delivery of the chef-client and your cookbooks to your infrastructure nodes. It is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way. It is built on a solid foundation of battle-tested tools, and it is production and enterprise ready.
 
 ![Image of scaffolding-chef](/docs/effortless-graphic.png)
 
