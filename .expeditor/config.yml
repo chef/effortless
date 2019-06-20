@@ -1,0 +1,24 @@
+# Documentation https://expeditor.chef.io/docs/getting-started/
+---
+project:
+  alias: scaffolding-chef
+
+product_key:
+  - scaffolding-chef
+
+slack:
+  notify_channel: effortless-notify
+
+pipelines:
+  - habitat/build
+
+  github:
+    delete_branch_on_merge: true
+
+  promote:
+    channels:
+      - unstable
+      - stable
+
+merge_actions:
+  - trigger_pipeline:habitat/build:

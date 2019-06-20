@@ -1,0 +1,8 @@
+.DS_Store
+.tags*
+.vscode
+Dockerfile
+log/
+results/
+tmp/
+tags
