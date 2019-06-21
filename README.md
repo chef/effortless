@@ -1,5 +1,7 @@
 # scaffolding-chef
 
+[![Build Status](https://buildkite.com/chef/chef-scaffolding-chef-master-habitat-build)]
+
 `scaffolding-chef` is a Habitat package of best practices for Chef Infra. Using this scaffolding will automatically keep you updated on the latest best practices for the Effortless pattern.
 
 You can implement the Effortless pattern for Chef Infra by adding `scaffolding-chef` to your Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the Chef Infra client in your `default.toml`
