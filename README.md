@@ -6,7 +6,7 @@ Effortless for Chef Infra is a strong way to build, run, and manage the chef-cli
 
 ![Image of scaffolding-chef](/docs/effortless-graphic.png)
 
-You can implement the Effortless pattern for Chef Infra by building a Habitat package and using this scaffolding. All you need to do is make a Habitat plan (`plan.sh` or `plan.ps1`) and a `policyfile`. Additionally, you can tune the settings of the chef-client in your `default.toml`.
+You can implement the Effortless pattern for Chef Infra by building a Habitat package and using this scaffolding. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the chef-client in your `default.toml`.
 
 #### Policyfile
 `example-app/example-app.rb`
