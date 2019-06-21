@@ -1,8 +1,8 @@
 [scaffolding-chef]
 plan_path = "scaffolding-chef"
 build_targets = [
-  "x86_64-linux",
-  "x86_64-linux-kernel2"
+  "x86_64-linux"
+  # "x86_64-linux-kernel2" --- TODO: Expeditor currently uses an old version of hab, which does not allow uploading kernel2 builds. Uncomment me soon!
   # "x86_64-windows" --- TODO: Expeditor does not currently support Windows, but will in the coming weeks. Uncomment me soon!
 ]
 paths = [
