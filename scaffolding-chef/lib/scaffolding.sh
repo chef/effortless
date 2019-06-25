@@ -139,10 +139,10 @@ EOF
 ssl_verify_mode {{cfg.ssl_verify_mode}}
 ENV['PATH'] = "{{cfg.env_path_prefix}}:#{ENV['PATH']}"
 
-{{#if cfg.data_collector.enable ~}}
+{{#if cfg.automate.enable ~}}
 chef_guid "{{sys.member_id}}"
-data_collector.token "{{cfg.data_collector.token}}"
-data_collector.server_url "{{cfg.data_collector.server_url}}"
+data_collector.token "{{cfg.automate.token}}"
+data_collector.server_url "{{cfg.automate.server_url}}"
 {{/if ~}}
 EOF
   chmod 0640 "${pkg_prefix}/config/client-config.rb"
@@ -173,9 +173,9 @@ ssl_verify_mode = ":verify_peer"
 acceptance = "undefined"
 
 [automate]
+enable = false 
 url = "https://<automate_url>"
 token = "<automate_token>"
-user = "<automate_user>"
 EOF
   chmod 0640 "${pkg_prefix}/default.toml"
 
