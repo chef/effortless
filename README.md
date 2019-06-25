@@ -1,6 +1,6 @@
 # scaffolding-chef
 
-[![Build Status](https://buildkite.com/chef/chef-scaffolding-chef-master-habitat-build)]
+[![Build status](https://badge.buildkite.com/82171de46ba8cce19902553657cd1e5919400a9a52c5e4530e.svg?branch=master)](https://buildkite.com/chef/chef-scaffolding-chef-master-habitat-build)
 
 `scaffolding-chef` is a Habitat package of best practices for Chef Infra. Using this scaffolding will automatically keep you updated on the latest best practices for the Effortless pattern.
 
