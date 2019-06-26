@@ -3,11 +3,7 @@
 #
 
 if [ -z "${scaffold_policy_name+x}" ]; then
-  echo "You must set \$scaffold_policy_name to a valid policy name. For example:"
-  echo
-  echo "\$scaffold_policy_name=base"
-  echo
-  echo "Will build a base.rb policyfile"
+  echo "You must set \$scaffold_policy_name to a valid policy name. For example:\n \$scaffold_policy_name=base \n Will build a base.rb policyfile."
   exit 1
 fi
 
@@ -45,12 +41,10 @@ do_default_unpack() {
 }
 
 do_default_build_service() {
-  ## Create hooks
   build_line "Creating lifecycle hooks"
   mkdir -p "${pkg_prefix}/hooks"
   chmod 0750 "${pkg_prefix}/hooks"
 
-  # Run hook
   cat << EOF >> "${pkg_prefix}/hooks/run"
 #!/bin/sh
 
@@ -68,10 +62,12 @@ CFG_SPLAY_FIRST_RUN={{cfg.splay_first_run}}
 CFG_SPLAY_FIRST_RUN="\${CFG_SPLAY_FIRST_RUN:-0}"
 CFG_SSL_VERIFY_MODE={{cfg.ssl_verify_mode}}
 CFG_SSL_VERIFY_MODE="\${CFG_SSL_VERIFY_MODE:-:verify_peer}"
+CFG_CHEF_LICENSE={{cfg.chef_license.acceptance}}
+CFG_CHEF_LICENSE="\${CFG_CHEF_LICENSE:-undefined}"
 
 chef_client_cmd()
 {
-  chef-client -z -l \$CFG_LOG_LEVEL -c $pkg_svc_config_path/client-config.rb -j $pkg_svc_config_path/attributes.json --once --no-fork --run-lock-timeout \$CFG_RUN_LOCK_TIMEOUT
+  chef-client -z -l \$CFG_LOG_LEVEL -c $pkg_svc_config_path/client-config.rb -j $pkg_svc_config_path/attributes.json --once --no-fork --run-lock-timeout \$CFG_RUN_LOCK_TIMEOUT --chef-license "\$CFG_CHEF_LICENSE"
 }
 
 SPLAY_DURATION=\$(shuf -i 0-\$CFG_SPLAY -n 1)
@@ -143,10 +139,10 @@ EOF
 ssl_verify_mode {{cfg.ssl_verify_mode}}
 ENV['PATH'] = "{{cfg.env_path_prefix}}:#{ENV['PATH']}"
 
-{{#if cfg.data_collector.enable ~}}
+{{#if cfg.automate.enable ~}}
 chef_guid "{{sys.member_id}}"
-data_collector.token "{{cfg.data_collector.token}}"
-data_collector.server_url "{{cfg.data_collector.server_url}}"
+data_collector.token "{{cfg.automate.token}}"
+data_collector.server_url "{{cfg.automate.server_url}}"
 {{/if ~}}
 EOF
   chmod 0640 "${pkg_prefix}/config/client-config.rb"
@@ -162,19 +158,24 @@ EOF
 
   build_line "Generating Chef Habitat configuration, default.toml"
   cat << EOF >> "${pkg_prefix}/default.toml"
+# You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
+# Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
+
 interval = 1800
 splay = 1800
 splay_first_run = 0
 run_lock_timeout = 1800
 log_level = "warn"
-chef_client_ident = "" # this is blank by default so it can be populated from the bind
 env_path_prefix = "/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin"
 ssl_verify_mode = ":verify_peer"
 
-[data_collector]
-enable = false
-token = "set_to_your_token"
-server_url = "set_to_your_url"
+[chef_license]
+acceptance = "undefined"
+
+[automate]
+enable = false 
+url = "https://<automate_url>"
+token = "<automate_token>"
 EOF
   chmod 0640 "${pkg_prefix}/default.toml"
 

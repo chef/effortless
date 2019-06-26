@@ -10,34 +10,60 @@ if (!$scaffold_policy_name) {
 function Load-Scaffolding {
     $scaffold_chef_client = "stuartpreston/chef-client-detox"
     $scaffold_chef_dk = "core/chef-dk"
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
+    $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
 
-    $pkg_deps += @("$scaffold_chef_client", "core/cacerts")
-    $pkg_build_deps += @("$scaffold_chef_dk", "core/git")
+    $pkg_deps += @(
+        "$scaffold_chef_client"
+        "core/cacerts"
+    )
+    $pkg_build_deps += @(
+        "$scaffold_chef_dk"
+        "core/git"
+    )
+
+    $pkg_svc_user="root"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 
 function Invoke-DefaultBuildService {
+    Write-BuildLine "Creating lifecycle hooks"
     New-Item -ItemType directory -Path "$pkg_prefix/hooks"
 
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
+`$env:CFG_ENV_PATH_PREFIX={{cfg.env_path_prefix}}
+if(!`$env:CFG_ENV_PATH_PREFIX) { `$env:CFG_ENV_PATH_PREFIX = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin" }
+`$env:CFG_INTERVAL={{cfg.interval}}
+if(!`$env:CFG_INTERVAL) { `$env:CFG_INTERVAL = 1800 }
+`$env:CFG_LOG_LEVEL={{cfg.log_level}}
+if(!`$env:CFG_LOG_LEVEL) { `$env:CFG_LOG_LEVEL = "warn" }
+`$env:CFG_RUN_LOCK_TIMEOUT={{cfg.run_lock_timeout}}
+if(!`$env:CFG_RUN_LOCK_TIMEOUT) { `$env:CFG_RUN_LOCK_TIMEOUT = 1800 }
+`$env:CFG_SPLAY={{cfg.splay}}
+if(!`$env:CFG_SPLAY) { `$env:CFG_SPLAY = 1800 }
+`$env:CFG_SPLAY_FIRST_RUN={{cfg.splay_first_run}}
+if(!`$env:CFG_SPLAY_FIRST_RUN) { `$env:CFG_SPLAY_FIRST_RUN = 0 }
+`$env:CFG_SSL_VERIFY_MODE={{cfg.ssl_verify_mode}}
+if(!`$env:CFG_SSL_VERIFY_MODE) { `$env:CFG_SSL_VERIFY_MODE = "verify_peer" }
+
 function Invoke-ChefClient {
-  {{pkgPathFor "stuartpreston/chef-client-detox"}}/bin/chef-client.bat -z -l {{cfg.log_level}} -c $pkg_svc_config_path/client-config.rb -j $pkg_svc_config_path/attributes.json --once --no-fork --run-lock-timeout {{cfg.run_lock_timeout}}
+  {{pkgPathFor "stuartpreston/chef-client-detox"}}/bin/chef-client.bat -z -l `$CFG_LOG_LEVEL -c $pkg_svc_config_path/client-config.rb -j $pkg_svc_config_path/attributes.json --once --no-fork --run-lock-timeout `$CFG_RUN_LOCK_TIMEOUT
 }
 
-`$splay_duration = Get-Random -InputObject (0..{{cfg.splay}}) -Count 1
+`$SPLAY_DURATION = Get-Random -InputObject (0..`$CFG_SPLAY) -Count 1
 
-`$splay_first_run_duration = Get-Random -InputObject (0..{{cfg.splay_first_run}}) -Count 1
+`$SPLAY_FIRST_RUN_DURATION = Get-Random -InputObject (0..`$CFG_SPLAY_FIRST_RUN) -Count 1
 
 `$env:SSL_CERT_FILE="{{pkgPathFor "core/cacerts"}}/ssl/cert.pem"
 
 cd {{pkg.path}}
 
-Start-Sleep -Seconds `$splay_first_run_duration
+Start-Sleep -Seconds `$SPLAY_FIRST_RUN_DURATION
 Invoke-ChefClient
 
 while(`$true){
-  Start-Sleep -Seconds `$splay_duration
-  Start-Sleep -Seconds {{cfg.interval}}
+  Start-Sleep -Seconds `$SPLAY_DURATION
+  Start-Sleep -Seconds `$CFG_INTERVAL
   Invoke-ChefClient
 }
 "@
@@ -115,13 +141,10 @@ log_level = "warn"
 env_path_prefix = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
 ssl_verify_mode = ":verify_peer"
 
-[chef_license]
-acceptance = "undefined"
-
-[data_collector]
-enable = false
-token = "set_to_your_token"
-server_url = "set_to_your_url"
+[automate]
+url = "https://<automate_url>"
+token = "<automate_token>"
+user = "<automate_user>"
 "@
 
     $scaffold_data_bags_path = "not_using_data_bags" # Set default to some string so Test-Path returns false instead of error. Thanks Powershell!
