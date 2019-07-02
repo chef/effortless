@@ -1,7 +1,7 @@
 # Documentation https://expeditor.chef.io/docs/getting-started/
 ---
 project:
-  alias: scaffolding-chef
+  alias: effortless
 
 slack:
   notify_channel: effortless-notify
