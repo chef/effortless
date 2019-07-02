@@ -1,7 +1,7 @@
 pkg_name=scaffolding-chef-infra
 pkg_description="Scaffolding for Chef Infra Policyfiles"
 pkg_origin=chef
-pkg_version="0.6.0"
+pkg_version=$(cat "${PLAN_CONTEXT}/../VERSION")
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
 pkg_source=nope
