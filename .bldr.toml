@@ -1,7 +1,7 @@
-[scaffolding-chef]
-plan_path = "scaffolding-chef"
+[scaffolding-chef-infra]
+plan_path = "scaffolding-chef-infra"
 build_targets = [
   "x86_64-linux",
   "x86_64-linux-kernel2",
-  "x86_64-windows"
+  #"x86_64-windows"
 ]

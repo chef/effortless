@@ -2,13 +2,13 @@
 
 [![Build status](https://badge.buildkite.com/82171de46ba8cce19902553657cd1e5919400a9a52c5e4530e.svg?branch=master)](https://buildkite.com/chef/chef-scaffolding-chef-master-habitat-build)
 
-`scaffolding-chef` is a Habitat package of best practices for Chef Infra. Using this scaffolding will automatically keep you updated on the latest best practices for the Effortless pattern.
+`scaffolding-chef-infra` is a Habitat package of best practices for Chef Infra. Using this scaffolding will automatically keep you updated on the latest best practices for the Effortless pattern.
 
-You can implement the Effortless pattern for Chef Infra by adding `scaffolding-chef` to your Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the Chef Infra client in your `default.toml`
+You can implement the Effortless pattern for Chef Infra by adding `scaffolding-chef-infra` to your Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the Chef Infra client in your `default.toml`
 
 Effortless for Chef Infra is a strong way to build, run, and manage the chef-client and your cookbooks as a single, deployable package. It is optimized for running without the need for a Chef Server and it provides a pull-based update strategy for continuous delivery of the chef-client and your cookbooks to your infrastructure nodes. It is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way. It is built on a solid foundation of battle-tested tools, and it is production and enterprise ready.
 
-![Image of scaffolding-chef](/docs/effortless-graphic.png)
+![Image of the Effortless pattern](/docs/effortless-graphic.png)
 
 You can implement the Effortless pattern for Chef Infra by building a Habitat package and using this scaffolding. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the chef-client in your `default.toml`.
 
@@ -41,7 +41,7 @@ pkg_version="0.1.0"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=("Apache-2.0")
 pkg_upstream_url="http://chef.io"
-pkg_scaffolding="chef/scaffolding-chef"
+pkg_scaffolding="chef/scaffolding-chef-infra"
 scaffold_policy_name="example-app"
 # These settings are optional - usually you won't need to use these
 scaffold_policyfile_path="$PLAN_CONTEXT" # allows you to use a policyfile in any location in your repo
@@ -59,7 +59,7 @@ $pkg_origin="example-corporation"
 $pkg_version="0.1.0"
 $pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 $pkg_upstream_url="http://chef.io"
-$pkg_scaffolding="echohack/scaffolding-chef"
+$pkg_scaffolding="echohack/scaffolding-chef-infra"
 $scaffold_policy_name="example-app"
 # These settings are optional - usually you won't need to use these
 $scaffold_policyfile_path="$PLAN_CONTEXT" # allows you to use a policyfile in any location in your repo

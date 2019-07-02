@@ -1,4 +1,4 @@
-$pkg_name="scaffolding-chef"
+$pkg_name="scaffolding-chef-infra"
 $pkg_description="Scaffolding for Chef Policyfiles"
 $pkg_origin="chef"
 $pkg_version="0.5.0"

@@ -62,12 +62,10 @@ CFG_SPLAY_FIRST_RUN={{cfg.splay_first_run}}
 CFG_SPLAY_FIRST_RUN="\${CFG_SPLAY_FIRST_RUN:-0}"
 CFG_SSL_VERIFY_MODE={{cfg.ssl_verify_mode}}
 CFG_SSL_VERIFY_MODE="\${CFG_SSL_VERIFY_MODE:-:verify_peer}"
-CFG_CHEF_LICENSE={{cfg.chef_license.acceptance}}
-CFG_CHEF_LICENSE="\${CFG_CHEF_LICENSE:-undefined}"
 
 chef_client_cmd()
 {
-  chef-client -z -l \$CFG_LOG_LEVEL -c $pkg_svc_config_path/client-config.rb -j $pkg_svc_config_path/attributes.json --once --no-fork --run-lock-timeout \$CFG_RUN_LOCK_TIMEOUT --chef-license "\$CFG_CHEF_LICENSE"
+  chef-client -z -l \$CFG_LOG_LEVEL -c $pkg_svc_config_path/client-config.rb -j $pkg_svc_config_path/attributes.json --once --no-fork --run-lock-timeout \$CFG_RUN_LOCK_TIMEOUT
 }
 
 SPLAY_DURATION=\$(shuf -i 0-\$CFG_SPLAY -n 1)
@@ -158,9 +156,6 @@ EOF
 
   build_line "Generating Chef Habitat configuration, default.toml"
   cat << EOF >> "${pkg_prefix}/default.toml"
-# You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
-# Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
-
 interval = 1800
 splay = 1800
 splay_first_run = 0
@@ -169,11 +164,8 @@ log_level = "warn"
 env_path_prefix = "/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin"
 ssl_verify_mode = ":verify_peer"
 
-[chef_license]
-acceptance = "undefined"
-
 [automate]
-enable = false 
+enable = false
 url = "https://<automate_url>"
 token = "<automate_token>"
 EOF
