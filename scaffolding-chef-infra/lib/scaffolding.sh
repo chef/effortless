@@ -10,7 +10,7 @@ fi
 scaffolding_load() {
   : "${scaffold_chef_client:=chef/chef-client}"
   : "${scaffold_chef_dk:=chef/chef-dk}"
-  : "${scaffold_policyfiles_path:=$PLAN_CONTEXT/../policyfiles}"
+  : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfile}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
 
   pkg_deps=(
@@ -92,18 +92,18 @@ EOF
 }
 
 do_default_build() {
-  if [ ! -d "${scaffold_policyfiles_path}" ]; then
-    build_line "Could not detect a policyfiles directory, this is required to proceed!"
+  if [ ! -d "${scaffold_policyfile_path}" ]; then
+    build_line "Could not detect a policyfile directory, this is required to proceed!"
     exit 1
   fi
 
-  rm -f "${scaffold_policyfiles_path}"/*.lock.json
+  rm -f "${scaffold_policyfile_path}"/*.lock.json
 
-  policyfile="${scaffold_policyfiles_path}/${scaffold_policy_name}.rb"
+  policyfile="${scaffold_policyfile_path}/${scaffold_policy_name}.rb"
 
   for p in $(grep include_policy "${policyfile}" | awk -F "," '{print $1}' | awk -F '"' '{print $2}' | tr -d " "); do
     build_line "Detected included policyfile, ${p}.rb, installing"
-    chef install "${scaffold_policyfiles_path}/${p}.rb"
+    chef install "${scaffold_policyfile_path}/${p}.rb"
   done
 
   build_line "Installing ${policyfile}"
@@ -112,7 +112,7 @@ do_default_build() {
 
 do_default_install() {
   build_line "Exporting Chef Infra Repository"
-  chef export "${scaffold_policyfiles_path}/${scaffold_policy_name}.lock.json" "${pkg_prefix}"
+  chef export "${scaffold_policyfile_path}/${scaffold_policy_name}.lock.json" "${pkg_prefix}"
 
   build_line "Creating Chef Infra configuration"
   mkdir -p "${pkg_prefix}/config"
