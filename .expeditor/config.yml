@@ -1,16 +1,19 @@
 # Documentation https://expeditor.chef.io/docs/getting-started/
 ---
-project:
-  alias: effortless
+github:
+  delete_branch_on_merge: true
 
-slack:
-  notify_channel: effortless-notify
+merge_actions:
+  - trigger_pipeline:habitat/build
 
 pipelines:
   - habitat/build
+  - verify:
+      public: true
+      definition: .expeditor/verify.scaffolding-chef-infra.yml
 
-github:
-  delete_branch_on_merge: true
+project:
+  alias: effortless
 
 promote:
   channels:
@@ -19,5 +22,10 @@ promote:
   actions:
     - built_in:promote_habitat_packages
 
-merge_actions:
-  - trigger_pipeline:habitat/build
+slack:
+  notify_channel: effortless-notify
+
+subscriptions:
+  - workload: pull_request_opened:{{agent_id}}:*
+    actions:
+      - post_github_comment:.expeditor/templates/welcome.mustache

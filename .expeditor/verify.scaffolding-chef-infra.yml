@@ -1,0 +1,52 @@
+expeditor:
+  defaults:
+    buildkite:
+      timeout_in_minutes: 30
+      retry:
+        automatic:
+          limit: 1
+
+steps:
+  - label: "[scaffolding-chef-infra] :habicat: Check for .bldr.toml entry"
+    command:
+      - bin/ci/check-bldr-toml.sh scaffolding-chef-infra
+    expeditor:
+      executor:
+        docker:
+
+  - label: "[scaffolding-chef-infra] :habicat: Check for bad patterns"
+    command:
+      - bin/ci/check-bad-patterns.sh scaffolding-chef-infra
+    expeditor:
+      executor:
+        docker:
+
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Shellcheck"
+    command:
+      - bin/ci/shellcheck.sh scaffolding-chef-infra
+    expeditor:
+      executor:
+        docker:
+
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Check for default variables"
+    command:
+      - bin/ci/check-default-variables.sh scaffolding-chef-infra
+    expeditor:
+      executor:
+        docker:
+
+  - label: "[scaffolding-chef-infra] :habicat: Check for bad patterns"
+    command:
+      - bin/ci/check-pre-commit.sh scaffolding-chef-infra
+    expeditor:
+      executor:
+        docker:
+
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests"
+    command:
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
