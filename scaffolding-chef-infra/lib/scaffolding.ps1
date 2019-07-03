@@ -8,7 +8,7 @@ if (!$scaffold_policy_name) {
 }
 
 function Load-Scaffolding {
-    $scaffold_chef_client = "stuartpreston/chef-client-detox"
+    $scaffold_chef_client = "stuartpreston/chef-client"
     $scaffold_chef_dk = "core/chef-dk"
     $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
@@ -47,7 +47,7 @@ if(!`$env:CFG_SPLAY_FIRST_RUN) { `$env:CFG_SPLAY_FIRST_RUN = 0 }
 if(!`$env:CFG_SSL_VERIFY_MODE) { `$env:CFG_SSL_VERIFY_MODE = "verify_peer" }
 
 function Invoke-ChefClient {
-  {{pkgPathFor "stuartpreston/chef-client-detox"}}/bin/chef-client.bat -z -l `$env:CFG_LOG_LEVEL -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout `$env:CFG_RUN_LOCK_TIMEOUT
+  {{pkgPathFor "stuartpreston/chef-client"}}/bin/chef-client.bat -z -l `$env:CFG_LOG_LEVEL -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout `$env:CFG_RUN_LOCK_TIMEOUT
 }
 
 `$SPLAY_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY) -Count 1
