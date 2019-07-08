@@ -10,7 +10,7 @@ if (!$scaffold_policy_name) {
 function Load-Scaffolding {
     $scaffold_chef_client = "stuartpreston/chef-client"
     $scaffold_chef_dk = "core/chef-dk"
-    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfile"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
 
     $pkg_deps += @(
@@ -72,7 +72,7 @@ while(`$true){
 
 function Invoke-DefaultBuild {
     if (!(Test-Path -Path "$scaffold_policyfile_path")) {
-        Write-BuildLine "Could not detect a policyfiles directory, this is required to proceed!"
+        Write-BuildLine "Could not detect a policyfile directory, this is required to proceed!"
         exit 1
     }
 
