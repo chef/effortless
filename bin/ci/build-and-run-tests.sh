@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eou pipefail
 
 plan="$(basename "$1")"
 HAB_ORIGIN=ci
@@ -11,13 +11,14 @@ echo "--- :key: Generating fake origin key"
 # we won't have access to any valid signing keys.
 hab origin key generate "$HAB_ORIGIN"
 
+echo "--- :construction: Starting build for $plan"
 # We want to ensure that we build from the project root. This
 # creates a subshell so that the cd will only affect that process
 project_root="$(git rev-parse --show-toplevel)"
 (
   cd "$project_root"
   echo "--- :construction: Building $plan"
-  hab pkg build "$plan"
+  env DO_CHECK=true hab pkg build "$plan"
   source results/last_build.env
   echo "--- :mag: Testing $pkg_ident"
   if [ ! -f "$plan/tests/test.sh" ]; then
