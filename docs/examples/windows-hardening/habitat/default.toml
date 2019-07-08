@@ -1,0 +1,15 @@
+# Use this file to templatize your application's native configuration files.
+# See the docs at https://www.habitat.sh/docs/create-packages-configure/.
+# You can safely delete this file if you don't need it.
+interval = 1800 # The number of seconds to wait between chef-infra-client runs
+splay = 1800 # A random number of seconds between 0 and $splay to add to the interval. Used to avoid the thundering herd problem.
+splay_first_run = 0 # A random number of seconds between 0 and $splay_first_run to add to the interval, only on the first run. Used to avoid the thundering herd problem on new deployments.
+run_lock_timeout = 1800 # The number of seconds to lock the chef-infra-client before allowing another run to begin.
+log_level = "warn"
+env_path_prefix = ";C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
+ssl_verify_mode = ":verify_peer"
+
+[automate]
+enable = "false"
+url = "https://<automate_url>"
+token = "<automate_token>"
