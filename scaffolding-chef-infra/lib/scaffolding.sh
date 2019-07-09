@@ -10,7 +10,7 @@ fi
 scaffolding_load() {
   : "${scaffold_chef_client:=chef/chef-client}"
   : "${scaffold_chef_dk:=chef/chef-dk}"
-  : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfile}"
+  : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
 
   pkg_deps=(

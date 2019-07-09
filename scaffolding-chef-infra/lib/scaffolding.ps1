@@ -10,7 +10,7 @@ if(!$scaffold_policy_name) {
 function Load-Scaffolding {
     $scaffold_chef_client = "stuartpreston/chef-client"
     $scaffold_chef_dk = "core/chef-dk"
-    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfile"
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
 
     $pkg_deps += @(
@@ -71,13 +71,13 @@ while(`$true){
 
 
 function Invoke-DefaultBuild {
-    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfile"
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     if([string]::IsNullOrWhiteSpace("$scaffold_policyfile_path")){
-        Write-Error "`$scaffolding_policyfile_path is null, empty string, or white space."
+        Write-Error "`$scaffold_policyfile_path is null, empty string, or white space."
         exit 1
     }
     if(!(Test-Path -Path "$scaffold_policyfile_path")) {
-        Write-Error "`$scaffolding_policy_path is not a valid path."
+        Write-Error "`$scaffold_policy_path is not a valid path."
         exit 1
     }
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
