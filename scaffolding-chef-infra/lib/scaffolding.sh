@@ -115,6 +115,8 @@ do_default_install() {
   chef export "${scaffold_policyfile_path}/${scaffold_policy_name}.lock.json" "${pkg_prefix}"
 
   build_line "Creating Chef Infra configuration"
+  mkdir -p "${pkg_prefix}/.chef"
+  chmod 0750 "${pkg_prefix}/.chef"
   mkdir -p "${pkg_prefix}/config"
   chmod 0750 "${pkg_prefix}/config"
   cat << EOF >> "${pkg_prefix}/.chef/config.rb"
