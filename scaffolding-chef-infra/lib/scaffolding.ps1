@@ -22,7 +22,7 @@ function Load-Scaffolding {
         "core/git"
     )
 
-    $pkg_svc_user="root"
+    $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 
@@ -68,7 +68,6 @@ while(`$true){
 }
 "@
 }
-
 
 function Invoke-DefaultBuild {
     $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
@@ -135,7 +134,7 @@ data_collector.server_url "{{cfg.automate.server_url}}"
 {{/if ~}}
 "@
 
-    Write-BuildLine "Generating Chef Habiat configuration, default.toml"
+    Write-BuildLine "Generating Chef Habitat configuration default.toml"
     Add-Content -Path "$pkg_prefix/default.toml" -Value @"
 interval = 1800
 splay = 1800
