@@ -154,7 +154,7 @@ EOF
 {{/if ~}}
 EOF
 
-  build_line "Generating Chef Habitat configuration, default.toml"
+  build_line "Generating Chef Habitat configuration default.toml"
   cat << EOF >> "${pkg_prefix}/default.toml"
 
 interval = 1800
