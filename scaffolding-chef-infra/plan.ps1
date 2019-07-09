@@ -1,7 +1,7 @@
 $pkg_name="scaffolding-chef-infra"
 $pkg_description="Scaffolding for Chef Policyfiles"
 $pkg_origin="chef"
-$pkg_version="0.7.0"
+$pkg_version="0.8.0"
 $pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 $pkg_license=("Apache-2.0")
 $pkg_upstream_url="https://www.chef.sh"
