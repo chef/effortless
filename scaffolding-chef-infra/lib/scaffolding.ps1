@@ -2,8 +2,8 @@
 # A scaffolding for Chef Policyfile packages
 #
 
-if (!$scaffold_policy_name) {
-    Write-Host "You must set `$scaffold_policy_name to a valid policy name. For example:`n `$scaffold_policy_name=base `n Will build a base.rb policyfile."
+if(!$scaffold_policy_name) {
+    Write-Error "You must set `$scaffold_policy_name to a valid policy name. `nTry: `$scaffold_policy_name=example"
     exit 1
 }
 
@@ -71,11 +71,15 @@ while(`$true){
 
 
 function Invoke-DefaultBuild {
-    if (!(Test-Path -Path "$scaffold_policyfile_path")) {
-        Write-BuildLine "Could not detect a policyfile directory, this is required to proceed!"
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfile"
+    if([string]::IsNullOrWhiteSpace("$scaffold_policyfile_path")){
+        Write-Error "`$scaffolding_policyfile_path is null, empty string, or white space."
         exit 1
     }
-
+    if(!(Test-Path -Path "$scaffold_policyfile_path")) {
+        Write-Error "`$scaffolding_policy_path is not a valid path."
+        exit 1
+    }
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
 
