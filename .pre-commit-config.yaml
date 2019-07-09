@@ -1,0 +1,34 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: v1.1.1
+    hooks:
+    -   id: check-added-large-files
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: check-yaml
+        exclude: config/.*$
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+        exclude: .*\.patch
+-   repo: git://github.com/detailyang/pre-commit-shell
+    sha: 1.0.2
+    hooks:
+    -   id: shell-lint
+        args: ["--exclude=SC1090,SC1091,SC2034,SC2039,SC2140,SC2148,SC2153,SC2154,SC2164"]
+        exclude: config/.*$
+-   repo: local
+    hooks:
+    -   id: default-variables
+        name: Check for Habitat default plan variables
+        entry: ./bin/pre-commit/default-variables.sh
+        language: system
+        files: plan.sh$
+    -   id: bldr-toml
+        name: Check for an entry in .bldr.toml
+        entry: ./bin/pre-commit/bldr-toml.sh
+        language: system
+        files: plan.sh$
+    -   id: bad-patterns
+        name: Check for bad patterns in Hook files
+        entry: ./bin/pre-commit/bad-patterns.sh
+        language: system
+        files: hooks/*

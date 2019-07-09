@@ -3,7 +3,7 @@
 #
 
 if [ -z "${scaffold_policy_name+x}" ]; then
-  echo "You must set \$scaffold_policy_name to a valid policy name. For example:\n \$scaffold_policy_name=base \n Will build a base.rb policyfile."
+  printf "You must set \$scaffold_policy_name to a valid policy name. \\n Try: \$scaffold_policy_name=example"
   exit 1
 fi
 
