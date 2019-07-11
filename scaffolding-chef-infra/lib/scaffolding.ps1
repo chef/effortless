@@ -93,11 +93,13 @@ function Invoke-DefaultBuild {
 }
 
 function Invoke-DefaultInstall {
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     Write-BuildLine "Exporting Chef Infra Repository"
     chef export "$scaffold_policyfile_path/$scaffold_policy_name.lock.json" "$pkg_prefix"
 
     Write-BuildLine "Creating Chef Infra configuration"
-    New-Item -ItemType directory -Path "$pkg_prefix/.chef"
+
+    New-Item -ItemType directory -Force -Path "$pkg_prefix/.chef"
     New-Item -ItemType directory -Path "$pkg_prefix/config"
     Add-Content -Path "$pkg_prefix/.chef/config.rb" -Value @"
 cache_path "$($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$pkg_svc_data_path/cache").Replace("\","/"))"
