@@ -14,18 +14,15 @@ scaffolding_load() {
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
 
-if [ -n "${scaffold_cacerts}" ]; then
-  pkg_deps=(
-    "${pkg_deps[@]}"
-    "${scaffold_chef_client}"
-    "${scaffold_cacerts}"
-  )
-else
   pkg_deps=(
     "${pkg_deps[@]}"
     "${scaffold_chef_client}"
   )
-fi
+  if [ -n "${scaffold_cacerts}" ]; then
+    pkg_deps+=("${scaffold_cacerts}")
+  else
+    pkg_deps+=("core/cacerts")
+  fi
 
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
