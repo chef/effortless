@@ -141,7 +141,7 @@ EOF
         "file": "{{pkg.svc_path}}/logs/inspec_last_run.json"
       }{{#if cfg.automate.enable ~}},
       "automate" : {
-        "url": "{{cfg.automate.url}}/data-collector/v0/",
+        "url": "{{cfg.automate.server_url}}/data-collector/v0/",
         "token": "{{cfg.automate.token}}",
         "node_name": "{{ sys.hostname }}",
         "verify_ssl": false
@@ -149,7 +149,7 @@ EOF
     }
     {{#if cfg.automate.enable }},
     "compliance": {
-     "server" : "{{cfg.automate.url}}",
+     "server" : "{{cfg.automate.server_url}}",
      "token" : "{{cfg.automate.token}}",
      "user" : "{{cfg.automate.user}}",
      "insecure" : true,
@@ -174,7 +174,7 @@ acceptance = "undefined"
 
 [automate]
 enable = false
-url = 'https://<automate_url>'
+server_url = 'https://<automate_url>'
 token = '<automate_token>'
 user = '<automate_user>'
 EOF

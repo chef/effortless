@@ -169,7 +169,7 @@ ssl_verify_mode = ":verify_peer"
 
 [automate]
 enable = false
-url = "https://<automate_url>"
+server_url = "https://<automate_url>"
 token = "<automate_token>"
 EOF
   chmod 0640 "${pkg_prefix}/default.toml"
