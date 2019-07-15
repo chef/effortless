@@ -10,14 +10,20 @@ fi
 scaffolding_load() {
   : "${scaffold_chef_client:=chef/chef-client}"
   : "${scaffold_chef_dk:=chef/chef-dk}"
+  : "${scaffold_cacerts:=}"
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
 
   pkg_deps=(
     "${pkg_deps[@]}"
     "${scaffold_chef_client}"
-    "core/cacerts"
   )
+  if [ -n "${scaffold_cacerts}" ]; then
+    pkg_deps+=("${scaffold_cacerts}")
+  else
+    pkg_deps+=("core/cacerts")
+  fi
+
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
     "${scaffold_chef_dk}"
@@ -26,6 +32,13 @@ scaffolding_load() {
 
   pkg_svc_user="root"
   pkg_svc_run="set_just_so_you_will_render"
+}
+
+do_setup_environment()
+{
+  if [ -n "${scaffold_cacerts}" ]; then
+    set_runtime_env CFG_CACERTS "${scaffold_cacerts}"
+  fi
 }
 
 do_default_download() {
@@ -72,7 +85,7 @@ SPLAY_DURATION=\$(shuf -i 0-\$CFG_SPLAY -n 1)
 
 SPLAY_FIRST_RUN_DURATION=\$(shuf -i 0-\$CFG_SPLAY_FIRST_RUN -n 1)
 
-export SSL_CERT_FILE="{{pkgPathFor "core/cacerts"}}/ssl/cert.pem"
+export SSL_CERT_FILE="{{ pkgPathFor "${CFG_CACERTS:-core/cacerts}" }}/ssl/cert.pem"
 
 cd {{pkg.path}}
 

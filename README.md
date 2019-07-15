@@ -65,6 +65,7 @@ scaffold_policyfile_path="$PLAN_CONTEXT" # allows you to use a policyfile in any
 scaffold_chef_client="chef/chef-client" # allows you to hard-pin to a version of the chef-infra-client
 scaffold_chef_dk="chef/chef-dk" # allows you to hard-pin to a version of chef-dk
 scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally build data bags into the package
+scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
 ```
 
 #### Windows
@@ -101,7 +102,7 @@ ssl_verify_mode = ":verify_peer"
 
 [automate]
 enable = false
-server_url = "https://<automate_url>"
+server_url = "https://<automate_url>/data-collector/v0/"
 token = "<automate_token>"
 ```
 
@@ -152,7 +153,7 @@ acceptance = "undefined"
 
 [automate]
 enable = false
-url = 'https://<automate_url>'
+server_url = "https://<automate_url>/data-collector/v0/"
 token = '<automate_token>'
 user = '<automate_user>'
 ```
