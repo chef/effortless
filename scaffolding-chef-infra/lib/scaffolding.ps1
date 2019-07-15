@@ -10,13 +10,19 @@ if(!$scaffold_policy_name) {
 function Load-Scaffolding {
     $scaffold_chef_client = "stuartpreston/chef-client"
     $scaffold_chef_dk = "core/chef-dk"
+    $scaffold_cacerts = ""
     $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
 
     $pkg_deps += @(
         "$scaffold_chef_client"
-        "core/cacerts"
     )
+    if(![string]::IsNullOrWhiteSpace("$scaffold_cacerts")){
+        $pkg_deps += @($scaffold_cacerts)
+    } else{
+        $pkg_deps += @("core/cacerts")
+    }
+
     $pkg_build_deps += @(
         "$scaffold_chef_dk"
         "core/git"
@@ -24,6 +30,12 @@ function Load-Scaffolding {
 
     $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
+}
+
+function Invoke-SetupEnvironment {
+    if(![string]::IsNullOrWhiteSpace("$scaffold_cacerts")){
+        Set-RuntimeEnv "CFG_CACERTS" "${scaffold_cacerts}"
+    }
 }
 
 function Invoke-DefaultBuildService {
@@ -54,7 +66,7 @@ function Invoke-ChefClient {
 
 `$SPLAY_FIRST_RUN_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY_FIRST_RUN) -Count 1
 
-`$env:SSL_CERT_FILE="{{pkgPathFor "core/cacerts"}}/ssl/cert.pem"
+`$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
 
 cd {{pkg.path}}
 

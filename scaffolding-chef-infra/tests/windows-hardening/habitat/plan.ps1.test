@@ -9,3 +9,4 @@ $pkg_deps=@(
 )
 $pkg_scaffolding="chef/scaffolding-chef-infra"
 $scaffold_policy_name="base"
+$scaffold_cacerts="core/cacerts"
