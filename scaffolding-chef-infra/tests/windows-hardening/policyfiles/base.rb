@@ -6,16 +6,19 @@
 name "base"
 
 # Where to find external cookbooks:
-default_source :supermarket
-default_source :chef_repo, '../'
+# default_source :supermarket
+default_source :chef_repo, '../' do |s|
+  s.preferred_for 'hardening'
+end
 
 # attributes: set attributes from your cookbooks
 default['hardening'] = {}
 
-default['patching'] = {}
+default['applications'] = {
+  'windows' => {}
+}
 
 # run_list: run these recipes in the order specified.
 run_list [
-  "patching::default",
   "hardening::default"
 ]

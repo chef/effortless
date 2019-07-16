@@ -77,13 +77,18 @@ $pkg_origin="example-corporation"
 $pkg_version="0.1.0"
 $pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 $pkg_upstream_url="http://chef.io"
-$pkg_scaffolding="echohack/scaffolding-chef-infra"
+$pkg_deps=@(
+  "core/cacerts"
+  "stuartpreston/chef-client" # https://github.com/habitat-sh/habitat/issues/6671
+)
+$pkg_scaffolding="chef/scaffolding-chef-infra"
 $scaffold_policy_name="example-app"
 # These settings are optional - usually you won't need to use these
 $scaffold_policyfile_path="$PLAN_CONTEXT" # allows you to use a policyfile in any location in your repo
 $scaffold_chef_client="chef/chef-infra-client" # allows you to hard-pin to a version of the chef-infra-client
 $scaffold_chef_dk="chef/chef-dk" # allows you to hard-pin to a version of chef-dk
 $scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally build data bags into the package
+$scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
 ```
 
 #### chef-infra-client settings
