@@ -1,0 +1,22 @@
+---
+driver:
+  name: vagrant
+  synced_folders:
+    - ["./results", "/tmp/results"] # Mount local ./results to /tmp/results in Kitchen VM
+
+provisioner:
+  name: shell
+  script: 'test/scripts/provisioner.sh'
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-16.04
+
+suites:
+  - name: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
