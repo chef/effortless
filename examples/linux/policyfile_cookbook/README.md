@@ -16,7 +16,8 @@ After generating a Policyfile cookbook (default generator will do it, but if
 you're on an older version of ChefDK/Workstation use `-P`) do the following:
 
   - Copy and modify `habitat/` and `habitat/plan.sh` from this example
-  - Add `results/*` to `chefignore` to prevent uploading Habitat files
+  - Add `results/*` to `chefignore` to prevent uploading Habitat files to Chef Server
+  - Add `results/*` to `.gitignore` to prevent committing Habitat files
   - Copy `test/scripts/provisioner.sh` from this example
   - Copy `kitchen.yml` from this example
 
