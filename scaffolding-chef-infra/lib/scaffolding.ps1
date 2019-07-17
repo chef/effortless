@@ -43,20 +43,40 @@ function Invoke-DefaultBuildService {
     New-Item -ItemType directory -Path "$pkg_prefix/hooks"
 
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
-`$env:CFG_ENV_PATH_PREFIX="{{cfg.env_path_prefix}}"
-if(!`$env:CFG_ENV_PATH_PREFIX) { `$env:CFG_ENV_PATH_PREFIX = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin" }
-`$env:CFG_INTERVAL={{cfg.interval}}
-if(!`$env:CFG_INTERVAL) { `$env:CFG_INTERVAL = 1800 }
-`$env:CFG_LOG_LEVEL="{{cfg.log_level}}"
-if(!`$env:CFG_LOG_LEVEL) { `$env:CFG_LOG_LEVEL = "warn" }
-`$env:CFG_RUN_LOCK_TIMEOUT={{cfg.run_lock_timeout}}
-if(!`$env:CFG_RUN_LOCK_TIMEOUT) { `$env:CFG_RUN_LOCK_TIMEOUT = 1800 }
-`$env:CFG_SPLAY={{cfg.splay}}
-if(!`$env:CFG_SPLAY) { `$env:CFG_SPLAY = 1800 }
-`$env:CFG_SPLAY_FIRST_RUN={{cfg.splay_first_run}}
-if(!`$env:CFG_SPLAY_FIRST_RUN) { `$env:CFG_SPLAY_FIRST_RUN = 0 }
-`$env:CFG_SSL_VERIFY_MODE="{{cfg.ssl_verify_mode}}"
-if(!`$env:CFG_SSL_VERIFY_MODE) { `$env:CFG_SSL_VERIFY_MODE = "verify_peer" }
+`$env:CFG_ENV_PATH_PREFIX = "{{cfg.env_path_prefix}}"
+if(!`$env:CFG_ENV_PATH_PREFIX){
+    `$env:CFG_ENV_PATH_PREFIX = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
+}
+
+`$env:CFG_INTERVAL = "{{cfg.interval}}"
+if(!`$env:CFG_INTERVAL){
+    `$env:CFG_INTERVAL = "1800"
+}
+
+`$env:CFG_LOG_LEVEL = "{{cfg.log_level}}"
+if(!`$env:CFG_LOG_LEVEL){
+    `$env:CFG_LOG_LEVEL = "warn"
+}
+
+`$env:CFG_RUN_LOCK_TIMEOUT = "{{cfg.run_lock_timeout}}"
+if(!`$env:CFG_RUN_LOCK_TIMEOUT){
+    `$env:CFG_RUN_LOCK_TIMEOUT = "1800"
+}
+
+`$env:CFG_SPLAY = "{{cfg.splay}}"
+if(!`$env:CFG_SPLAY){
+    `$env:CFG_SPLAY = "1800"
+}
+
+`$env:CFG_SPLAY_FIRST_RUN = "{{cfg.splay_first_run}}"
+if(!`$env:CFG_SPLAY_FIRST_RUN){
+    `$env:CFG_SPLAY_FIRST_RUN = "0"
+}
+
+`$env:CFG_SSL_VERIFY_MODE = "{{cfg.ssl_verify_mode}}"
+if(!`$env:CFG_SSL_VERIFY_MODE){
+    `$env:CFG_SSL_VERIFY_MODE = "verify_peer"
+}
 
 function Invoke-ChefClient {
   {{pkgPathFor "stuartpreston/chef-client"}}/bin/chef-client.bat -z -l `$env:CFG_LOG_LEVEL -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout `$env:CFG_RUN_LOCK_TIMEOUT
