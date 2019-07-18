@@ -49,22 +49,26 @@ function Invoke-DefaultBuildService {
 if(!`$env:CFG_SPLAY_FIRST_RUN) {
     `$env:CFG_SPLAY_FIRST_RUN = "0"
 }
+
 `$env:CFG_INTERVAL="{{cfg.interval}}"
 if(!`$env:CFG_INTERVAL){
-
 }
+
 `$env:CFG_SPLAY="{{cfg.splay}}"
 if(!`$env:CFG_SPLAY){
     `$env:CFG_SPLAY = "1800"
 }
+
 `$env:CFG_LOG_LEVEL="{{cfg.log_level}}"
 if (!`$env:CFG_LOG_LEVEL){
     `$env:CFG_LOG_LEVEL = "warn"
 }
+
 `$env:CFG_CHEF_LICENSE="{{cfg.chef_license.acceptance}}"
 if(!`$env:CFG_CHEF_LICENSE){
     `$env:CFG_CHEF_LICENSE = "undefined"
 }
+
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
@@ -75,7 +79,6 @@ function Invoke-Inspec {
 `$SPLAY_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY) -Count 1
 
 `$SPLAY_FIRST_RUN_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY_FIRST_RUN) -Count 1
-
 
 Start-Sleep -Seconds `$SPLAY_FIRST_RUN_DURATION
 Invoke-Inspec
