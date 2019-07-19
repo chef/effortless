@@ -151,7 +151,6 @@ interval = 1800
 splay = 1800
 splay_first_run = 0
 log_level = 'warn'
-report_to_stdout = true
 
 [chef_license]
 acceptance = "undefined"

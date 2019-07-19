@@ -135,7 +135,7 @@ EOF
     "target_id": "{{ sys.member_id }}",
     "reporter": {
       "cli": {
-        "stdout": {{cfg.report_to_stdout}}
+        "stdout": true
       },
       "json": {
         "file": "{{pkg.svc_path}}/logs/inspec_last_run.json"
@@ -167,7 +167,6 @@ interval = 1800
 splay = 1800
 splay_first_run = 0
 log_level = 'warn'
-report_to_stdout = true
 
 [chef_license]
 acceptance = "undefined"

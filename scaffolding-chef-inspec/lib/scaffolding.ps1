@@ -52,6 +52,7 @@ if(!`$env:CFG_SPLAY_FIRST_RUN) {
 
 `$env:CFG_INTERVAL="{{cfg.interval}}"
 if(!`$env:CFG_INTERVAL){
+    `$env:CFG_INTERVAL = "1800"
 }
 
 `$env:CFG_SPLAY="{{cfg.splay}}"
@@ -120,7 +121,7 @@ function Invoke-DefaultInstall {
     "target_id": "{{ sys.member_id }}",
     "reporter": {
         "cli": {
-          "stdout": {{cfg.report_to_stdout}}
+          "stdout": true
         },
         "json": {
           "file": "{{pkg.svc_path}}/logs/inspec_last_run.json"
@@ -152,7 +153,6 @@ interval = 1800
 splay = 1800
 splay_first_run = 0
 log_level = 'warn'
-report_to_stdout = true
 
 [chef_license]
 acceptance = "undefined"
