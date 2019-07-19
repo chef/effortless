@@ -40,7 +40,12 @@ function Invoke-SetupEnvironment {
 
 function Invoke-DefaultBuildService {
     Write-BuildLine "Creating lifecycle hooks"
-    New-Item -ItemType directory -Path "$pkg_prefix/hooks"
+
+    # Only create the directory if it does not exist
+    $dir = "$pkg_prefix/hooks"
+    if (!(Test-Path -Path $dir)) {
+        New-Item -ItemType directory -Path $dir
+    }
 
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
 `$env:CFG_ENV_PATH_PREFIX = "{{cfg.env_path_prefix}}"
@@ -131,8 +136,16 @@ function Invoke-DefaultInstall {
 
     Write-BuildLine "Creating Chef Infra configuration"
 
-    New-Item -ItemType directory -Force -Path "$pkg_prefix/.chef"
-    New-Item -ItemType directory -Path "$pkg_prefix/config"
+    $dir = "$pkg_prefix/.chef"
+    if (!(Test-Path -Path $dir)) {
+        New-Item -ItemType directory -Path $dir
+    }
+
+    $dir = "$pkg_prefix/config"
+    if (!(Test-Path -Path $dir)) {
+        New-Item -ItemType directory -Path $dir
+    }
+
     Add-Content -Path "$pkg_prefix/.chef/config.rb" -Value @"
 cache_path "$($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$pkg_svc_data_path/cache").Replace("\","/"))"
 node_path "$($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$pkg_svc_data_path/nodes").Replace("\","/"))"
