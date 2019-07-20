@@ -141,20 +141,12 @@ EOF
         "file": "{{pkg.svc_path}}/logs/inspec_last_run.json"
       }{{#if cfg.automate.enable ~}},
       "automate" : {
-        "url": "{{cfg.automate.server_url}}/data-collector/v0/",
+        "url": "{{cfg.automate.server_url}}",
         "token": "{{cfg.automate.token}}",
         "node_name": "{{ sys.hostname }}",
         "verify_ssl": false
       }{{/if ~}}
     }
-    {{#if cfg.automate.enable }},
-    "compliance": {
-     "server" : "{{cfg.automate.server_url}}",
-     "token" : "{{cfg.automate.token}}",
-     "user" : "{{cfg.automate.user}}",
-     "insecure" : true,
-     "ent" : "automate"
-    }{{/if }}
 }
 EOF
   chmod 0640 "$pkg_prefix/config/inspec_exec_config.json"
@@ -167,6 +159,7 @@ interval = 1800
 splay = 1800
 splay_first_run = 0
 log_level = 'warn'
+report_to_stdout = true
 
 [chef_license]
 acceptance = "undefined"
