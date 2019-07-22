@@ -45,7 +45,7 @@ cookbook 'tar'
 cookbook 'os-hardening'
 
 run_list [
-  'hardening::default', 'example-app::default'
+  'os-hardening::default', 'example-app::default'
 ]
 ```
 
