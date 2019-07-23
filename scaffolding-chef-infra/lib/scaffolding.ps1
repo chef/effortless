@@ -92,6 +92,7 @@ function Invoke-ChefClient {
 `$SPLAY_FIRST_RUN_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY_FIRST_RUN) -Count 1
 
 `$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
+`$env:SSL_CERT_DIR="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/certs"
 
 cd {{pkg.path}}
 

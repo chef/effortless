@@ -86,6 +86,7 @@ SPLAY_DURATION=\$(shuf -i 0-\$CFG_SPLAY -n 1)
 SPLAY_FIRST_RUN_DURATION=\$(shuf -i 0-\$CFG_SPLAY_FIRST_RUN -n 1)
 
 export SSL_CERT_FILE="{{ pkgPathFor "${CFG_CACERTS:-core/cacerts}" }}/ssl/cert.pem"
+export SSL_CERT_DIR="{{ pkgPathFor "${CFG_CACERTS:-core/cacerts}" }}/ssl/certs"
 
 cd {{pkg.path}}
 
