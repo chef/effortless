@@ -1,6 +1,6 @@
-# linux-policyfile-cookbook
+# infra-linux-policyfile-cookbook
 
-This cookbook meant to serve as an example of testing a Policyfile cookbook via
+This example demonstrates a cookbook meant to serve as an example of testing a Policyfile cookbook via
 Habitat + Chef Scaffolding. It works by sharing `results/` with a Kitchen VM
 and then running `test/scripts/provisioner.sh` which will:
 
