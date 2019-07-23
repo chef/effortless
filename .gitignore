@@ -7,3 +7,13 @@ results/
 tmp/
 tags
 *.lock.*
+
+terraform.tfvars
+.terraform/
+*.tfstate*
+!example.tfvars
+*.keys
+*.license
+*.creds
+*.swp
+.idea

@@ -21,13 +21,13 @@ pkg_scaffolding=chef/scaffolding-chef-infra
 scaffold_policy_name=example-app
 ```
 
-Effortless for Chef Infra is a strong way to build, run, and manage the chef-infra-client and your cookbooks as a single, deployable package. It is optimized for running without the need for a Chef Infra Server and it provides a pull-based update strategy for continuous delivery of the chef-infra-client and your cookbooks to your infrastructure nodes. It is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way. It is built on a solid foundation of battle-tested tools, and it is production and enterprise ready.
+Effortless for Chef Infra is a strong way to build, run, and manage the Chef Infra Client and your cookbooks as a single, deployable package. It is optimized for running without the need for a Chef Infra Server and it provides a pull-based update strategy for continuous delivery of the Chef Infra Client and your cookbooks to your infrastructure nodes. It is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way. It is built on a solid foundation of battle-tested tools, and it is production and enterprise ready.
 
 Setting `pkg_scaffolding="chef/scaffolding-chef-infra"` in your `plan.sh` or `plan.ps1` automatically keeps you up-to-date on the latest best practices.
 
 ![Image of the Effortless pattern](/docs/effortless-graphic.png)
 
-You can implement the Effortless pattern for Chef Infra by building a Habitat package. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the chef-infra-client by using the configuration methods described below.
+You can implement the Effortless pattern for Chef Infra by building a Habitat package. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the Chef Infra Client by using the configuration methods described below.
 
 ### Policyfile
 
@@ -49,27 +49,6 @@ cookbook 'os-hardening'
 run_list [
   'hardening::default', 'example-app::default'
 ]
-```
-
-### Linux Infra Plan
-
-`example-app/plan.sh`
-
-```bash
-pkg_name=example-app
-pkg_origin=example-corporation
-pkg_version="0.1.0"
-pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
-pkg_license=("Apache-2.0")
-pkg_upstream_url="http://chef.io"
-pkg_scaffolding="chef/scaffolding-chef-infra"
-scaffold_policy_name="example-app"
-# These settings are optional - usually you won't need to use these
-scaffold_policyfile_path="$PLAN_CONTEXT" # allows you to use a policyfile in any location in your repo
-scaffold_chef_client="chef/chef-client" # allows you to hard-pin to a version of the chef-infra-client
-scaffold_chef_dk="chef/chef-dk" # allows you to hard-pin to a version of chef-dk
-scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally build data bags into the package
-scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
 ```
 
 ### Windows Infra Plan
@@ -94,27 +73,6 @@ $scaffold_chef_client="chef/chef-infra-client" # allows you to hard-pin to a ver
 $scaffold_chef_dk="chef/chef-dk" # allows you to hard-pin to a version of chef-dk
 $scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally build data bags into the package
 $scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
-```
-
-### chef-infra-client settings
-
-These are the defaults for the scaffolding. There several ways to override the default configuration. These methods are described below as they apply to both Chef Infra and Chef InSpec.
-
-`default.toml`
-
-```toml
-interval = 1800 # The number of seconds to wait between chef-infra-client runs
-splay = 1800 # A random number of seconds between 0 and $splay to add to the interval. Used to avoid the thundering herd problem.
-splay_first_run = 0 # A random number of seconds between 0 and $splay_first_run to add to the interval, only on the first run. Used to avoid the thundering herd problem on new deployments.
-run_lock_timeout = 1800 # The number of seconds to lock the chef-infra-client before allowing another run to begin.
-log_level = "warn"
-env_path_prefix = "/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin"
-ssl_verify_mode = ":verify_peer"
-
-[automate]
-enable = false
-server_url = "https://<automate_url>/data-collector/v0/"
-token = "<automate_token>"
 ```
 
 ## Chef InSpec
