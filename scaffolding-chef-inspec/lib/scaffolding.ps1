@@ -24,7 +24,29 @@ function Invoke-DefaultBefore {
     }
 
     if((Select-String -Path "$PLAN_CONTEXT/../inspec.yml" -Pattern "compliance: ")){
-        Invoke-ComplianceLogin
+        if(!$scaffold_automate_server_url){
+            Write-BuildLine "You have a dependency on a profile in Automate"
+            Write-BuildLine " please specify the `$scaffold_automate_server_url"
+            Write-BuildLine " in your plan.ps1 file."
+            exit 1
+        }
+        elseif(!$scaffold_automate_user){
+            Write-BuildLine "You have a dependency on a profile in Automate"
+            Write-BuildLine " please specify the `$scaffold_automate_user"
+            Write-BuildLine " in your plan.ps1 file."
+            exit 1
+        }
+        elseif(!$scaffold_automate_token){
+            Write-BuildLine "You have a dependency on a profile in Automate"
+            Write-BuildLine " please specify the `$scaffold_automate_token"
+            Write-BuildLine " in your plan.ps1 file."
+            exit 1
+        }
+        else{
+            inspec compliance login "$scaffold_automate_server_url" `
+                            --user "$scaffold_automate_user" `
+                            --token "$scaffold_automate_token"
+        }
     }
 }
 
@@ -74,7 +96,11 @@ if(!`$env:CFG_CHEF_LICENSE){
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
 function Invoke-Inspec {
-    inspec exec `$PROFILE_PATH --config `$CONFIG --log-level `$CFG_LOG_LEVEL
+
+    # TODO: This is set to --json-config due to the
+    #  version of InSpec being used please update when InSpec is updated
+
+    inspec exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
 }
 
 `$SPLAY_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY) -Count 1
@@ -122,9 +148,6 @@ function Invoke-DefaultInstall {
     "reporter": {
         "cli": {
           "stdout": true
-        },
-        "json": {
-          "file": "{{pkg.svc_path}}/logs/inspec_last_run.json"
         }{{#if cfg.automate.enable ~}},
         "automate" : {
           "url": "{{cfg.automate.server_url}}/data-collector/v0/",
@@ -133,14 +156,6 @@ function Invoke-DefaultInstall {
           "verify_ssl": false
         }{{/if ~}}
     }
-    {{#if cfg.automate.enable }},
-    "compliance": {
-      "server" : "{{cfg.automate.server_url}}",
-      "token" : "{{cfg.automate.token}}",
-      "user" : "{{cfg.automate.user}}",
-      "insecure" : true,
-      "ent" : "automate"
-    }{{/if }}
 }
 "@
 
@@ -163,20 +178,4 @@ server_url = 'https://<automate_url>'
 token = '<automate_token>'
 user = '<automate_user>'
 "@
-}
-
-function Invoke-ComplianceLogin {
-    if (!$COMPLIANCE_CREDS){
-        Write-BuildLine "ERROR: Please preform an 'inspec compliance login' and set"
-        Write-BuildLine " `$HAB_STUDIO_SECRET_COMPLIANCE_CREDS to the contents of"
-        Write-BuildLine " '~/.inspec/compliance/config.json'"
-        exit 1
-    }
-
-    $creds = Get-Content $COMPLIANCE_CREDS | ConvertFrom-Json
-
-    inspec compliance login --insecure $creds.insecure `
-                            --user $creds.user `
-                            --token $creds.token `
-                            "$($creds.server)/api/v0/"
 }
