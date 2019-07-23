@@ -1,0 +1,9 @@
+$pkg_name="effortless-audit-baseline"
+$pkg_origin="chef"
+$pkg_version="0.1.0"
+$pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
+$pkg_license=("Apache-2.0")
+$pkg_build_deps=@("stuartpreston/inspec")
+$pkg_deps=@("stuartpreston/inspec")
+$pkg_description="Effortless Windows Audit"
+$pkg_scaffolding="chef/scaffolding-chef-inspec"
