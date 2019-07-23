@@ -27,10 +27,12 @@ Setting `pkg_scaffolding="chef/scaffolding-chef-infra"` in your `plan.sh` or `pl
 
 ![Image of the Effortless pattern](/docs/effortless-graphic.png)
 
-You can implement the Effortless pattern for Chef Infra by building a Habitat package. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the chef-infra-client in your `default.toml`.
+You can implement the Effortless pattern for Chef Infra by building a Habitat package. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the chef-infra-client by using the configuration methods described below.
 
-#### Policyfile
+### Policyfile
+
 `example-app/example-app.rb`
+
 ```ruby
 name 'example-app'
 
@@ -49,8 +51,10 @@ run_list [
 ]
 ```
 
-#### Linux
+### Linux Infra Plan
+
 `example-app/plan.sh`
+
 ```bash
 pkg_name=example-app
 pkg_origin=example-corporation
@@ -68,9 +72,10 @@ scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally 
 scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
 ```
 
-#### Windows
+### Windows Infra Plan
 
 `example-app/plan.ps1`
+
 ```powershell
 $pkg_name="example-app"
 $pkg_origin="example-corporation"
@@ -91,11 +96,12 @@ $scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally
 $scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
 ```
 
-#### chef-infra-client settings
+### chef-infra-client settings
 
-Creating a default.toml is optional. If you don't create one, the chef-infra-client will run with the default settings below.
+These are the defaults for the scaffolding. There several ways to override the default configuration. These methods are described below as they apply to both Chef Infra and Chef InSpec.
 
-`example-app/default.toml`
+`default.toml`
+
 ```toml
 interval = 1800 # The number of seconds to wait between chef-infra-client runs
 splay = 1800 # A random number of seconds between 0 and $splay to add to the interval. Used to avoid the thundering herd problem.
@@ -126,10 +132,12 @@ Effortless for Chef InSpec allows you to build your Chef InSpec profiles and the
 
 Setting `pkg_scaffolding="chef/scaffolding-chef-inspec"` in your `plan.sh` or `plan.ps1` automatically keeps you up-to-date on the latest best practices.
 
-You can implement the Effortless pattern for Chef InSpec by building a Habitat package. A Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of Chef InSpec in your `default.toml`.
+You can implement the Effortless pattern for Chef InSpec by building a Habitat package. A Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of Chef InSpec using the methods below.
 
-#### Linux
+### Linux InSpec Plan
+
 `habitat/plan.sh`
+
 ```bash
 pkg_name=example-app-audit
 pkg_origin=example-corporation
@@ -140,9 +148,26 @@ pkg_upstream_url="http://chef.io"
 pkg_scaffolding="chef/scaffolding-chef-inspec"
 ```
 
-#### Chef InSpec settings
+### Windows InSpec Plan
 
-`habitat/default.toml`
+```powershell
+$pkg_name="example-app-audit"
+$pkg_origin="example-corporation"
+$pkg_version="0.1.0"
+$pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
+$pkg_license=("Apache-2.0")
+$pkg_build_deps=@("stuartpreston/inspec")
+$pkg_deps=@("stuartpreston/inspec")
+$pkg_description="example-app-audit"
+$pkg_scaffolding="chef/scaffolding-chef-inspec"
+```
+
+### Chef InSpec settings
+
+These are the defaults for the scaffolding. There several ways to override the default configuration. These methods are described below as they apply to both Chef Infra and Chef InSpec.
+
+`default.toml`
+
 ```toml
 # You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
 # Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
@@ -161,3 +186,37 @@ server_url = "https://<automate_url>/data-collector/v0/"
 token = '<automate_token>'
 user = '<automate_user>'
 ```
+
+## Configurations
+
+As noted above, there are several methods for applying configurations to an Effortless package. Let's take a look at the different methods in order of most to least recommended.
+
+### user.toml file
+
+By using the `user.toml` file, you can provide overrides for any of the values specified in the scaffolding defaults. This method requires that you place a `user.toml` file in a directory on each node that needs the override. This is the preferred option as the file can be managed in source code and applied via the provisioning tool.
+
+- Linux path: `/hab/user/myservice/config/user.toml`
+- Windows path: `C:\hab\user\myservice\config\user.toml`
+
+`user.toml`
+
+``` toml
+interval = 3600
+
+[chef_license]
+acceptance = "undefined"
+
+[automate]
+enable = false
+server_url = "https://<automate_url>/data-collector/v0/"
+token = '<automate_token>'
+user = '<automate_user>'
+```
+
+As you can see, we're only overriding specific parameters that we need. This allows us to reuse the same artifact across all environments and still provide environmental specific settings.
+
+Read more [here](https://www.habitat.sh/docs/using-habitat/#apply-configuration-updates-to-an-individual-service).
+
+### default.toml override
+
+This option is at the bottom because it's the least desirable. Since the scaffolding generates a `default.toml` with sane defaults for us, there's no reason to duplicate that work. If you go this route, you'll need to make sure you account for all the variables included in the scaffolding. If there's an update to the scaffolding and the new variable isn't replicated in your package's `default.toml`, it will build, however, the package will fail when you run it on a node.
