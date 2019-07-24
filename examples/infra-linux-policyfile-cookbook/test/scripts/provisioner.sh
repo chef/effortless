@@ -15,19 +15,12 @@ else
   sudo useradd hab && true
 fi
 
-# Get latest `.hart` file
-# NOTE: Files are named in such a way that the last returned is latest
-latest_hart_file=$(find /tmp/results/*.hart | tail -n 1)
+source /tmp/results/last_build.env
 
-echo "Extracting info from $latest_hart_file"
-pkg_info=$(hab pkg info "$latest_hart_file")
-pkg_name=$(echo "$pkg_info" | grep "Name" | cut -d':' -f 2 | tr -d "[:space:]")
-pkg_origin=$(echo "$pkg_info" | grep "Origin" | cut -d':' -f 2 | tr -d "[:space:]")
+echo "Installing /tmp/results/$pkg_artifact"
+hab pkg install "/tmp/results/$pkg_artifact"
 
-echo "Installing $latest_hart_file"
-hab pkg install "$latest_hart_file"
-
-echo "Determing pkg_prefix for $latest_hart_file"
+echo "Determing pkg_prefix for $pkg_artifact"
 pkg_prefix=$(find "/hab/pkgs/$pkg_origin/$pkg_name" -maxdepth 2 -mindepth 2 | sort | tail -n 1)
 echo "Found: $pkg_prefix"
 
