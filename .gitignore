@@ -17,3 +17,5 @@ terraform.tfvars
 *.creds
 *.swp
 .idea
+
+inspec.lock

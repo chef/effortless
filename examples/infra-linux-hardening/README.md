@@ -12,9 +12,9 @@ Files in this example are heavily annotated and commented, and include ALL overr
 
 The origin you create will be your personal origin for testing packages for local development. You should never use your personal origin for packages running beyond your CI system.
 
-3. [Download and install Hashicorp Terraform](https://www.terraform.io/downloads.html) for your workstation of choice.
+3. [Download and install HashiCorp Terraform](https://www.terraform.io/downloads.html) for your workstation of choice.
 
-## Build
+## Building, Promoting, and Uploading
 
 1. Enter the directory for this example in a terminal, and enter a Habitat Studio from that directory.
 
@@ -39,40 +39,10 @@ all in one command:
 build && source results/last_build.env && hab pkg upload results/${pkg_artifact} && hab pkg promote ${pkg_ident} stable
 ```
 
-You now have a Habitat artifact ready to test.
-
-## Provision
-
-1. Enter the `terraform` directory in the root of the examples directory. This directory contains pre-configured terraform for different platforms. You'll want to select the provider and platform of your choice.
-
-```
-cd examples/terraform/aws-centos7
-```
-
-2. Copy `example.tfvars` and rename it `terraform.tfvars`. Fill it out with the necssary information.
-
-3. Run terraform to provision a VM.
-
-```
-terraform init
-terraform plan
-terraform apply -auto-approve
-```
-
 ## Testing
 
-Now you can test your instance with the method you choose.
+See: `terraform/README.md`
 
-If you see something wrong, you can simply make a code change and re-build your package. Repeat the `Build` section, and upload your package. Habitat is automatically subscribed to updates from the stable channel, and will upgrade itself in under a minute.
+## Other Resources
 
-At this point, it's handy to familiarize yourself with the [Chef Habitat Docs](https://habitat.sh/docs).
-
-If you don't know where to start, try sshing into the box, and reading the logs with `sudo journalctl -f` as your package upgrades.
-
-## Cleanup
-
-1. Run terraform to destroy the instance.
-
-```
-terraform destroy -auto-approve
-```
+Be sure to familiarize yourself with the [Chef Habitat Docs](https://habitat.sh/docs).
