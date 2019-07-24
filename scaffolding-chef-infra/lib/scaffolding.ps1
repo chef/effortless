@@ -151,7 +151,7 @@ cache_path "$($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromP
 node_path "$($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$pkg_svc_data_path/nodes").Replace("\","/"))"
 role_path "$($ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$pkg_svc_data_path/roles").Replace("\","/"))"
 chef_zero.enabled true
-ENV['PSModulePath'] += "C:/Program\ Files/WindowsPowerShell/Modules"
+ENV['PSModulePath'] = "C:/Program\ Files/WindowsPowerShell/Modules;C:/Windows/system32/WindowsPowerShell/v1.0/Modules;#{ENV['PSModulePath']}"
 "@
 
     Write-BuildLine "Creating initial bootstrap configuration"
