@@ -7,13 +7,6 @@ expeditor:
           limit: 1
 
 steps:
-  - label: "[scaffolding-chef-infra] :habicat: Check for .bldr.toml entry"
-    command:
-      - bin/ci/check-bldr-toml.sh scaffolding-chef-infra
-    expeditor:
-      executor:
-        docker:
-
   - label: "[scaffolding-chef-infra] :habicat: Check for bad patterns"
     command:
       - bin/ci/check-bad-patterns.sh scaffolding-chef-infra
@@ -35,7 +28,7 @@ steps:
       executor:
         docker:
 
-  - label: "[scaffolding-chef-infra] :habicat: Check for bad patterns"
+  - label: "[scaffolding-chef-infra] :habicat: Run pre-commit"
     command:
       - bin/ci/check-pre-commit.sh scaffolding-chef-infra
     expeditor:

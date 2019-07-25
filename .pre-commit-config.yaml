@@ -22,11 +22,6 @@
         entry: ./bin/pre-commit/default-variables.sh
         language: system
         files: plan.sh$
-    -   id: bldr-toml
-        name: Check for an entry in .bldr.toml
-        entry: ./bin/pre-commit/bldr-toml.sh
-        language: system
-        files: plan.sh$
     -   id: bad-patterns
         name: Check for bad patterns in Hook files
         entry: ./bin/pre-commit/bad-patterns.sh
