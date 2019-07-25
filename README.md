@@ -4,78 +4,45 @@
 
 `Effortless` is automated best practices for Chef Infra and Chef InSpec.
 
+What can you do with Effortless Infrastructure?
+
+- Deliver brand new infrastructure configuration and automated security tests to your entire fleet, in 60 seconds.
+
+- Use a secure, pull-based workflow that scales. Use the same workflow in airgapped environments.
+
+- Update Chef Infra and Chef InSpec automatically, with always up-to-date best practices.
+
+- Report infrastructure configuration and security test runs to [Chef Automate](https://www.chef.io/products/automate/), automatically.
+
 ## Quick Links
 
-- [Chef Infra](#chef-infra)
-- [Chef InSpec](#chef-inspec)
+- [Chef Infra](https://github.com/chef/chef) - Chef Infra automates infrastructure configuration, ensuring every system is configured correctly and consistently.
 
-## Chef Infra
+- [Chef InSpec](https://github.com/inspec/inspec) - Automate security tests, ensuring consistent standards are enforced in every environment, at every stage of development.
 
-Automated best practices for Chef Infra is this simple:
+- [Chef Habitat](https://github.com/habitat-sh/habitat) - Codify how the application is built, how it runs, and all of its dependencies to free the app from underlying infrastructure and make updates easy.
 
-```bash
-pkg_name=example-app
-pkg_origin=example-corporation
-pkg_version=1.0.0
-pkg_scaffolding=chef/scaffolding-chef-infra
-scaffold_policy_name=example-app
-```
+- [Chef Automate](https://github.com/chef/automate) - Enterprise dashboard and analytics tool enabling cross-team collaboration with actionable insights for configuration and compliance and an auditable history of changes to environments.
 
-Effortless for Chef Infra is a strong way to build, run, and manage the Chef Infra Client and your cookbooks as a single, deployable package. It is optimized for running without the need for a Chef Infra Server and it provides a pull-based update strategy for continuous delivery of the Chef Infra Client and your cookbooks to your infrastructure nodes. It is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way. It is built on a solid foundation of battle-tested tools, and it is production and enterprise ready.
+## Existing Users - Effortless for Chef Infra
 
-Setting `pkg_scaffolding="chef/scaffolding-chef-infra"` in your `plan.sh` or `plan.ps1` automatically keeps you up-to-date on the latest best practices.
+If you're already familiar with Chef Infra, here's a quick rundown of how Effortless for Chef Infra works.
+
+1. Effortless uses a strong build process for your cookbooks. The build creates a single, deployable package with your cookbooks, an up-to-date Chef Infra Client, and the latest best practices.
+
+2. At runtime, Chef Infra works without Chef Infra Server. It uses Chef Solo mode.
+
+3. Chef Habitat manages Chef Infra, and provides a pull-based update strategy for continuous delivery of the Chef Infra Client and your cookbooks.
+
+4. This workflow is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way.
+
+5. Effortless is production and enterprise ready because it is built on already battle-tested Chef Infra tools that you know already.
 
 ![Image of the Effortless pattern](/docs/effortless-graphic.png)
 
-You can implement the Effortless pattern for Chef Infra by building a Habitat package. All you need to do is make a `policyfile` and a Habitat plan (`plan.sh` or `plan.ps1`). Additionally, you can tune the settings of the Chef Infra Client by using the configuration methods described below.
+If you're new to `Effortless`, the `examples` directory has a list of different kinds of packages and workflows that you can use to get started. If you just want to try something, start with `examples/infra-linux-hardening`.
 
-### Policyfile
-
-`example-app/example-app.rb`
-
-```ruby
-name 'example-app'
-
-default_source :supermarket
-default_source :chef_repo, '../' do |s|
-  s.preferred_for 'example-app'
-end
-
-cookbook 'hostsfile'
-cookbook 'line'
-cookbook 'tar'
-cookbook 'os-hardening'
-
-run_list [
-  'hardening::default', 'example-app::default'
-]
-```
-
-### Windows Infra Plan
-
-`example-app/plan.ps1`
-
-```powershell
-$pkg_name="example-app"
-$pkg_origin="example-corporation"
-$pkg_version="0.1.0"
-$pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
-$pkg_upstream_url="http://chef.io"
-$pkg_deps=@(
-  "core/cacerts"
-  "stuartpreston/chef-client" # https://github.com/habitat-sh/habitat/issues/6671
-)
-$pkg_scaffolding="chef/scaffolding-chef-infra"
-$scaffold_policy_name="example-app"
-# These settings are optional - usually you won't need to use these
-$scaffold_policyfile_path="$PLAN_CONTEXT" # allows you to use a policyfile in any location in your repo
-$scaffold_chef_client="chef/chef-infra-client" # allows you to hard-pin to a version of the chef-infra-client
-$scaffold_chef_dk="chef/chef-dk" # allows you to hard-pin to a version of chef-dk
-$scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags" # allows you to optionally build data bags into the package
-$scaffold_cacerts="origin/cacerts" # allows you to optionally specify a custom cacert package for Chef Infra Client
-```
-
-## Chef InSpec
+## Effortless for Chef InSpec
 
 Automated best practices for Chef InSpec is this simple:
 

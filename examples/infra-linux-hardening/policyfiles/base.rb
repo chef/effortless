@@ -1,11 +1,11 @@
-# Policyfile.rb - Describe how you want Chef to build your system.
+# Policyfile.rb - Describe how you want Chef Infra to build your system.
 #
 # For more information on the Policyfile feature, visit
 # https://docs.chef.io/policyfile.html
 
 name "base"
 
-# Where to find external cookbooks:
+# Where to find external cookbooks
 default_source :supermarket
 default_source :chef_repo, "../"
 
