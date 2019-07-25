@@ -7,6 +7,19 @@ if(!$scaffold_policy_name) {
     exit 1
 }
 
+# TODO: Clean up this check when Load-Scaffolding is fixed
+# https://github.com/habitat-sh/habitat/issues/6671
+if([string]::IsNullOrWhiteSpace("$scaffold_policyfile_path")){
+    Write-Buildline "`$scaffold_policyfile_path is null, empty string, or white space."
+    Write-BuildLine "  Setting default `$scaffold_policyfile_path to:"
+    Write-BuildLine "  `$PLAN_CONTEXT\..\policyfiles"
+    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
+}
+if(!(Test-Path -Path "$scaffold_policyfile_path")) {
+    Write-Error "`$scaffold_policy_path is not a valid path."
+    exit 1
+}
+
 function Load-Scaffolding {
     $scaffold_chef_client = "stuartpreston/chef-client"
     $scaffold_chef_dk = "core/chef-dk"
@@ -108,15 +121,6 @@ while(`$true){
 }
 
 function Invoke-DefaultBuild {
-    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
-    if([string]::IsNullOrWhiteSpace("$scaffold_policyfile_path")){
-        Write-Error "`$scaffold_policyfile_path is null, empty string, or white space."
-        exit 1
-    }
-    if(!(Test-Path -Path "$scaffold_policyfile_path")) {
-        Write-Error "`$scaffold_policy_path is not a valid path."
-        exit 1
-    }
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
 
@@ -131,7 +135,6 @@ function Invoke-DefaultBuild {
 }
 
 function Invoke-DefaultInstall {
-    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     Write-BuildLine "Exporting Chef Infra Repository"
     chef export "$scaffold_policyfile_path/$scaffold_policy_name.lock.json" "$pkg_prefix"
 
