@@ -6,7 +6,7 @@ $pkg_license=("Apache-2.0")
 $pkg_build_deps=@("stuartpreston/inspec")
 $pkg_deps=@("stuartpreston/inspec")
 $pkg_description="Effortless Windows Audit"
-$pkg_scaffolding="thelunaticscripter/scaffolding-chef-inspec"
+$pkg_scaffolding="chef/scaffolding-chef-inspec"
 $scaffold_automate_server_url = "$env:AUTOMATE_SERVER_URL" # Example: https://foo.bar.com
 $scaffold_automate_user = "$env:AUTOMATE_USER"             # Example: "admin"
 $scaffold_automate_token = "$env:AUTOMATE_TOKEN"           # Example: "DI0WVxInnyGnWKRlZBGizTXySgk="
