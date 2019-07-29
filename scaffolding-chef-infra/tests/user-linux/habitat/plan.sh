@@ -4,10 +4,10 @@
 #######################################
 
 pkg_name=user-linux
-pkg_origin=chef
+pkg_origin=ci
 pkg_version="1.0.0"
-pkg_upstream_url="http://chef.io"
-pkg_scaffolding="ci/scaffolding-chef-infra"
+pkg_scaffolding="chef/scaffolding-chef-infra"
 pkg_svc_user=("root")
 scaffold_policy_name="ci"
 scaffold_chef_client="chef/chef-client/14.13.11"
+scaffold_cacerts="ci/cacerts"
