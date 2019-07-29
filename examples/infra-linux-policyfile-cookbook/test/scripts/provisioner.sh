@@ -1,11 +1,17 @@
 #!/bin/bash
+
+if ! [ -f /tmp/results/hab_artifact.tar.gz ]; then
+  echo "ERROR: No hab_artifact.tar.gz found, did you run 'hab pkg build .'?"
+  exit 1
+fi
+
 export HAB_LICENSE="accept-no-persist"
 
-# Install the Habitat CLI if it isn't installed
-if [ ! -e "/bin/hab" ]; then
-  # Using wget since curl isn't available on Ubuntu
-  wget -q -O - https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
-fi
+# Load variables for use in this script
+source /tmp/results/last_build.env
+
+# Extract Habitat artifact (contains `hab` binary and all keys/packages)
+sudo tar xf /tmp/results/hab_artifact.tar.gz -C /
 
 # Create `hab` user and group if they do not exist
 if grep "^hab:" /etc/passwd > /dev/null; then
@@ -15,15 +21,11 @@ else
   sudo useradd hab && true
 fi
 
-source /tmp/results/last_build.env
-
-echo "Installing /tmp/results/$pkg_artifact"
-hab pkg install "/tmp/results/$pkg_artifact"
-
-echo "Determing pkg_prefix for $pkg_artifact"
+echo "Determine pkg_prefix for $pkg_artifact"
 pkg_prefix=$(find "/hab/pkgs/$pkg_origin/$pkg_name" -maxdepth 2 -mindepth 2 | sort | tail -n 1)
 echo "Found: $pkg_prefix"
 
+# Execute Chef Infra client inside the package
 echo "Running chef-client in $pkg_origin/$pkg_name"
 cd "$pkg_prefix" || exit 1
-hab pkg exec "$pkg_origin/$pkg_name" chef-client -z -c "$pkg_prefix/config/bootstrap-config.rb"
+sudo -E /hab/bin/hab pkg exec "$pkg_origin/$pkg_name" chef-client -z -c "$pkg_prefix/config/bootstrap-config.rb"
