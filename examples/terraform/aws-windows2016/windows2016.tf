@@ -97,7 +97,6 @@ set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine
       "hab pkg install core/windows-service",
       "hab pkg exec core/window-service install",
       "hab license accept",
-      # "hab svc load echohack/rain --channel unstable --strategy at-once"
     ]
   }
 }

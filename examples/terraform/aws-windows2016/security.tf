@@ -43,6 +43,6 @@ resource "aws_security_group" "default" {
   }
 
   tags {
-    X-Contact = "${var.aws_key_pair_name} <echohack@chef.io>"
+    X-Contact = "${var.aws_key_pair_name} <you@example.io>"
   }
 }
