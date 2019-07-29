@@ -19,3 +19,5 @@ terraform.tfvars
 .idea
 
 inspec.lock
+
+.kitchen/*
