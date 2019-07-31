@@ -1,0 +1,14 @@
+name: inspec-linux-audit
+title: Linux Effortless Audit Example
+maintainer: humans@habitat.sh
+copyright: Chef Software Inc
+copyright_email: humans@habitat.sh
+license: Apache-2.0
+summary: Example Linux Effortless Audit Profile
+version: 0.1.0
+supports:
+  - os-family: linux
+
+depends:
+  - name: linux-baseline
+    url: https://github.com/dev-sec/linux-baseline/archive/master.tar.gz
