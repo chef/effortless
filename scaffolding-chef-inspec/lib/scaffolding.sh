@@ -3,6 +3,10 @@
 #
 
 scaffolding_load() {
+  : "${scaffold_automate_server_url:=}"
+  : "${scaffold_automate_user:=}"
+  : "${scaffold_automate_token:=}"
+
   pkg_deps=(
     "${pkg_deps[@]}"
     "chef/inspec"
@@ -10,7 +14,6 @@ scaffolding_load() {
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
     "chef/inspec"
-    "core/jq-static"
   )
   pkg_svc_user="root"
   pkg_svc_run="set_just_so_you_will_render"
@@ -28,7 +31,29 @@ do_default_before() {
   # Execute an 'inspec compliance login' if a profile needs to be fetched from
   # the Automate server
   if [ "$(grep "compliance: " "$PLAN_CONTEXT/../inspec.yml")" ]; then
-    _do_compliance_login;
+    if [ ! $scaffold_automate_server_url ]; then
+      message="You have a dependency on a profile in Automate"
+      message="$message please specify the \$scaffold_automate_server_url"
+      message="$message in your plan.sh file."
+      build_line "$message"
+      exit 1
+    elif [ ! $scaffold_automate_user ]; then
+      message="You have a dependency on a profile in Automate"
+      message="$message please specify the \$scaffold_automate_user"
+      message="$message in your plan.sh file."
+      build_line "$message"
+      exit 1
+    elif [ ! $scaffold_automate_token ]; then
+      message="You have a dependency on a profile in Automate"
+      message="$message please specify the \$scaffold_automate_token"
+      message="$message in your plan.sh file."
+      build_line "$message"
+      exit 1
+    else
+      inspec compliance login $scaffold_automate_server_url \
+                              --user $scaffold_automate_user \
+                              --token $scaffold_automate_token
+    fi
   fi
 }
 
@@ -182,29 +207,4 @@ EOF
 
 do_default_strip() {
   return 0
-}
-
-_do_compliance_login() {
-  if [ -z $COMPLIANCE_CREDS ]; then
-    message="ERROR: Please perform an 'inspec compliance login' and set"
-    message="$message \$HAB_STUDIO_SECRET_COMPLIANCE_CREDS to the contents of"
-    message="$message '~/.inspec/compliance/config.json'"
-    build_line "$message"
-    return 1
-  fi
-
-  user=$(echo $COMPLIANCE_CREDS | jq .user | sed 's/"//g')
-  token=$(echo $COMPLIANCE_CREDS | jq .token | sed 's/"//g')
-  automate_server=$(echo $COMPLIANCE_CREDS | \
-                    jq .server | \
-                    sed 's/\/api\/v0//' | \
-                    sed 's/"//g'
-                   )
-  insecure=$(echo $COMPLIANCE_CREDS | jq .insecure)
-  inspec compliance login --insecure $insecure \
-                          --user $user \
-                          --token $token \
-                          --chef-license "$CHEF_LICENSE" \
-                          $automate_server
-                          
 }

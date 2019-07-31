@@ -1,0 +1,7 @@
+name: effortless-a2-profile-test
+title: Effortless Automate CIS profile Test
+version: 1.0.0
+
+depends:
+  - name: cis-rhel7-level1-server
+    compliance: admin/cis-rhel7-level1-server
