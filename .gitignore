@@ -20,4 +20,4 @@ terraform.tfvars
 
 inspec.lock
 
-.kitchen/*
+.kitchen/
