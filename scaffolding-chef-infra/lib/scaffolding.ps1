@@ -96,8 +96,19 @@ if(!`$env:CFG_SSL_VERIFY_MODE){
     `$env:CFG_SSL_VERIFY_MODE = "verify_peer"
 }
 
+`$env:CFG_CHEF_LICENSE = "{{cfg.chef_license.acceptance}}"
+if(!`$env:CFG_CHEF_LICENSE){
+    `$env:CFG_CHEF_LICENSE = "undefined"
+}
+
+if(`$env:CFG_CHEF_LICENSE -eq "undefined"){
+    `$env:CFG_CHEF_LICENSE_CMD = ""
+} else {
+    `$env:CFG_CHEF_LICENSE_CMD = "--chef-license `$env:CFG_CHEF_LICENSE"
+}
+
 function Invoke-ChefClient {
-  {{pkgPathFor "stuartpreston/chef-client"}}/bin/chef-client.bat -z -l `$env:CFG_LOG_LEVEL -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout `$env:CFG_RUN_LOCK_TIMEOUT
+  {{pkgPathFor "stuartpreston/chef-client"}}/bin/chef-client.bat -z -l `$env:CFG_LOG_LEVEL -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout `$env:CFG_RUN_LOCK_TIMEOUT `$env:CFG_CHEF_LICENSE_CMD
 }
 
 `$SPLAY_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY) -Count 1
@@ -188,6 +199,10 @@ data_collector.server_url "{{cfg.automate.server_url}}"
 
     Write-BuildLine "Generating Chef Habitat configuration default.toml"
     Add-Content -Path "$pkg_prefix/default.toml" -Value @"
+
+# You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
+# Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
+
 interval = 1800
 splay = 1800
 splay_first_run = 0
@@ -195,6 +210,9 @@ run_lock_timeout = 1800
 log_level = "warn"
 env_path_prefix = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
 ssl_verify_mode = ":verify_peer"
+
+[chef_license]
+acceptance = "undefined"
 
 [automate]
 enable = false
