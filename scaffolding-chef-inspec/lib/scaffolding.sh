@@ -6,11 +6,18 @@ scaffolding_load() {
   : "${scaffold_automate_server_url:=}"
   : "${scaffold_automate_user:=}"
   : "${scaffold_automate_token:=}"
+  : "${scaffold_cacerts:=}"
 
   pkg_deps=(
     "${pkg_deps[@]}"
     "chef/inspec"
   )
+  if [ -n "${scaffold_cacerts}" ]; then
+    pkg_deps+=("${scaffold_cacerts}")
+  else
+    pkg_deps+=("core/cacerts")
+  fi
+
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
     "chef/inspec"
@@ -94,6 +101,8 @@ do_default_build_service() {
 
 export HOME="{{pkg.svc_var_path}}"
 export INSPEC_CONFIG_DIR="{{pkg.svc_var_path}}"
+export SSL_CERT_FILE="{{ pkgPathFor "${CFG_CACERTS:-core/cacerts}" }}/ssl/cert.pem"
+export SSL_CERT_DIR="{{ pkgPathFor "${CFG_CACERTS:-core/cacerts}" }}/ssl/certs"
 
 CFG_SPLAY_FIRST_RUN={{cfg.splay_first_run}}
 CFG_SPLAY_FIRST_RUN="\${CFG_SPLAY_FIRST_RUN:-0}"

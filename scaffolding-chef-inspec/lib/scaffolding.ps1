@@ -3,10 +3,18 @@
 #
 
 function Load-Scaffolding {
+    $scaffold_cacerts = ""
+
     $pkg_deps += @(
         "${pkg_deps[@]}"
         "stuartpreston/inspec"
     )
+    if(![string]::IsNullOrWhiteSpace("$scaffold_cacerts")){
+        $pkg_deps += @($scaffold_cacerts)
+    } else{
+        $pkg_deps += @("core/cacerts")
+    }
+
     $pkg_build_deps += @(
         "${pkg_build_deps[@]}"
         "stuartpreston/inspec"
@@ -65,6 +73,8 @@ function Invoke-DefaultBuildService {
     New-Item -ItemType Directory -Path "$pkg_prefix/hooks"
 
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
+`$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
+`$env:SSL_CERT_DIR="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/certs"
 `$env:PATH = "{{pkgPathFor "stuartpreston/inspec"}}/bin;`$env:PATH"
 
 `$env:CFG_SPLAY_FIRST_RUN="{{cfg.splay_first_run}}"
