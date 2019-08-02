@@ -175,6 +175,21 @@ ENV['PSModulePath'] = "C:/Program\ Files/WindowsPowerShell/Modules;C:/Windows/sy
 ENV['PATH'] += ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
 "@
 
+    # Get the Automate connection info from the default.toml if it's set and if the $scaffold_report_on_install is set to $true
+    if($scaffold_report_on_install){
+        if(Test-Path "$PLAN_CONTEXT\default.toml"){
+            $input_toml = "$PLAN_CONTEXT\default.toml"
+            
+            $toml_guid = (Select-String -Path $input_toml -Pattern '^chef_guid').Line -replace "chef_guid\s*=\s*", "chef_guid "
+            $toml_data_collector_token = (Select-String -Path $input_toml -Pattern '^token').Line -replace "token\s*=\s*", "data_collector.token "
+            $toml_data_collector_server_url = (Select-String -Path $input_toml -Pattern '^server_url').Line -replace "server_url\s*=\s*", "data_collector.server_url "
+            
+            Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb" -Value $toml_guid
+            Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb" -Value $toml_data_collector_token
+            Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb" -Value $toml_data_collector_server_url
+        }
+    }
+
     Write-BuildLine "Creating Chef Infra client configuration"
     Copy-Item -Path "$pkg_prefix/.chef/config.rb" -Destination "$pkg_prefix/config/client-config.rb"
     Add-Content -Path "$pkg_prefix/config/client-config.rb" -Value @"
@@ -215,8 +230,10 @@ ssl_verify_mode = ":verify_peer"
 acceptance = "undefined"
 
 [automate]
+report_on_bootstrap = false
+chef_guid = <your_guid>
 enable = false
-server_url = "https://<automate_url>"
+server_url = "https://<automate_url>/data-collector/v0/"
 token = "<automate_token>"
 user = "<automate_user>"
 "@
