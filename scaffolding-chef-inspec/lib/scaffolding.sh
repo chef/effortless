@@ -170,9 +170,6 @@ EOF
     "reporter": {
       "cli": {
         "stdout": true
-      },
-      "json": {
-        "file": "{{pkg.svc_path}}/logs/inspec_last_run.json"
       }{{#if cfg.automate.enable ~}},
       "automate" : {
         "url": "{{cfg.automate.server_url}}/data-collector/v0/",
@@ -181,14 +178,6 @@ EOF
         "verify_ssl": false
       }{{/if ~}}
     }
-    {{#if cfg.automate.enable }},
-    "compliance": {
-     "server" : "{{cfg.automate.server_url}}",
-     "token" : "{{cfg.automate.token}}",
-     "user" : "{{cfg.automate.user}}",
-     "insecure" : true,
-     "ent" : "automate"
-    }{{/if }}
 }
 EOF
   chmod 0640 "$pkg_prefix/config/inspec_exec_config.json"
