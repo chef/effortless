@@ -9,7 +9,8 @@ $pkg_deps=@(
     "core/chef-dk"
     "core/git"
 )
+
 function Invoke-Install {
-  New-Item -ItemType directory -Path "${pkg_prefix}/lib"
-  Copy-Item -Path "$PLAN_CONTEXT/lib/scaffolding.ps1" -Destination "$pkg_prefix/lib/scaffolding.ps1"
+  New-Item -ItemType directory -Path "$pkg_prefix/lib/windows"
+  Copy-Item -Path "$PLAN_CONTEXT/lib/windows/*" -Destination "$pkg_prefix/lib" -Recurse
 }

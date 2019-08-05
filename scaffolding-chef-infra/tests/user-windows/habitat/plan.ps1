@@ -14,3 +14,9 @@ $pkg_deps=@(
 $pkg_scaffolding="ci/scaffolding-chef-infra"
 $scaffold_policy_name="ci"
 $scaffold_cacerts="core/cacerts"
+
+# Required Metadata for CI
+$pkg_description="CI Test Plan for Linux"
+$pkg_license="Apache-2.0"
+$pkg_maintainer="The Habitat Maintainers humans@habitat.sh"
+$pkg_upstream_url="https://chef.sh"

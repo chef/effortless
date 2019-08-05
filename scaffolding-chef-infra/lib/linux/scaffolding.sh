@@ -6,7 +6,7 @@ fi
 scaffolding_load() {
   : "${scaffold_chef_client:=chef/chef-client}"
   : "${scaffold_chef_dk:=chef/chef-dk}"
-  : "${scaffold_cacerts:=core/cacerts}"
+  : "${scaffold_cacerts:=}"
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
 
@@ -30,7 +30,7 @@ scaffolding_load() {
   pkg_svc_run="set_just_so_you_will_render"
 
   # Internals
-  : ${lib_dir="$(pkg_path_for "${pkg_scaffolding}")/lib"}
+  : "${lib_dir="$(pkg_path_for "${pkg_scaffolding}")/lib"}"
 }
 
 do_default_download() {
@@ -49,7 +49,7 @@ do_default_build_service() {
   mkdir -p "${pkg_prefix}/hooks"
   # Template buildtime variables into the run hook.
   # This allows us to render the run hook from a file.
-  sed -e "s,\${scaffold_cacerts},${scaffold_cacerts},g" -e "s,\${pkg_svc_config_path},${pkg_svc_config_path},g" "${lib_dir}/run.bash" >> "${pkg_prefix}/hooks/run"
+  sed -e "s,\${scaffold_cacerts},${scaffold_cacerts},g" "${lib_dir}/run.bash" >> "${pkg_prefix}/hooks/run"
   chmod 0750 -R "${pkg_prefix}/hooks"
 }
 
@@ -77,7 +77,7 @@ do_default_install() {
 
   export_chunk=$(cat "${pkg_prefix}/.chef/config.rb")
 
-  shared_chunk=$(sed -e "s,\${pkg_svc_data_path},${pkg_svc_data_path},g" "${lib_dir}/shared-chunk.rb")
+  shared_chunk=$(cat "${lib_dir}"/shared-chunk.rb)
   shared_chunk=$(echo -e "${export_chunk}\n${shared_chunk}")
 
   bootstrap_chunk=$(cat "${lib_dir}"/bootstrap-chunk.rb)
