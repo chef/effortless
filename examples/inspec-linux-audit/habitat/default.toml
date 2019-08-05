@@ -45,7 +45,8 @@ log_level = "warn"
 #  - user: User for requests to Chef Automate (Default: '<automate_user>')
 [automate]
 enable = false
-server_url = "https://<automate_url>/data-collector/v0/"
+# Do not add /data-collector/v0/ to the server_url as this will be appended properly by the scaffolding when required
+server_url = "https://<automate_url>"
 token = '<automate_token>'
 user = '<automate_user>'
 

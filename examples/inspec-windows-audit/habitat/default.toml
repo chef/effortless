@@ -1,3 +1,10 @@
+# You must accept the Chef License to use this software:
+# https://www.chef.io/end-user-license-agreement/
+# Change [chef_license] from acceptance = "undefined" to
+# acceptance = "accept-no-persist" if you agree to the license.
+[chef_license]
+acceptance = "undefined"
+
 #######################################
 # Optional settings
 #######################################
@@ -26,7 +33,8 @@ log_level = "warn"
 
 [automate]
 enable = false
-server_url = "https://<automate_url>/data-collector/v0/"
+# Do not add /data-collector/v0/ to the server_url as this will be appended properly by the scaffolding when required
+server_url = "https://<automate_url>"
 token = '<automate_token>'
 user = '<automate_user>'
 # The connection information for your Chef Automate server
@@ -39,9 +47,3 @@ user = '<automate_user>'
 #######################################
 # End of optional settings
 #######################################
-
-# You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
-# Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
-
-[chef_license]
-acceptance = "undefined"
