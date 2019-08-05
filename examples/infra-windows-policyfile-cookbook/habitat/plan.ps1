@@ -1,0 +1,11 @@
+$pkg_name="windows-policyfile-cookbook"
+$pkg_origin="example-corporation"
+$pkg_version="0.1.0"
+$pkg_build_deps=@("core/chef-dk")
+$pkg_deps=@(
+  "core/cacerts"
+  "stuartpreston/chef-client"
+)
+$pkg_scaffolding="chef/scaffolding-chef-infra"
+$scaffold_policy_name="Policyfile"
+$scaffold_policyfile_path="$PLAN_CONTEXT\..\"
