@@ -45,7 +45,7 @@ log_level = "warn"
 #  - user: User for requests to Chef Automate (Default: '<automate_user>')
 [automate]
 enable = false
-server_url = "https://<automate_url>/data-collector/v0/"
+server_url = "https://<automate_url>"
 token = '<automate_token>'
 user = '<automate_user>'
 
