@@ -4,7 +4,6 @@ pkg_origin=chef
 pkg_version=$(cat "${PLAN_CONTEXT}/../VERSION")
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
-pkg_source=nope
 pkg_upstream_url="https://www.chef.sh"
 
 do_download() {
@@ -24,5 +23,6 @@ do_build() {
 }
 
 do_install() {
-  install -D -m 0644 "$PLAN_CONTEXT/lib/scaffolding.sh" "$pkg_prefix/lib/scaffolding.sh"
+  mkdir -p "${pkg_prefix}/lib/linux"/
+  cp -r "${PLAN_CONTEXT}/lib/linux"/* "${pkg_prefix}/lib"/
 }
