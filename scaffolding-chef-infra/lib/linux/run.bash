@@ -16,9 +16,15 @@ cfg_splay_first_run="${cfg_splay_first_run:-0}"
 cfg_chef_license={{cfg.chef_license.acceptance}}
 cfg_chef_license="${cfg_chef_license:-undefined}"
 
+if [ "${cfg_chef_license}" == "undefined" ]; then
+  cfg_chef_license_cmd=""
+else
+  cfg_chef_license_cmd="--chef-license ${cfg_chef_license}"
+fi
+
 chef_client_cmd()
 {
-  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" --chef-license "${cfg_chef_license}"
+  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" "${cfg_chef_license_cmd}"
 }
 
 cfg_splay_duration=$(shuf -i 0-"${cfg_splay}" -n 1)
