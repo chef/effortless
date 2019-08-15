@@ -33,3 +33,8 @@ $scaffold_policy_name="base"
 
 # $scaffold_cacerts="origin/cacerts"
 # allows you to specify a custom cacert package
+
+# $scaffold_report_on_install=$true
+# writes automate config information to the bootstrap-config.rb that is
+# generated during package install, the default is $false, by enabling this,
+#  you can report on converge status during image builds - such as Packer etc..

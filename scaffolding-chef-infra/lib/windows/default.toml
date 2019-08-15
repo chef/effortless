@@ -14,6 +14,5 @@ acceptance = "undefined"
 
 [automate]
 enable = false
-server_url = "https://<automate_url>"
+server_url = "https://<automate_url>/data-collector/v0"
 token = "<automate_token>"
-user = "<automate_user>"

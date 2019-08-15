@@ -83,6 +83,17 @@ do_default_install() {
   bootstrap_chunk=$(cat "${lib_dir}"/bootstrap-chunk.rb)
   echo -e "${shared_chunk}\n${bootstrap_chunk}" >> "${pkg_prefix}/config/bootstrap-config.rb"
 
+  if $scaffold_report_on_install; then
+    if [ -f "$PLAN_CONTEXT/default.toml" ]; then
+      echo `grep "^chef_guid" "$PLAN_CONTEXT/default.toml" | sed 's/^chef_guid *= */chef_guid /'` >> "${pkg_prefix}/config/bootstrap-config.rb"
+      echo `grep "^token" "$PLAN_CONTEXT/default.toml" | sed 's/^token *= */data_collector.token /'` >> "${pkg_prefix}/config/bootstrap-config.rb"
+      echo `grep "^server_url" "$PLAN_CONTEXT/default.toml" | sed 's/^server_url *= */data_collector.server_url /'` >> "${pkg_prefix}/config/bootstrap-config.rb"
+    else
+      printf "You must have a default.toml file present with the automate section configured..."
+      exit 1
+    fi
+  fi
+
   client_chunk=$(cat "${lib_dir}"/client-chunk.rb)
   echo -e "${shared_chunk}\n${client_chunk}" >> "${pkg_prefix}/config/client-config.rb"
 

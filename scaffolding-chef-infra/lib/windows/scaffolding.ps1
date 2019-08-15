@@ -90,6 +90,20 @@ function Invoke-DefaultInstall {
     $bootstrap_chunk = (Get-Content -Path "$lib_dir/bootstrap-chunk.rb") -join "`n"
     "$shared_chunk`n$bootstrap_chunk" | Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb"
 
+    if($scaffold_report_on_install){
+        if(Test-Path "$PLAN_CONTEXT\default.toml"){
+            $input_toml = "$PLAN_CONTEXT\default.toml"
+
+            $toml_guid = (Select-String -Path $input_toml -Pattern '^chef_guid').Line -replace "chef_guid\s*=\s*", "chef_guid "
+            $toml_data_collector_token = (Select-String -Path $input_toml -Pattern '^token').Line -replace "token\s*=\s*", "data_collector.token "
+            $toml_data_collector_server_url = (Select-String -Path $input_toml -Pattern '^server_url').Line -replace "server_url\s*=\s*", "data_collector.server_url "
+
+            Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb" -Value $toml_guid
+            Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb" -Value $toml_data_collector_token
+            Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb" -Value $toml_data_collector_server_url
+        }
+    }
+
     $client_chunk = (Get-Content -Path "$lib_dir/client-chunk.rb") -join "`n"
     "$shared_chunk`n$client_chunk" | Add-Content -Path "$pkg_prefix/config/client-config.rb"
 
