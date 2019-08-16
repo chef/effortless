@@ -90,6 +90,8 @@ function Invoke-DefaultInstall {
     $bootstrap_chunk = (Get-Content -Path "$lib_dir/bootstrap-chunk.rb") -join "`n"
     "$shared_chunk`n$bootstrap_chunk" | Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb"
 
+
+    # Report on install conditional
     if($scaffold_report_on_install){
         if(Test-Path "$PLAN_CONTEXT\default.toml"){
             $input_toml = "$PLAN_CONTEXT\default.toml"
