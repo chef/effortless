@@ -6,7 +6,7 @@ fi
 scaffolding_load() {
   : "${scaffold_chef_client:=chef/chef-client}"
   : "${scaffold_chef_dk:=chef/chef-dk}"
-  : "${scaffold_cacerts:=}"
+  : "${scaffold_cacerts:=core/cacerts}"
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
 
@@ -14,10 +14,10 @@ scaffolding_load() {
     "${pkg_deps[@]}"
     "${scaffold_chef_client}"
   )
-  if [ -n "${scaffold_cacerts}" ]; then
-    pkg_deps+=("${scaffold_cacerts}")
-  else
+  if [ "${scaffold_cacerts}" == "core/cacerts" ]; then
     pkg_deps+=("core/cacerts")
+  else
+    pkg_deps+=("${scaffold_cacerts}")
   fi
 
   pkg_build_deps=(

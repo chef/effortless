@@ -24,6 +24,21 @@ project_root="$(git rev-parse --show-toplevel)"
   SCAFFOLDING_PKG_RELEASE=${pkg_release}
   SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
 
+  echo "--- :construction: :linux: Building default user plan for ${plan}"
+  hab studio -q -r "/hab/studios/default-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-default"
+  source results/last_build.env # user last_build.env
+  DEFAULT_PKG_RELEASE="${pkg_release}"
+  DEFAULT_PKG_ARTIFACT="${pkg_artifact}"
+  DEFAULT_PKG_IDENT="${pkg_ident}"
+
+  echo "--- :mag: Testing ${pkg_ident}"
+  if [ ! -f "${plan}/tests/test-default.sh" ]; then
+    buildkite-agent annotate --style 'warning' ":warning: :linux: ${plan} has no Linux tests to run."
+    # TODO: When basic tests are created, change this to exit 1
+    exit 0
+  fi
+
+  hab studio -q -r "/hab/studios/default-${DEFAULT_PKG_RELEASE}" run "hab pkg install results/${DEFAULT_PKG_ARTIFACT} && ./${plan}/tests/test-default.sh ${DEFAULT_PKG_IDENT}"
 
   # Need to rename the studio because studios cannot be re-entered due to umount issues.
   # Ref: https://github.com/habitat-sh/habitat/issues/6577
@@ -32,12 +47,12 @@ project_root="$(git rev-parse --show-toplevel)"
   source results/last_build.env # cacerts last_build.env
   CACERTS_PKG_ARTIFACT="${pkg_artifact}"
 
-  echo "--- :construction: :linux: Building user plan for ${plan}"
-  hab studio -q -r "/hab/studios/ci-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && hab pkg install results/${CACERTS_PKG_ARTIFACT} && build ${plan}/tests/user-linux"
+  echo "--- :construction: :linux: Building api user plan for ${plan}"
+  hab studio -q -r "/hab/studios/api-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && hab pkg install results/${CACERTS_PKG_ARTIFACT} && build ${plan}/tests/user-linux"
   source results/last_build.env # user last_build.env
-  USER_PKG_RELEASE="${pkg_release}"
-  USER_PKG_ARTIFACT="${pkg_artifact}"
-  USER_PKG_IDENT="${pkg_ident}"
+  API_PKG_RELEASE="${pkg_release}"
+  API_PKG_ARTIFACT="${pkg_artifact}"
+  API_PKG_IDENT="${pkg_ident}"
 
   echo "--- :mag: Testing ${pkg_ident}"
   if [ ! -f "${plan}/tests/test.sh" ]; then
@@ -46,5 +61,5 @@ project_root="$(git rev-parse --show-toplevel)"
     exit 0
   fi
 
-  hab studio -q -r "/hab/studios/ci-${USER_PKG_RELEASE}" run "hab pkg install results/${USER_PKG_ARTIFACT} && ./${plan}/tests/test.sh ${USER_PKG_IDENT}"
+  hab studio -q -r "/hab/studios/api-${API_PKG_RELEASE}" run "hab pkg install results/${API_PKG_ARTIFACT} && ./${plan}/tests/test.sh ${API_PKG_IDENT}"
 )

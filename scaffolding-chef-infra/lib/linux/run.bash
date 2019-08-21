@@ -24,7 +24,12 @@ fi
 
 chef_client_cmd()
 {
-  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" "${cfg_chef_license_cmd}"
+  # Disables the Shellcheck that requires a double quote around a variable
+  # This only applies to the cfg_chef_license_cmd because putting quotes around the variable
+  # causes the Chef Client to think that the policyfile is be overriden which is unsupported
+  # and causes the chef run to fail.
+  # shellcheck disable=SC2086
+  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" $cfg_chef_license_cmd
 }
 
 cfg_splay_duration=$(shuf -i 0-"${cfg_splay}" -n 1)
