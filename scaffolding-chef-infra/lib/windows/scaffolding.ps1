@@ -68,7 +68,19 @@ function Invoke-DefaultBuild {
 
     Get-Content $policyfile | ? { $_.StartsWith("include_policy") } | % {
         $p = $_.Split()[1]
-        $p = $p.Replace("`"", "").Replace(",", "")
+        if ($p.Contains("'")) {
+            $p = $p.Replace("'", "").Replace(",", "")
+        }
+        elseif($p.Contains("`"")) {
+            $p = $p.Replace("`"", "").Replace(",", "")
+        }
+        else {
+            Write-Buildline "There is a problem in the policyfile with this line"
+            Write-BuildLine "$_"
+            Write-BuildLine "Please fix this before continuing."
+            exit 1
+        }
+        Write-BuildLine "Detected included policyfile, $p.rb, installing"
         chef install "$scaffold_policyfile_path/$p.rb"
     }
     chef install "$policyfile"
