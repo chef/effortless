@@ -64,6 +64,11 @@ do_default_build() {
   policyfile="${scaffold_policyfile_path}/${scaffold_policy_name}.rb"
 
   for p in $(grep include_policy "${policyfile}" | awk -F "," '{print $1}' | awk -F '"' '{print $2}' | tr -d " "); do
+    build_line "Detected included policyfile, ${p}.rb, installing"
+    chef install "${scaffold_policyfile_path}/${p}.rb"
+  done
+  for p in $(grep include_policy "${policyfile}" | awk -F "," '{print $1}' | awk -F '\x27' '{print $2}' | tr -d " "); do
+    build_line "Detected included policyfile, ${p}.rb, installing"
     chef install "${scaffold_policyfile_path}/${p}.rb"
   done
 

@@ -62,4 +62,10 @@ project_root="$(git rev-parse --show-toplevel)"
   fi
 
   hab studio -q -r "/hab/studios/api-${API_PKG_RELEASE}" run "hab pkg install results/${API_PKG_ARTIFACT} && ./${plan}/tests/test.sh ${API_PKG_IDENT}"
+
+  echo "--- :construction: :linux: Building include policy with double quotes user plan"
+  hab studio -q -r "/hab/studios/nested-double-${SCAFFOLDING_PKG_RELEASE}" run "export CHEF_POLICYFILE=double && hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-include-policy"
+
+  echo "--- :construction: :linux: Building include policy with single quotes user plan"
+  hab studio -q -r "/hab/studios/nested-single-${SCAFFOLDING_PKG_RELEASE}" run "export CHEF_POLICYFILE=single && hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-include-policy"
 )
