@@ -43,3 +43,18 @@ steps:
         docker:
           privileged: true
     timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :windows: :habicat: Build and run tests"
+    env:
+      HAB_LICENSE: "accept-no-persist"
+      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
+    command:
+      - ./bin/ci/build-and-run-tests.ps1 scaffolding-chef-infra
+    agents:
+      queue: 'default-windows-2016-privileged'
+    plugins:
+      docker#v3.2.0:
+        image: "chefes/buildkite-windows-2016"
+        shell: [ "powershell", "-Command" ]
+        always-pull: true
+        propagate-environment: true
