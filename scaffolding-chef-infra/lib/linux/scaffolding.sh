@@ -81,8 +81,10 @@ do_default_install() {
   mkdir -p "${pkg_prefix}/config"
 
   export_chunk=$(cat "${pkg_prefix}/.chef/config.rb")
-
   shared_chunk=$(cat "${lib_dir}"/shared-chunk.rb)
+  # A more complex sed command is necessary here instead of parameter expansion
+  # shellcheck disable=SC2001
+  shared_chunk="$(echo "${shared_chunk}" | sed -e "s,build_time_pkg_svc_data_path,${pkg_svc_data_path},g")"
   shared_chunk=$(echo -e "${export_chunk}\n${shared_chunk}")
 
   bootstrap_chunk=$(cat "${lib_dir}"/bootstrap-chunk.rb)
