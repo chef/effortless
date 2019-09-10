@@ -19,8 +19,13 @@ if(!(Test-Path -Path "$scaffold_policyfile_path")) {
     Write-Error "`$scaffold_policy_path is not a valid path."
     exit 1
 }
+# These variables are being set because Load-Scaffolding is not working.
+# When loading gets fixed these can be removed.
 if(!$scaffold_cacerts){
     $scaffold_cacerts = "core/cacerts"
+}
+if(!$scaffold_chef_client){
+    $scaffold_chef_client = "stuartpreston/chef-client"
 }
 
 # Internals
@@ -58,8 +63,10 @@ function Invoke-DefaultBuildService {
         New-Item -ItemType directory -Path $dir
     }
 
-    $run_hook = (Get-Content -Path "$lib_dir/run.ps1") -join "`n"
-    $run_hook -replace 'scaffold_cacerts', $scaffold_cacerts | Add-Content -Path "$pkg_prefix/hooks/run"
+    (Get-Content -Path "$lib_dir/run.ps1") -join "`n" | Foreach-Object {
+        $_ -replace 'scaffold_cacerts', $scaffold_cacerts `
+           -replace 'scaffold_chef_client', $scaffold_chef_client
+    } | Set-Content "$pkg_prefix/hooks/run"
 }
 
 function Invoke-DefaultBuild {

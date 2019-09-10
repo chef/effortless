@@ -28,7 +28,6 @@ Write-Output "Waiting $LOAD_WAIT_SECONDS seconds for $PackageIdentifier to start
 hab svc load $PackageIdentifier
 Start-Sleep $LOAD_WAIT_SECONDS
 
-
 $__dir=(Get-Item $PSScriptRoot)
 $test_result = Invoke-Pester -Strict -PassThru -Script @{
     Path = "$__dir/test.pester.ps1";
