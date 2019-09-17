@@ -22,7 +22,7 @@ scaffolding_load() {
 
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
-    "${scaffold_chef_dk}"
+    "chef/chef-dk/4.4.14/20190905060033"
     "core/git"
   )
 
