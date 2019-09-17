@@ -93,9 +93,10 @@ set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine
       insecure = true
       https    = false
     }
+
     inline = [
       "hab pkg install core/windows-service",
-      "hab pkg exec core/window-service install",
+      "hab pkg exec core/windows-service install",
       "hab license accept",
     ]
   }
