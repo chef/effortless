@@ -7,6 +7,7 @@ pkg_upstream_url="http://chef.io"
 pkg_scaffolding="chef/scaffolding-chef-infra"
 pkg_svc_user=("root")
 scaffold_policy_name="base"
+scaffold_chef_license="accept-no-persist"
 
 
 #######################################

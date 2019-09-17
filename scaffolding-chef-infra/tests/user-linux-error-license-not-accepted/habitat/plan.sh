@@ -9,9 +9,15 @@ pkg_version="1.0.0"
 pkg_scaffolding="ci/scaffolding-chef-infra"
 pkg_svc_user=("root")
 scaffold_policy_name="ci"
-scaffold_chef_client="chef/chef-client/14.13.11"
-scaffold_cacerts="ci/cacerts"
-scaffold_chef_license="accept-no-persist"
+# When the user doesn't accept the license, then all builds will
+# fail with the error message:
+#
+# The Chef License must be accepted in your plan
+# through the variable 'scaffold_chef_license=<value>'.
+#
+# More info: https://docs.chef.io/chef_license_accept.html
+#
+#scaffold_chef_license="accept-no-persist"
 
 # Required Metadata for CI
 pkg_description="CI Test Plan for Linux"

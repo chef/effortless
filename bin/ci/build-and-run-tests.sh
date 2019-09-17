@@ -15,15 +15,17 @@ echo "--- :construction: Starting build for ${plan}"
 # We want to ensure that we build from the project root. This
 # creates a subshell so that the cd will only affect that process
 project_root="$(git rev-parse --show-toplevel)"
-(
-  cd "$project_root"
+(cd "$project_root" || exit 1
 
   echo "--- :construction: :linux: Building ${plan}"
   env DO_CHECK=true hab pkg build "${plan}"
-  source results/last_build.env # scaffolding last_build.env
-  SCAFFOLDING_PKG_RELEASE=${pkg_release}
-  SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
+)
 
+source $project_root/results/last_build.env # scaffolding last_build.env
+SCAFFOLDING_PKG_RELEASE=${pkg_release}
+SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
+
+(cd "$project_root" || exit 1
   echo "--- :construction: :linux: Building default user plan for ${plan}"
   hab studio -q -r "/hab/studios/default-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-default"
   source results/last_build.env # user last_build.env
@@ -39,7 +41,25 @@ project_root="$(git rev-parse --show-toplevel)"
   fi
 
   hab studio -q -r "/hab/studios/default-${DEFAULT_PKG_RELEASE}" run "hab pkg install results/${DEFAULT_PKG_ARTIFACT} && ./${plan}/tests/test-default.sh ${DEFAULT_PKG_IDENT}"
+)
 
+set +e
+
+(cd "$project_root" || exit 1
+  echo "--- :mag: :linux: Test failure in plans without \$scaffold_chef_license variable"
+  hab studio -q \
+    -r "/hab/studios/license-failure-${SCAFFOLDING_PKG_RELEASE}" \
+    run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-error-license-not-accepted"
+  exit_code=$?
+  if [[ $exit_code != 7 ]]; then
+    echo "ERROR: The expected error code was 7 but got $exit_code"
+    exit $exit_code
+  fi
+)
+
+set -e
+
+(cd "$project_root" || exit 1
   # Need to rename the studio because studios cannot be re-entered due to umount issues.
   # Ref: https://github.com/habitat-sh/habitat/issues/6577
   echo "--- :construction: :linux: Building ci/cacerts plan"

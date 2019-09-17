@@ -6,3 +6,4 @@ pkg_license=("Apache-2.0")
 pkg_scaffolding="chef/scaffolding-chef-infra"
 scaffold_policy_name="Policyfile"
 scaffold_policyfile_path="$PLAN_CONTEXT/../" # habitat/../Policyfile.rb
+scaffold_chef_license="accept-no-persist"
