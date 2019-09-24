@@ -15,7 +15,7 @@ hab pkg install $PackageSource
 Get-Process hab-sup -ErrorAction SilentlyContinue | Stop-Process
 Get-Process hab-launch -ErrorAction SilentlyContinue | Stop-Process
 
-$SUP_WAIT_SECONDS = 20
+$SUP_WAIT_SECONDS = 60
 
 Start-Sleep $SUP_WAIT_SECONDS
 $hab_supervisor = Start-Process hab -ArgumentList sup,run -NoNewWindow -PassThru

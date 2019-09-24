@@ -3,6 +3,16 @@
   [ "${result}" = "Hello world!" ]
 }
 
+@test "Build: bootstrap-config.rb pkg_svc_data_path renders" {
+  result="$(grep '^cache_path.*' /hab/svc/${TEST_PKG_NAME}/config/bootstrap-config.rb | cut -d/ -f2-3)"
+  [ "${result}" = "hab/svc" ]
+}
+
+@test "Build: client-config.rb pkg_svc_data_path renders" {
+  result="$(grep '^cache_path.*' /hab/svc/${TEST_PKG_NAME}/config/client-config.rb | cut -d/ -f2-3)"
+  [ "${result}" = "hab/svc" ]
+}
+
 @test "API: scaffold_cacerts matches run hook core/cacerts" {
   result="$(grep '^export SSL_CERT_FILE.*' /hab/svc/${TEST_PKG_NAME}/hooks/run | cut -d/ -f4-5)"
   [ "${result}" = "core/cacerts" ]

@@ -21,6 +21,14 @@ Describe "Chef client run doesn't fail" {
         }
     }
 
+    Context "Build: client-config.rb pkg_svc_data_path renders " {
+        It "client-config.rb renders" {
+            $config = Get-Content "C:\hab\svc\user-windows-default\config\client-config.rb" | Select-String -Pattern 'cache_path'
+            $config = $config -split ' '
+            $config[1] | Should be "'C:\hab\svc\user-windows-default\data/cache'"
+        }
+    }
+
     Context "API: scaffold_cacerts matches run hook core/cacerts" {
         It "SSL_CERT_FILE should be core/cacerts" {
             $cert_file = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\$env:SSL_CERT_FILE'

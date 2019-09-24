@@ -1,3 +1,7 @@
+cache_path '{{pkg.svc_data_path}}/cache'
+node_path '{{pkg.svc_data_path}}/nodes'
+role_path '{{pkg.svc_data_path}}/roles'
+
 cfg_env_path_prefix = '{{cfg.env_path_prefix}}'
 cfg_env_path_prefix ||= ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
 ENV['PATH'] += cfg_env_path_prefix
