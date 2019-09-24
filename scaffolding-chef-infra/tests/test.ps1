@@ -25,12 +25,6 @@ Start-Sleep $SUP_WAIT_SECONDS
 $LOAD_WAIT_SECONDS = 60
 
 Write-Output "Waiting $LOAD_WAIT_SECONDS seconds for $PackageIdentifier to start..."
-
-$sup_secret = (Get-Content "c:/hab/sup/default/CTL_SECRET")
-Write-Output "The hab ctl file is: $sup_secret"
-
-Write-Output "$env:HAB_CTL_SECRET"
-
 hab svc load $PackageIdentifier
 Start-Sleep $LOAD_WAIT_SECONDS
 
