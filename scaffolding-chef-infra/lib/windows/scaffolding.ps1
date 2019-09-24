@@ -97,6 +97,7 @@ function Invoke-DefaultInstall {
     $export_chunk = (Get-Content -Path "$pkg_prefix/.chef/config.rb") -join "`n"
 
     $shared_chunk = (Get-Content -Path "$lib_dir/shared-chunk.rb") -join "`n"
+    $shared_chunk = "$export_chunk`n$shared_chunk"
 
     $bootstrap_chunk = (Get-Content -Path "$lib_dir/bootstrap-chunk.rb") -join "`n"
     "$shared_chunk`n$bootstrap_chunk" | Add-Content -Path "$pkg_prefix/config/bootstrap-config.rb"
