@@ -25,7 +25,7 @@ Describe "Chef client run doesn't fail" {
         It "client-config.rb renders" {
             $config = Get-Content "C:\hab\svc\user-windows-default\config\client-config.rb" | Select-String -Pattern 'cache_path'
             $config = $config -split ' '
-            $config[1] | Should be "C:\hab\svc\user-windows-default\data/cache'"
+            $config[1] | Should be "'C:\hab\svc\user-windows-default\data/cache'"
         }
     }
 
