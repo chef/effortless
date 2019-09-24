@@ -21,14 +21,6 @@ Describe "Chef client run doesn't fail" {
         }
     }
 
-    Context "Build: bootstrap-config.rb pkg_svc_data_path renders " {
-        It "bootstrap-config.rb renders" {
-            $config = Get-Content "C:\hab\svc\user-windows-default\config\bootstrap-config.rb" | Select-String -Pattern 'cache_path'
-            $config = $config -split ' '
-            $config[1] | Should be "'\hab\svc\user-windows-default\data/cache'"
-        }
-    }
-
     Context "Build: client-config.rb pkg_svc_data_path renders " {
         It "client-config.rb renders" {
             $config = Get-Content "C:\hab\svc\user-windows-default\config\client-config.rb" | Select-String -Pattern 'cache_path'
