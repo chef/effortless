@@ -6,7 +6,7 @@ splay = 1800
 splay_first_run = 0
 run_lock_timeout = 1800
 log_level = "warn"
-env_path_prefix = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
+env_path_prefix = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin;C:/Habitat/;C:/ProgramData/Habitat"
 ssl_verify_mode = ":verify_peer"
 
 [chef_license]

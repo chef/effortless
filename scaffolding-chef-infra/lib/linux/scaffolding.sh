@@ -86,7 +86,7 @@ do_default_install() {
   shared_chunk=$(echo -e "${export_chunk}\n${shared_chunk}")
 
   bootstrap_chunk=$(cat "${lib_dir}"/bootstrap-chunk.rb)
-  echo -e "${shared_chunk}\n${bootstrap_chunk}" >> "${pkg_prefix}/config/bootstrap-config.rb"
+  echo -e "${export_chunk}\n${bootstrap_chunk}" >> "${pkg_prefix}/config/bootstrap-config.rb"
 
   client_chunk=$(cat "${lib_dir}"/client-chunk.rb)
   echo -e "${shared_chunk}\n${client_chunk}" >> "${pkg_prefix}/config/client-config.rb"

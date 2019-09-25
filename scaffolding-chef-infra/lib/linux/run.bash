@@ -13,14 +13,8 @@ cfg_splay={{cfg.splay}}
 cfg_splay="${cfg_splay:-1800}"
 cfg_splay_first_run={{cfg.splay_first_run}}
 cfg_splay_first_run="${cfg_splay_first_run:-0}"
-cfg_chef_license={{cfg.chef_license.acceptance}}
-cfg_chef_license="${cfg_chef_license:-undefined}"
 
-if [ "${cfg_chef_license}" == "undefined" ]; then
-  cfg_chef_license_cmd=""
-else
-  cfg_chef_license_cmd="--chef-license ${cfg_chef_license}"
-fi
+export CHEF_LICENSE="{{cfg.chef_license.acceptance}}"
 
 chef_client_cmd()
 {
@@ -29,7 +23,7 @@ chef_client_cmd()
   # causes the Chef Client to think that the policyfile is be overriden which is unsupported
   # and causes the chef run to fail.
   # shellcheck disable=SC2086
-  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" $cfg_chef_license_cmd
+  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}"
 }
 
 cfg_splay_duration=$(shuf -i 0-"${cfg_splay}" -n 1)
