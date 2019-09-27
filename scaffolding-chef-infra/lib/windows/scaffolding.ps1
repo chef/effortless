@@ -73,6 +73,16 @@ function Invoke-DefaultBuild {
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
 
+    if (!$scaffold_chef_license) {
+    Write-BuildLine $error_msg="
+The Chef License must be accepted in your plan
+through the variable 'scaffold_chef_license=<value>'.
+More info: https://docs.chef.io/chef_license_accept.html
+"
+        exit 7
+    }
+    $env:CHEF_LICENSE="$scaffold_chef_license"
+    
     gem install chef-cli --no-document
 
     Get-Content $policyfile | ? { $_.StartsWith("include_policy") } | % {
