@@ -34,7 +34,7 @@ $lib_dir = "$(Get-HabPackagePath $scaffolding_package)/lib"
 
 function Load-Scaffolding {
     $scaffold_chef_client = "stuartpreston/chef-client"
-    $scaffold_chef_dk = "core/chef-dk"
+    # $scaffold_chef_dk = "core/chef-dk"
     $scaffold_cacerts = ""
     $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
@@ -49,7 +49,7 @@ function Load-Scaffolding {
     }
 
     $pkg_build_deps += @(
-        "$scaffold_chef_dk"
+        # "$scaffold_chef_dk"
         "core/git"
     )
 
@@ -72,6 +72,8 @@ function Invoke-DefaultBuildService {
 function Invoke-DefaultBuild {
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
+
+    gem install chef-cli --no-document
 
     Get-Content $policyfile | ? { $_.StartsWith("include_policy") } | % {
         $p = $_.Split()[1]
