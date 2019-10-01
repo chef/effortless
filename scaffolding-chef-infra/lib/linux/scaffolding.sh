@@ -54,18 +54,7 @@ do_default_build_service() {
 }
 
 do_default_build() {
-  if [ -z "$scaffold_chef_license" ]; then
-    local error_msg="
-
-The Chef License must be accepted in your plan
-through the variable 'scaffold_chef_license=<value>'.
-
-More info: https://docs.chef.io/chef_license_accept.html
-
-"
-    exit_with "$error_msg" 7
-  fi
-  export CHEF_LICENSE="$scaffold_chef_license"
+  export CHEF_LICENSE="accept-no-persist"
 
   if [ ! -d "${scaffold_policyfile_path}" ]; then
     build_line "A policyfile directory is required to build. More info: https://docs.chef.io/policyfile.html"

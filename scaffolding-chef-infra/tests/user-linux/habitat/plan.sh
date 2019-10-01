@@ -11,7 +11,6 @@ pkg_svc_user=("root")
 scaffold_policy_name="ci"
 scaffold_chef_client="chef/chef-client/14.13.11"
 scaffold_cacerts="ci/cacerts"
-scaffold_chef_license="accept-no-persist"
 
 # Required Metadata for CI
 pkg_description="CI Test Plan for Linux"

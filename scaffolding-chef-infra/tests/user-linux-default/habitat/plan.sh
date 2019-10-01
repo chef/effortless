@@ -9,7 +9,6 @@ pkg_version="1.0.0"
 pkg_scaffolding="ci/scaffolding-chef-infra"
 pkg_svc_user=("root")
 scaffold_policy_name="ci"
-scaffold_chef_license="accept-no-persist"
 
 # Required Metadata for CI
 pkg_description="CI Test Plan for Linux"

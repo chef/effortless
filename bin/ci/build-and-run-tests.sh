@@ -43,20 +43,6 @@ SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
   hab studio -q -r "/hab/studios/default-${DEFAULT_PKG_RELEASE}" run "hab pkg install results/${DEFAULT_PKG_ARTIFACT} && ./${plan}/tests/test-default.sh ${DEFAULT_PKG_IDENT}"
 )
 
-set +e
-
-(cd "$project_root" || exit 1
-  echo "--- :mag: :linux: Test failure in plans without \$scaffold_chef_license variable"
-  hab studio -q \
-    -r "/hab/studios/license-failure-${SCAFFOLDING_PKG_RELEASE}" \
-    run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-error-license-not-accepted"
-  exit_code=$?
-  if [[ $exit_code != 7 ]]; then
-    echo "ERROR: The expected error code was 7 but got $exit_code"
-    exit $exit_code
-  fi
-)
-
 set -e
 
 (cd "$project_root" || exit 1
