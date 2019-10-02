@@ -27,6 +27,8 @@ scaffolding_load() {
 }
 
 do_default_before() {
+  export CHEF_LICENSE="accept-no-persist"
+
   if [ ! -f "$PLAN_CONTEXT/../inspec.yml" ]; then
     message="ERROR: Cannot find inspec.yml."
     message="$message Please build from the profile root"
@@ -144,8 +146,7 @@ EOF
 do_default_build() {
   inspec archive "$HAB_CACHE_SRC_PATH/$pkg_dirname" \
                  --overwrite \
-                 -o "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz" \
-                 --chef-license "$CHEF_LICENSE"
+                 -o "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz"
 }
 
 do_default_install() {
