@@ -12,10 +12,22 @@ echo "--- :key: Generating fake origin key"
 hab origin key generate "${HAB_ORIGIN}"
 
 echo "--- :construction: Starting build for ${plan}"
-# We want to ensure that we build from the project root. This
-# creates a subshell so that the cd will only affect that process
+# We'll build from the root of the project's git repo. To do that,
+# we'll need to ensure git is installed to determine the
+# project root directory.
+if type git 2>/dev/null; then
+  echo "--- :thumbsup: git's installed"
+else
+  echo "--- :hammer_and_wrench: installing git"
+  hab pkg install core/git --binlink
+fi
 project_root="$(git rev-parse --show-toplevel)"
-(cd "$project_root" || exit 1
+
+# We want to ensure that we build the scaffolding package from the
+# project root. When changing directories in scripts, doing so in
+# a subshell () ensures that the script continues from the initial
+# runtime directory regardless of the actions within.
+( cd "$project_root" || exit 1
 
   echo "--- :construction: :linux: Building ${plan}"
   env DO_CHECK=true hab pkg build "${plan}"
