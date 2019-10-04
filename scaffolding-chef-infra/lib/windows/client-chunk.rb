@@ -10,6 +10,10 @@ cfg_ssl_verify_mode = '{{cfg.ssl_verify_mode}}'
 cfg_ssl_verify_mode ||= ":verify_peer"
 ssl_verify_mode "#{cfg_ssl_verify_mode}"
 
+cfg_verify_api_cert = '{{cfg.verify_api_cert}}'
+cfg_verify_api_cert ||= false
+verify_api_cert "#{cfg_verify_api_cert}"
+
 {{#if cfg.automate.enable ~}}
 chef_guid "{{sys.member_id}}"
 data_collector.token "{{cfg.automate.token}}"
