@@ -16,7 +16,7 @@ export TEST_PKG_IDENT
 TEST_PKG_NAME="$(echo "${TEST_PKG_IDENT}" | cut -d/ -f2)"
 export TEST_PKG_NAME
 
-source "../habitat/plan.sh"
+source "$(dirname "${0}")/../habitat/plan.sh"
 export pkg_svc_path
 
 hab pkg install core/bats --binlink
