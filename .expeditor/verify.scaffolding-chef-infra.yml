@@ -37,7 +37,7 @@ steps:
 
   - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and default user plan"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-default
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-default ci
     expeditor:
       executor:
         docker:
@@ -46,7 +46,7 @@ steps:
 
   - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and api plan"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-api
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-api ci
     expeditor:
       executor:
         docker:
