@@ -37,4 +37,4 @@ hab svc load "${TEST_PKG_IDENT}"
 echo "Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to start..."
 
 sleep "${LOAD_WAIT_SECONDS}"
-bats "$(dirname "${0}")/test-default.bats"
+bats "$(dirname "${0}")/test.bats"
