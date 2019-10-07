@@ -10,7 +10,7 @@ else
   policy_name="${CHEF_POLICYFILE}"
 fi
 
-pkg_name=user-linux-nested-policy
+pkg_name=user-linux-include-policy
 pkg_origin=ci
 pkg_version="1.0.0"
 pkg_scaffolding="ci/scaffolding-chef-infra"
