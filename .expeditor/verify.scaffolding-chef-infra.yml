@@ -37,7 +37,7 @@ steps:
 
   - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with defaults"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-default ci
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-default ci
     expeditor:
       executor:
         docker:
@@ -46,7 +46,7 @@ steps:
 
   - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with change to API's"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-api ci
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-api ci
     expeditor:
       executor:
         docker:
@@ -55,7 +55,7 @@ steps:
 
   - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan that includes a policy defined in single quotes"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy single
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-include-policy single
     expeditor:
       executor:
         docker:
@@ -64,7 +64,7 @@ steps:
 
   - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan that includes a policy defined in double quotes"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy double
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-include-policy double
     expeditor:
       executor:
         docker:
@@ -76,7 +76,7 @@ steps:
       HAB_LICENSE: "accept-no-persist"
       HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
     command:
-      - ./bin/ci/build-and-run-tests.ps1 scaffolding-chef-infra
+      - ./bin/ci/verify-plans.ps1 scaffolding-chef-infra
     agents:
       queue: 'default-windows-2016-privileged'
     plugins:
