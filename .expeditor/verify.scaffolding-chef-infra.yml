@@ -35,9 +35,27 @@ steps:
       executor:
         docker:
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests"
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and default user plan"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-default
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and api plan"
+    command:
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-api
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and include policy plan"
+    command:
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy
     expeditor:
       executor:
         docker:

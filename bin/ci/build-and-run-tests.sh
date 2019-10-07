@@ -3,6 +3,7 @@
 set -eou pipefail
 
 plan="$(basename "${1}")"
+test_plan="$(basename "${2}")"
 HAB_ORIGIN=ci
 export HAB_ORIGIN
 
@@ -38,52 +39,24 @@ SCAFFOLDING_PKG_RELEASE=${pkg_release}
 SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
 
 (cd "$project_root" || exit 1
-  echo "--- :construction: :linux: Building default user plan for ${plan}"
-  hab studio -q -r "/hab/studios/default-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-default"
-  source results/last_build.env # user last_build.env
-  DEFAULT_PKG_RELEASE="${pkg_release}"
-  DEFAULT_PKG_ARTIFACT="${pkg_artifact}"
-  DEFAULT_PKG_IDENT="${pkg_ident}"
-
-  echo "--- :mag: Testing ${pkg_ident}"
-  if [ ! -f "${plan}/tests/test-default.sh" ]; then
-    buildkite-agent annotate --style 'warning' ":warning: :linux: ${plan} has no Linux tests to run."
-    # TODO: When basic tests are created, change this to exit 1
-    exit 0
-  fi
-
-  hab studio -q -r "/hab/studios/default-${DEFAULT_PKG_RELEASE}" run "hab pkg install results/${DEFAULT_PKG_ARTIFACT} && ./${plan}/tests/test-default.sh ${DEFAULT_PKG_IDENT}"
-)
-
-set -e
-
-(cd "$project_root" || exit 1
-  # Need to rename the studio because studios cannot be re-entered due to umount issues.
-  # Ref: https://github.com/habitat-sh/habitat/issues/6577
   echo "--- :construction: :linux: Building ci/cacerts plan"
   hab studio -q -r "/hab/studios/ci-cacerts-${SCAFFOLDING_PKG_RELEASE}" run "build ${plan}/tests/cacerts"
   source results/last_build.env # cacerts last_build.env
   CACERTS_PKG_ARTIFACT="${pkg_artifact}"
 
-  echo "--- :construction: :linux: Building api user plan for ${plan}"
-  hab studio -q -r "/hab/studios/api-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && hab pkg install results/${CACERTS_PKG_ARTIFACT} && build ${plan}/tests/user-linux"
+  echo "--- :construction: :linux: Building ${test_plan} user plan for ${plan}"
+  hab studio -q -r "/hab/studios/default-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/${test_plan}"
   source results/last_build.env # user last_build.env
-  API_PKG_RELEASE="${pkg_release}"
-  API_PKG_ARTIFACT="${pkg_artifact}"
-  API_PKG_IDENT="${pkg_ident}"
+  TEST_PKG_RELEASE="${pkg_release}"
+  TEST_PKG_ARTIFACT="${pkg_artifact}"
+  TEST_PKG_IDENT="${pkg_ident}"
 
   echo "--- :mag: Testing ${pkg_ident}"
-  if [ ! -f "${plan}/tests/test.sh" ]; then
-    buildkite-agent annotate --style 'warning' ":warning: :linux: ${plan} has no Linux tests to run."
+  if [ ! -f "${plan}/tests/${test_plan}/tests/test.sh" ]; then
+    buildkite-agent annotate --style 'warning' ":warning: :linux: ${test_plan} has no tests to run."
     # TODO: When basic tests are created, change this to exit 1
     exit 0
   fi
 
-  hab studio -q -r "/hab/studios/api-${API_PKG_RELEASE}" run "hab pkg install results/${API_PKG_ARTIFACT} && ./${plan}/tests/test.sh ${API_PKG_IDENT}"
-
-  echo "--- :construction: :linux: Building include policy with double quotes user plan"
-  hab studio -q -r "/hab/studios/nested-double-${SCAFFOLDING_PKG_RELEASE}" run "export CHEF_POLICYFILE=double && hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-include-policy"
-
-  echo "--- :construction: :linux: Building include policy with single quotes user plan"
-  hab studio -q -r "/hab/studios/nested-single-${SCAFFOLDING_PKG_RELEASE}" run "export CHEF_POLICYFILE=single && hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/user-linux-include-policy"
+  hab studio -q -r "/hab/studios/default-${TEST_PKG_RELEASE}" run "hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
 )
