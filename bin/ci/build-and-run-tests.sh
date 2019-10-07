@@ -46,7 +46,7 @@ SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
   CACERTS_PKG_ARTIFACT="${pkg_artifact}"
 
   echo "--- :construction: :linux: Building ${test_plan} user plan for ${plan}"
-  hab studio -q -r "/hab/studios/default-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && build ${plan}/tests/${test_plan}"
+  hab studio -q -r "/hab/studios/${test_plan}-${SCAFFOLDING_PKG_RELEASE}" run "hab pkg install results/${SCAFFOLDING_PKG_ARTIFACT} && hab pkg install results/${CACERTS_PKG_ARTIFACT} && build ${plan}/tests/${test_plan}"
   source results/last_build.env # user last_build.env
   TEST_PKG_RELEASE="${pkg_release}"
   TEST_PKG_ARTIFACT="${pkg_artifact}"
@@ -59,5 +59,5 @@ SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
     exit 0
   fi
 
-  hab studio -q -r "/hab/studios/default-${TEST_PKG_RELEASE}" run "export CHEF_POLICYFILE=${chef_policy_name} && hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
+  hab studio -q -r "/hab/studios/${test_plan}-${TEST_PKG_RELEASE}" run "export CHEF_POLICYFILE=${chef_policy_name} && hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
 )
