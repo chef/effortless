@@ -4,6 +4,7 @@ set -eou pipefail
 
 plan="$(basename "${1}")"
 test_plan="$(basename "${2}")"
+chef_policy_name="$(basename "${3}")"
 HAB_ORIGIN=ci
 export HAB_ORIGIN
 
@@ -58,5 +59,5 @@ SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
     exit 0
   fi
 
-  hab studio -q -r "/hab/studios/default-${TEST_PKG_RELEASE}" run "hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
+  hab studio -q -r "/hab/studios/default-${TEST_PKG_RELEASE}" run "export CHEF_POLICYFILE=${chef_policy_name} && hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
 )

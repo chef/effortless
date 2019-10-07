@@ -15,7 +15,7 @@ TEST_PKG_IDENT="${1}"
 export TEST_PKG_IDENT
 TEST_PKG_NAME="$(echo "${TEST_PKG_IDENT}" | cut -d/ -f2)"
 export TEST_PKG_NAME
-source "$(dirname "${0}")/${TEST_PKG_NAME}/habitat/plan.sh"
+source "../habitat/plan.sh"
 export scaffold_chef_client
 export scaffold_cacerts
 export pkg_svc_path

@@ -53,9 +53,18 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and include policy plan"
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and include policy plan single quote"
     command:
-      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy single
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and include policy plan double quote"
+    command:
+      - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy double
     expeditor:
       executor:
         docker:
