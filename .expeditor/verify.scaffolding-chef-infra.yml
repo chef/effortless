@@ -35,7 +35,7 @@ steps:
       executor:
         docker:
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and default user plan"
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with defaults"
     command:
       - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-default ci
     expeditor:
@@ -44,7 +44,7 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and api plan"
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with change to API's"
     command:
       - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-api ci
     expeditor:
@@ -53,7 +53,7 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and include policy plan single quote"
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan that includes a policy defined in single quotes"
     command:
       - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy single
     expeditor:
@@ -62,7 +62,7 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Build and run tests and include policy plan double quote"
+  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan that includes a policy defined in double quotes"
     command:
       - bin/ci/build-and-run-tests.sh scaffolding-chef-infra user-linux-include-policy double
     expeditor:
