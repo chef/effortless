@@ -1,7 +1,7 @@
 # encoding: utf-8
 # copyright: 2018, The Authors
 
-control '1234' do
+control 'Test Control' do
   title 'Control title'
   desc "Control description"
   impact 1.0
