@@ -43,11 +43,13 @@ log_level = "warn"
 #  - server_url: Chef Automate server URL (Default: 'https://<automate_url>')
 #  - token: API token for Chef Automate (Default: '<automate_token>')
 #  - user: User for requests to Chef Automate (Default: '<automate_user>')
+#  - environment: An optional environment setting to aid in filtering within Automate
 [automate]
 enable = false
 server_url = "https://<automate_url>"
 token = '<automate_token>'
 user = '<automate_user>'
+environment = 'foo'
 
 #######################################
 # End of optional settings

@@ -176,8 +176,9 @@ EOF
         "url": "{{cfg.automate.server_url}}/data-collector/v0/",
         "token": "{{cfg.automate.token}}",
         "node_name": "{{ sys.hostname }}",
-        "verify_ssl": false
-      }{{/if ~}}
+        "verify_ssl": false{{#if cfg.automate.environment}},
+        "environment": "{{cfg.automate.environment}}"{{/if }}
+      }{{/if }}
     }
 }
 EOF

@@ -26,14 +26,16 @@ log_level = "warn"
 
 [automate]
 enable = false
-server_url = "https://<automate_url>/data-collector/v0/"
+server_url = "https://<automate_url>"
 token = '<automate_token>'
 user = '<automate_user>'
+environment = 'foo'
 # The connection information for your Chef Automate server
 # Setting enable = false will turn off this feature
 # The server_url is the url to your Chef Automate Server
 # The token is a token with the data_collector rights to the Chef Automate API
 # The user is the user that you log in to Chef Automate with, using inspec compliance login
+# The environment: An optional environment setting to aid in filtering within Automate
 # Default value: false
 
 #######################################
