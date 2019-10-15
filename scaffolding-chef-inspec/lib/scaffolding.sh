@@ -7,6 +7,7 @@ scaffolding_load() {
   : "${scaffold_automate_user:=}"
   : "${scaffold_automate_token:=}"
   : "${scaffold_cacerts:=}"
+  : "${scaffold_inspec_client:=chef/inspec}"
 
   pkg_deps=(
     "${pkg_deps[@]}"
