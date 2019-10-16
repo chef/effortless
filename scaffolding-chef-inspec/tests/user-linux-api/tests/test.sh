@@ -15,10 +15,10 @@ TEST_PKG_IDENT="${1}"
 export TEST_PKG_IDENT
 TEST_PKG_NAME="$(echo "${TEST_PKG_IDENT}" | cut -d/ -f2)"
 export TEST_PKG_NAME
-export scaffold_inspec_client
 
 source "$(dirname "${0}")/../habitat/plan.sh"
 export pkg_svc_path
+export scaffold_inspec_client
 
 hab pkg install core/bats --binlink
 hab pkg install "${TEST_PKG_IDENT}"
