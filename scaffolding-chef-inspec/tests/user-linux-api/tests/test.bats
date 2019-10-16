@@ -1,4 +1,4 @@
-SCAFFOLD_PKG_INSPEC_CLIENT_VERSION="$(echo "${scaffold_chef_client}" | cut -d/ -f3)"
+SCAFFOLD_PKG_INSPEC_CLIENT_VERSION="$(echo "${scaffold_inspec_client}" | cut -d/ -f3)"
 
 @test "API: scaffold_cacerts matches run hook core/cacerts" {
   result="$(grep '^export SSL_CERT_FILE.*' /hab/svc/${TEST_PKG_NAME}/hooks/run | cut -d/ -f4-5)"
