@@ -11,7 +11,7 @@ SCAFFOLD_PKG_INSPEC_CLIENT_VERSION="$(echo "${scaffold_inspec_client}" | cut -d/
 }
 
 @test "API: scaffold_inspec_client version matches whats in the plan" {
-  result="$(hab pkg exec ${TEST_PKG_IDENT} inspec -v | head -n 1 | awk '{print $2}')"
+  result="$(hab pkg exec ${TEST_PKG_IDENT} inspec --version)"
   [ "${result}" = "${SCAFFOLD_PKG_INSPEC_CLIENT_VERSION}" ]
 }
 
