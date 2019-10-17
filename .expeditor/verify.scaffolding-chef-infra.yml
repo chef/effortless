@@ -103,3 +103,12 @@ steps:
         docker:
           privileged: true
     timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test default InSpec profile"
+    command:
+      - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-waiver ci
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60

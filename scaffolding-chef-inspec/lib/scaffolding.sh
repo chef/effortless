@@ -118,11 +118,12 @@ CFG_LOG_LEVEL="\${CFG_LOG_LEVEL:-warn}"
 CFG_CHEF_LICENSE={{cfg.chef_license.acceptance}}
 CFG_CHEF_LICENSE="\${CFG_CHEF_LICENSE:-undefined}"
 CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
+WAIVER="{{pkg.svc_config_path}}/waiver.yml"
 PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
 inspec_cmd()
 {
-  inspec exec \${PROFILE_PATH} --config \${CONFIG} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
+  inspec exec \${PROFILE_PATH} --config \${CONFIG} --waiver-file ${WAIVER} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
 }
 
 
@@ -204,6 +205,13 @@ token = '<automate_token>'
 user = '<automate_user>'
 EOF
   chmod 0640 "$pkg_prefix/default.toml"
+
+  cat << EOF >> "$pkg_prefix/config/waiver.yml"
+{{#if cfg.waivers ~}}
+{{toYaml cfg.waivers}}
+{{/if ~}}
+EOF
+  chmod 0640 "$pkg_prefix/config/waiver.yml"
 }
 
 do_default_strip() {
