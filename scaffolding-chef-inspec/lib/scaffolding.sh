@@ -123,7 +123,7 @@ PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
 inspec_cmd()
 {
-  inspec exec \${PROFILE_PATH} --config \${CONFIG} --waiver-file ${WAIVER} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
+  inspec exec \${PROFILE_PATH} --config \${CONFIG} --waiver-file \${WAIVER} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
 }
 
 
