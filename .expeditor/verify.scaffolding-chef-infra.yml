@@ -104,7 +104,7 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test default InSpec profile"
+  - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test InSpec profile with waivers"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-waiver ci
     expeditor:
