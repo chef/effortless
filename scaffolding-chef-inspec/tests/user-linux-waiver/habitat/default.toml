@@ -5,6 +5,6 @@
 acceptance = "accept-no-persist"
 
 [waivers]
-[waivers.foo_2]
+[waivers.foo-2]
 run = false
-justification = "This should be a test that foo_2 is skipped"
+justification = "This should be a test that foo-2 is skipped"
