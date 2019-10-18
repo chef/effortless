@@ -7,10 +7,11 @@ scaffolding_load() {
   : "${scaffold_automate_user:=}"
   : "${scaffold_automate_token:=}"
   : "${scaffold_cacerts:=}"
+  : "${scaffold_inspec_client:=chef/inspec}"
 
   pkg_deps=(
     "${pkg_deps[@]}"
-    "chef/inspec"
+    "${scaffold_inspec_client}"
   )
   if [ -n "${scaffold_cacerts}" ]; then
     pkg_deps+=("${scaffold_cacerts}")
@@ -20,7 +21,7 @@ scaffolding_load() {
 
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
-    "chef/inspec"
+    "${scaffold_inspec_client}"
   )
   pkg_svc_user="root"
   pkg_svc_run="set_just_so_you_will_render"
