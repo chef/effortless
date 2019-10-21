@@ -121,9 +121,20 @@ CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 WAIVER="{{pkg.svc_config_path}}/waiver.yml"
 PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
+# This function compares the versions of inspec to ensure that
+# the waiver feature is present before building the InSpec command
+function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
+inspec_waiver_version=4.17.27
+
+if version_gt $(inspec --version) $inspec_waiver_version; then
+  cfg_waiver_cmd="--waiver-file \${WAIVER}"
+else
+  cfg_waiver_cmd=""
+fi
+
 inspec_cmd()
 {
-  inspec exec \${PROFILE_PATH} --config \${CONFIG} --waiver-file \${WAIVER} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
+  inspec exec \${PROFILE_PATH} --config \${CONFIG} \${cfg_waiver_cmd} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
 }
 
 
