@@ -10,7 +10,7 @@ control 'foo_1' do
   end
 end
 
-control 'foo-2' do
+control 'foo_2' do
   title 'Control title'
   desc "Control description"
   impact 1.0
