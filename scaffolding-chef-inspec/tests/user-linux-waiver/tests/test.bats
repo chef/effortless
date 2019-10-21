@@ -27,7 +27,7 @@ function parse_yaml {
 
 @test "Waiver: Ensure waiver file is written correctly" {
   result="$(parse_yaml /hab/svc/user-linux-waiver/config/waiver.yml | grep 'foo_2_run')"
-  [ "${result}" = "foo_2_run=\"false\""]
+  [ "${result}" = "foo_2_run=\"false\"" ]
 }
 
 teardown(){
