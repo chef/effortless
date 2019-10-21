@@ -126,11 +126,13 @@ PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
 inspec_waiver_version=4.17.27
 
-if version_gt $(inspec --version) $inspec_waiver_version; then
+if version_gt \$(inspec --version) $inspec_waiver_version; then
   cfg_waiver_cmd="--waiver-file \${WAIVER}"
 else
   cfg_waiver_cmd=""
 fi
+
+echo \${cfg_waiver_cmd}
 
 inspec_cmd()
 {
