@@ -118,11 +118,25 @@ CFG_LOG_LEVEL="\${CFG_LOG_LEVEL:-warn}"
 CFG_CHEF_LICENSE={{cfg.chef_license.acceptance}}
 CFG_CHEF_LICENSE="\${CFG_CHEF_LICENSE:-undefined}"
 CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
+WAIVER="{{pkg.svc_config_path}}/waiver.yml"
 PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
+
+# This function compares the versions of inspec to ensure that
+# the waiver feature is present before building the InSpec command
+function version_gt() { test "\$(printf '%s\n' "\$@" | sort -V | head -n 1)" != "\$1"; }
+inspec_waiver_version=4.17.27
+
+if version_gt "\$(inspec --version)" \$inspec_waiver_version; then
+  cfg_waiver_cmd="--waiver-file \${WAIVER}"
+else
+  cfg_waiver_cmd=""
+fi
+
+echo \${cfg_waiver_cmd}
 
 inspec_cmd()
 {
-  inspec exec \${PROFILE_PATH} --config \${CONFIG} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
+  inspec exec \${PROFILE_PATH} --config \${CONFIG} \${cfg_waiver_cmd} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
 }
 
 
@@ -204,6 +218,13 @@ token = '<automate_token>'
 user = '<automate_user>'
 EOF
   chmod 0640 "$pkg_prefix/default.toml"
+
+  cat << EOF >> "$pkg_prefix/config/waiver.yml"
+{{#if cfg.waivers ~}}
+{{toYaml cfg.waivers}}
+{{/if ~}}
+EOF
+  chmod 0640 "$pkg_prefix/config/waiver.yml"
 }
 
 do_default_strip() {

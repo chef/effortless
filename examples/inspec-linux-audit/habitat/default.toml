@@ -51,6 +51,13 @@ token = '<automate_token>'
 user = '<automate_user>'
 environment = 'foo'
 
+# This is where you would put a waiver to skip a control
+[waivers]
+[waivers.control_id]
+expiration_date = "2019-10-23"
+run = false
+justification = "Blah Blah Blah"
+
 #######################################
 # End of optional settings
 #######################################
