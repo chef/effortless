@@ -38,4 +38,4 @@ if (!(Test-path "$Plan/tests/$Test_Plan/tests/test.ps1")){
     exit 1
 }
 
-powershell -File ".\$Plan\tests\$Test_Plan\test.ps1" -PackageIdentifier $DEFAULT_PKG_IDENT -PackageSource ./results/$DEFAULT_PKG_ARTIFACT
+powershell -File ".\$Plan\tests\$Test_Plan\tests\test.ps1" -PackageIdentifier $DEFAULT_PKG_IDENT -PackageSource ./results/$DEFAULT_PKG_ARTIFACT
