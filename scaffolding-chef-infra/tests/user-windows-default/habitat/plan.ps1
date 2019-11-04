@@ -6,10 +6,9 @@
 $pkg_name="user-windows-default"
 $pkg_origin="ci"
 $pkg_version="1.0.0"
-$pkg_build_deps=@("core/chef-dk")
 $pkg_deps=@(
   "core/cacerts"
-  "stuartpreston/chef-client"
+  "chef/chef-infra-client/15.4.63/20191104181446"
 )
 $pkg_scaffolding="ci/scaffolding-chef-infra"
 $scaffold_policy_name="ci"

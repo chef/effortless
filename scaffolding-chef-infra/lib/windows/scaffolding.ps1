@@ -25,7 +25,7 @@ if(!$scaffold_cacerts){
     $scaffold_cacerts = "core/cacerts"
 }
 if(!$scaffold_chef_client){
-    $scaffold_chef_client = "stuartpreston/chef-client"
+    $scaffold_chef_client = "chef/chef-infra-client"
 }
 
 # Internals
@@ -33,8 +33,7 @@ $scaffolding_package = $pkg_scaffolding.split("/")[1]
 $lib_dir = "$(Get-HabPackagePath $scaffolding_package)/lib"
 
 function Load-Scaffolding {
-    $scaffold_chef_client = "stuartpreston/chef-client"
-    $scaffold_chef_dk = "core/chef-dk"
+    $scaffold_chef_client = "chef/chef-infra-client"
     $scaffold_cacerts = ""
     $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
@@ -49,7 +48,6 @@ function Load-Scaffolding {
     }
 
     $pkg_build_deps += @(
-        "$scaffold_chef_dk"
         "core/git"
     )
 
@@ -72,6 +70,8 @@ function Invoke-DefaultBuildService {
 function Invoke-DefaultBuild {
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
+    $env:CHEF_LICENSE = 'accept-no-persist'
+    gem install chef-cli --no-document
 
     Get-Content $policyfile | ? { $_.StartsWith("include_policy") } | % {
         $p = $_.Split()[1]
@@ -88,13 +88,13 @@ function Invoke-DefaultBuild {
             exit 1
         }
         Write-BuildLine "Detected included policyfile, $p.rb, installing"
-        chef install "$scaffold_policyfile_path/$p.rb"
+        chef-cli install "$scaffold_policyfile_path/$p.rb"
     }
-    chef install "$policyfile"
+    chef-cli install "$policyfile"
 }
 
 function Invoke-DefaultInstall {
-    chef export "$scaffold_policyfile_path/$scaffold_policy_name.lock.json" "$pkg_prefix"
+    chef-cli export "$scaffold_policyfile_path/$scaffold_policy_name.lock.json" "$pkg_prefix"
 
     $dir = "$pkg_prefix/config"
     if (!(Test-Path -Path $dir)) {
