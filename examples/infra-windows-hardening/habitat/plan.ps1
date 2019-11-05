@@ -5,7 +5,7 @@ $pkg_upstream_url="http://chef.io"
 $pkg_build_deps=@("core/chef-dk")
 $pkg_deps=@(
   "core/cacerts"
-  "chef/chef-infra-client" # https://github.com/habitat-sh/habitat/issues/6671
+  "chef/chef-infra-client/15.4.63/20191104181446" # https://github.com/habitat-sh/habitat/issues/6671
 )
 $pkg_scaffolding="chef/scaffolding-chef-infra"
 $scaffold_policy_name="base"
