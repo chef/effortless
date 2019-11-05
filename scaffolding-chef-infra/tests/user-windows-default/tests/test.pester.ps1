@@ -49,7 +49,7 @@ Describe "Chef client run doesn't fail" {
     }
 
     Context "API: scaffold_chef_client matches run hook chef/chef-infra-client" {
-        It "The chef-client should be Stuart Preston's chef-client" {
+        It "The chef-client should be the official chef-client" {
             $chef_client_pkg = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\w+/bin/chef-client.bat -z'
             $chef_client_pkg = $chef_client_pkg -split ' '
             $chef_client_pkg = $chef_client_pkg[2].split('\')
