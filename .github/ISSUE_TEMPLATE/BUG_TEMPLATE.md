@@ -14,7 +14,7 @@ This issue tracker is for the code contained within this repo -- `chef/scaffoldi
 ## Description
 <!--- Briefly describe the issue -->
 
-## Chef Version
+## Scaffolding Version
 <!--- Tell us which version of scaffolding you are using. -->
 
 ## Platform Version
