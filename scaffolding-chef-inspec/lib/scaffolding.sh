@@ -100,7 +100,7 @@ do_default_build_service() {
 
   # Run hook
   cat << EOF >> "$pkg_prefix/hooks/run"
-{{ pkgPathFor "core/bash" }}/bin/bash
+#!{{ pkgPathFor "core/bash" }}/bin/bash
 
 export HOME="{{pkg.svc_var_path}}"
 export INSPEC_CONFIG_DIR="{{pkg.svc_var_path}}"
