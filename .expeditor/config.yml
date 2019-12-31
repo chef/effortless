@@ -18,6 +18,7 @@ project:
 promote:
   channels:
     - unstable
+    - current
     - stable
   actions:
     - built_in:promote_habitat_packages
