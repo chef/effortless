@@ -3,7 +3,7 @@
 #
 
 if(!$scaffold_inspec_client){
-    $scaffold_inspec_client = "stuartpreston/inspec"
+    $scaffold_inspec_client = "chef/inspec"
 }
 
 function Load-Scaffolding {
@@ -105,6 +105,7 @@ if (!`$env:CFG_LOG_LEVEL){
 if(!`$env:CFG_CHEF_LICENSE){
     `$env:CFG_CHEF_LICENSE = "undefined"
 }
+`$env:CHEF_LICENSE = `$env:CFG_CHEF_LICENSE
 
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
