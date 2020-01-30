@@ -1,4 +1,11 @@
-pkg_name=linux-hardening
+#@IgnoreInspection BashAddShebang
+if [ -z ${CHEF_POLICYFILE+x} ]; then
+  policy_name="base"
+else
+  policy_name=${CHEF_POLICYFILE}
+fi
+
+pkg_name=effortless-config-${policy_name}line
 pkg_origin=effortless
 pkg_version="0.1.0"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
@@ -6,7 +13,7 @@ pkg_license=("Apache-2.0")
 pkg_upstream_url="http://chef.io"
 pkg_scaffolding="chef/scaffolding-chef-infra"
 pkg_svc_user=("root")
-scaffold_policy_name="base"
+scaffold_policy_name="$policy_name"
 
 
 #######################################

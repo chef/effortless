@@ -8,17 +8,7 @@
 
 **Pull Request [Response Time Maximum](https://github.com/chef/chef-oss-practices/blob/master/repo-management/repo-states.md)**: 14 days
 
-`Effortless` is automated best practices for Chef Infra and Chef InSpec.
-
-What can you do with Effortless Infrastructure?
-
-- Deliver brand new infrastructure configuration and automated security tests to your entire fleet, in 60 seconds.
-
-- Use a secure, pull-based workflow that scales. Use the same workflow in airgapped environments.
-
-- Update Chef Infra and Chef InSpec automatically, with always up-to-date best practices.
-
-- Report infrastructure configuration and security test runs to [Chef Automate](https://www.chef.io/products/automate/), automatically.
+`Effortless` is pattern to better manage Chef and InSpec workloads.
 
 ## Quick Links
 
@@ -42,12 +32,13 @@ If you're already familiar with the Chef stack, here's a quick rundown of how Ef
 
 1. Chef Habitat manages Chef Infra and Chef InSpec, and provides a pull-based update strategy for continuous delivery.
 
-1. This workflow is a full replacement and improvement over the environment and role cookbook patterns or Berkshelf way.
-
-1. Effortless is production and enterprise ready because it is built on already battle-tested Chef tools that you know already.
+1. This workflow is a replacement for the environment and role cookbook patterns or Berkshelf way.
 
 ![Image of the Effortless pattern](/docs/effortless-graphic.png)
 
 ## Next Steps
 
-If you're new to `Effortless`, the `examples` directory has a list of different kinds of packages and workflows that you can use to get started. If you just want to try something, start with `examples/infra-linux-hardening`.
+If you are new to the `Effortless` pattern checkout some of the below examples and walk throughs that will help you understand what you can do with this pattern.s
+
+## Examples
+1. [Chef Infra](examples/effortless_config/README.md)
