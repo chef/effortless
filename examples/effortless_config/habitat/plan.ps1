@@ -13,7 +13,5 @@ $pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 $pkg_license=("Apache-2.0")
 $pkg_description="A Chef Policy for $policy_name"
 $pkg_upstream_url="http://chef.io"
-$pkg_build_deps=@("core/chef-dk")
-$pkg_deps=@("stuartpreston/chef-client", "core/cacerts")
 $pkg_scaffolding="chef/scaffolding-chef-infra"
 $scaffold_policy_name="$policy_name"

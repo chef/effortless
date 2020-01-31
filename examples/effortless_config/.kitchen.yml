@@ -1,0 +1,30 @@
+---
+driver:
+  name: vagrant
+  synced_folders:
+    - ["./results", "/tmp/results"]
+
+provisioner:
+  name: shell
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7.6
+    driver:
+      box: effortless/baseline-centos-7.6
+      box_version: 1.0.0
+  - name: ubuntu-18.10
+    driver:
+      box: effortless/baseline-ubuntu-18.10
+      box_version: 1.0.0
+
+suites:
+  - name: base
+    provisioner:
+      arguments: ["effortless", "config-baseline"]
+    verifier:
+      inspec_tests:
+        test/integration/base
+
