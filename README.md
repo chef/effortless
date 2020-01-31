@@ -8,7 +8,7 @@
 
 **Pull Request [Response Time Maximum](https://github.com/chef/chef-oss-practices/blob/master/repo-management/repo-states.md)**: 14 days
 
-`Effortless` is pattern to better manage Chef and InSpec workloads.
+`Effortless` is pattern to better manage Chef and Chef InSpec workloads using Chef Habitat.
 
 ## Quick Links
 
