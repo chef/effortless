@@ -1,0 +1,12 @@
+name: stig-testing-audit
+title: Effortless stig testing Audit
+maintainer: humans@habitat.sh
+copyright: Chef Software Inc.
+copyright_email: humans@habitat.sh
+license: Apache-2.0
+summary: Effortless Audit Windows Baseline
+version: 0.1.0
+
+depends:
+  - name: stig-windowsserver2016-i-missioncriticalpublic
+    compliance: admin/stig-windowsserver2016-i-missioncriticalpublic
