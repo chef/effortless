@@ -19,23 +19,21 @@ if(!(Test-Path -Path "$scaffold_policyfile_path")) {
     Write-Error "`$scaffold_policy_path is not a valid path."
     exit 1
 }
-# These variables are being set because Load-Scaffolding is not working.
-# When loading gets fixed these can be removed.
-if(!$scaffold_cacerts){
-    $scaffold_cacerts = "core/cacerts"
-}
-if(!$scaffold_chef_client){
-    $scaffold_chef_client = "stuartpreston/chef-client"
-}
 
 # Internals
 $scaffolding_package = $pkg_scaffolding.split("/")[1]
 $lib_dir = "$(Get-HabPackagePath $scaffolding_package)/lib"
 
 function Load-Scaffolding {
-    $scaffold_chef_client = "stuartpreston/chef-client"
-    $scaffold_chef_dk = "core/chef-dk"
-    $scaffold_cacerts = ""
+    if(!$scaffold_chef_client){
+        $scaffold_chef_client = "stuartpreston/chef-client"
+    }
+    if(!$scaffold_chef_dk) {
+        $scaffold_chef_dk = "core/chef-dk"
+    }
+    if(!$scaffold_cacerts){
+        $scaffold_cacerts = "core/cacerts"
+    }
     $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
     $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
 

@@ -4,7 +4,8 @@
 
 param(
     # The name of the plan that is to be built.
-    [string]$Plan
+    [string]$Plan,
+    [string]$test_plan
 )
 
 $env:HAB_ORIGIN = 'ci'
@@ -25,16 +26,16 @@ $env:DO_CHECK=$true; hab pkg build $Plan
 
 Write-Host "--- :construction: :windows: Building user plan for $Plan"
 
-hab studio build "./$Plan/tests/user-windows-default" -R
+hab studio build "./$Plan/tests/$test_plan" -R
 . ./results/last_build.ps1
-$DEFAULT_PKG_ARTIFACT = $pkg_artifact
-$DEFAULT_PKG_IDENT = $pkg_ident
+$TEST_PKG_ARTIFACT = $pkg_artifact
+$TEST_PKG_IDENT = $pkg_ident
 
-Write-Host "--- :mag: Testing $DEFAULT_PKG_IDENT"
+Write-Host "--- :mag: Testing $TEST_PKG_IDENT"
 
 if (!(Test-path "$Plan/tests/test.ps1")){
     Write-host ":warning: :windows: $Plan has no Windows tests to run."
     exit 1
 }
 
-powershell -File ".\$Plan\tests\test.ps1" -PackageIdentifier $DEFAULT_PKG_IDENT -PackageSource ./results/$DEFAULT_PKG_ARTIFACT
+powershell -File ".\$Plan\tests\$test_plan\tests\test.ps1" -PackageIdentifier $TEST_PKG_IDENT -PackageSource ./results/$TEST_PKG_ARTIFACT
