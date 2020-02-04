@@ -33,7 +33,7 @@ $TEST_PKG_IDENT = $pkg_ident
 
 Write-Host "--- :mag: Testing $TEST_PKG_IDENT"
 
-if (!(Test-path "$Plan/tests/test.ps1")){
+if (!(Test-path "$Plan\tests\$test_plan\tests\test.ps1")){
     Write-host ":warning: :windows: $Plan has no Windows tests to run."
     exit 1
 }
