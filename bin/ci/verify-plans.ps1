@@ -9,7 +9,7 @@ param(
 )
 
 $env:HAB_ORIGIN = 'ci'
-
+$env:HAB_VERSION = '1.5.0'
 Install-Habitat
 
 Write-Host "--- :key: Generating fake origin key"
