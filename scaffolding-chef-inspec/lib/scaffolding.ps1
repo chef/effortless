@@ -2,15 +2,11 @@
 # A scaffolding for an InSpec profile
 #
 
-if(!$scaffold_inspec_client){
-    $scaffold_inspec_client = "chef/inspec"
-}
-
 function Load-Scaffolding {
-    $scaffold_cacerts = ""
-
+    if(!$scaffold_inspec_client){
+        $scaffold_inspec_client = "chef/inspec"
+    }
     $pkg_deps += @(
-        "${pkg_deps[@]}"
         $scaffold_inspec_client
     )
     if(![string]::IsNullOrWhiteSpace("$scaffold_cacerts")){
@@ -19,12 +15,6 @@ function Load-Scaffolding {
         $pkg_deps += @("core/cacerts")
     }
 
-    $pkg_build_deps += @(
-        "${pkg_build_deps[@]}"
-        $scaffold_inspec_client
-    )
-
-    $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 

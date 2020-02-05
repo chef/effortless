@@ -34,8 +34,12 @@ function Load-Scaffolding {
     if(!$scaffold_cacerts){
         $scaffold_cacerts = "core/cacerts"
     }
-    $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
-    $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
+    if(!$scaffold_policyfile_path){
+        $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
+    }
+    if(!$scaffold_data_bags_path){
+        $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
+    }
 
     $pkg_deps += @(
         "$scaffold_chef_client"
@@ -51,7 +55,6 @@ function Load-Scaffolding {
         "core/git"
     )
 
-    $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 
