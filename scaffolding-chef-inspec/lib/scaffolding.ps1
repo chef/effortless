@@ -1,27 +1,17 @@
 #
 # A scaffolding for an InSpec profile
 #
-
 if(!$scaffold_inspec_client){
     $scaffold_inspec_client = "chef/inspec"
 }
+if(!$scaffold_cacerts){
+    $scaffold_cacerts = "core/cacerts"
+}
 
 function Load-Scaffolding {
-    $scaffold_cacerts = ""
-
     $pkg_deps += @(
-        "${pkg_deps[@]}"
-        $scaffold_inspec_client
-    )
-    if(![string]::IsNullOrWhiteSpace("$scaffold_cacerts")){
-        $pkg_deps += @($scaffold_cacerts)
-    } else{
-        $pkg_deps += @("core/cacerts")
-    }
-
-    $pkg_build_deps += @(
-        "${pkg_build_deps[@]}"
-        $scaffold_inspec_client
+        $scaffold_inspec_client,
+        $scaffold_cacerts
     )
 
     $pkg_svc_user="administrator"
@@ -29,6 +19,7 @@ function Load-Scaffolding {
 }
 
 function Invoke-DefaultBefore {
+    $env:CHEF_LICENSE='accept-no-persist'
     if(!(Test-Path "$PLAN_CONTEXT/../inspec.yml")) {
         Write-BuildLine "Error: Cannot find inspec.yml"
         Write-BuildLine "  Please build from the profile root"

@@ -3,11 +3,13 @@
 # This tests a user interacting with the API provided by the scaffolding
 #######################################
 
-$pkg_name="user-windows-default"
+$pkg_name="user-windows-api"
 $pkg_origin="ci"
 $pkg_version="1.0.0"
 $pkg_scaffolding="ci/scaffolding-chef-infra"
 $scaffold_policy_name="ci"
+$scaffold_cacerts="core/cacerts"
+$scaffold_chef_client="stuartpreston/chef-client-detox"
 
 # Required Metadata for CI
 $pkg_description="CI Test Plan for Linux"

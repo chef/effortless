@@ -4,12 +4,15 @@
 
 param(
     # The name of the plan that is to be built.
-    [string]$Plan
+    [string]$Plan,
+    [string]$test_plan
 )
 
 $env:HAB_ORIGIN = 'ci'
+$HAB_VERSION = '1.5.0'
+Write-Host "--- :habicat: Install Habitat 1.5.0"
+Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.ps1) } -Version $HAB_VERSION"
 
-Install-Habitat
 
 Write-Host "--- :key: Generating fake origin key"
 hab origin key generate $env:HAB_ORIGIN
@@ -25,16 +28,16 @@ $env:DO_CHECK=$true; hab pkg build $Plan
 
 Write-Host "--- :construction: :windows: Building user plan for $Plan"
 
-hab studio build "./$Plan/tests/user-windows-default" -R
+hab studio build "./$Plan/tests/$test_plan" -R
 . ./results/last_build.ps1
-$DEFAULT_PKG_ARTIFACT = $pkg_artifact
-$DEFAULT_PKG_IDENT = $pkg_ident
+$TEST_PKG_ARTIFACT = $pkg_artifact
+$TEST_PKG_IDENT = $pkg_ident
 
-Write-Host "--- :mag: Testing $DEFAULT_PKG_IDENT"
+Write-Host "--- :mag: Testing $TEST_PKG_IDENT"
 
-if (!(Test-path "$Plan/tests/test.ps1")){
+if (!(Test-path "$Plan\tests\$test_plan\tests\test.ps1")){
     Write-host ":warning: :windows: $Plan has no Windows tests to run."
     exit 1
 }
 
-powershell -File ".\$Plan\tests\test.ps1" -PackageIdentifier $DEFAULT_PKG_IDENT -PackageSource ./results/$DEFAULT_PKG_ARTIFACT
+powershell -File ".\$Plan\tests\$test_plan\tests\test.ps1" -PackageIdentifier $TEST_PKG_IDENT -PackageSource ./results/$TEST_PKG_ARTIFACT
