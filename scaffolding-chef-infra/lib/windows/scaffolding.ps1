@@ -40,12 +40,12 @@ function Load-Scaffolding {
         "$scaffold_chef_client",
         "$scaffold_cacerts"
     )
-    
+
     $pkg_build_deps += @(
         "$scaffold_chef_dk"
         "core/git"
     )
-    
+
     $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
