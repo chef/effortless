@@ -42,7 +42,7 @@ function Load-Scaffolding {
     )
 
     $pkg_build_deps += @(
-        "$scaffold_chef_dk"
+        "$scaffold_chef_dk",
         "core/git"
     )
 

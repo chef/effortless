@@ -12,7 +12,6 @@ if (-Not (Get-Module -ListAvailable -Name Pester)){
 # Install the package
 hab pkg install $PackageSource
 
-Get-Process hab-sup -ErrorAction SilentlyContinue | Stop-Process
 Get-Process hab-launch -ErrorAction SilentlyContinue | Stop-Process
 
 $SUP_WAIT_SECONDS = 60
