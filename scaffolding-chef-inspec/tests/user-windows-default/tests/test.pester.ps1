@@ -28,14 +28,14 @@ Describe "Inspec client run doesn't fail" {
         }
     }
 
-    Context "API: scaffold_chef_client matches run hook chef/inspec" {
-        It "The chef-client should be Stuart Preston's chef-client" {
-            $chef_client_pkg = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\env:PATH = "'
-            $chef_client_pkg = $chef_client_pkg -split ' '
-            $chef_client_pkg = $chef_client_pkg[2].split('\')
-            $chef_client_pkg = $chef_client_pkg[3] + '/' + $chef_client_pkg[4]
+    Context "API: scaffold_inspec_client matches run hook chef/inspec" {
+        It "The inspec should be the official inspec client" {
+            $inspec_client_pkg = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\$env:PATH = "'
+            $inspec_client_pkg = $inspec_client_pkg -split ' '
+            $inspec_client_pkg = $inspec_client_pkg[2].split('\')
+            $inspec_client_pkg = $inspec_client_pkg[3] + '/' + $inspec_client_pkg[4]
 
-            $chef_client_pkg | Should be "chef/inspec"
+            $inspec_client_pkg | Should be "chef/inspec"
         }
     }
 }
