@@ -128,12 +128,12 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests API"
+  - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests default"
     env:
       HAB_LICENSE: "accept-no-persist"
       HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
     command:
-      - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-api
+      - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-default
     agents:
       queue: 'default-windows-2016-privileged'
     plugins:
