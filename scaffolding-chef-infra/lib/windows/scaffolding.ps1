@@ -1,7 +1,15 @@
 #
 # A scaffolding for Chef Policyfile packages
 #
-
+if(!$scaffold_chef_client){
+    $scaffold_chef_client = "stuartpreston/chef-client"
+}
+if(!$scaffold_chef_dk) {
+    $scaffold_chef_dk = "core/chef-dk"
+}
+if(!$scaffold_cacerts){
+    $scaffold_cacerts = "core/cacerts"
+}
 if(!$scaffold_policy_name) {
     Write-Error "You must set `$scaffold_policy_name to a valid policy name. `nTry: `$scaffold_policy_name=example"
     exit 1
@@ -19,42 +27,26 @@ if(!(Test-Path -Path "$scaffold_policyfile_path")) {
     Write-Error "`$scaffold_policy_path is not a valid path."
     exit 1
 }
+if(!$scaffold_data_bags_path){
+    $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
+}
 
 # Internals
 $scaffolding_package = $pkg_scaffolding.split("/")[1]
 $lib_dir = "$(Get-HabPackagePath $scaffolding_package)/lib"
 
 function Load-Scaffolding {
-    if(!$scaffold_chef_client){
-        $scaffold_chef_client = "stuartpreston/chef-client"
-    }
-    if(!$scaffold_chef_dk) {
-        $scaffold_chef_dk = "core/chef-dk"
-    }
-    if(!$scaffold_cacerts){
-        $scaffold_cacerts = "core/cacerts"
-    }
-    if(!$scaffold_policyfile_path){
-        $scaffold_policyfile_path = "$PLAN_CONTEXT\..\policyfiles"
-    }
-    if(!$scaffold_data_bags_path){
-        $scaffold_data_bags_path = "$PLAN_CONTEXT\..\data_bags"
-    }
-
     $pkg_deps += @(
-        "$scaffold_chef_client"
+        "$scaffold_chef_client",
+        "$scaffold_cacerts"
     )
-    if(![string]::IsNullOrWhiteSpace("$scaffold_cacerts")){
-        $pkg_deps += @($scaffold_cacerts)
-    } else{
-        $pkg_deps += @("core/cacerts")
-    }
-
+    
     $pkg_build_deps += @(
         "$scaffold_chef_dk"
         "core/git"
     )
-
+    
+    $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 
