@@ -19,6 +19,7 @@ function Load-Scaffolding {
 }
 
 function Invoke-DefaultBefore {
+    $env:CHEF_LICENSE='accept-no-persist'
     if(!(Test-Path "$PLAN_CONTEXT/../inspec.yml")) {
         Write-BuildLine "Error: Cannot find inspec.yml"
         Write-BuildLine "  Please build from the profile root"
