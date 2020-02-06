@@ -109,7 +109,6 @@ function Invoke-DefaultInstall {
 
     (Get-Content -Path "$lib_dir/default.toml") -join "`n" | Add-Content -Path "$pkg_prefix/default.toml"
 
-    $scaffold_data_bags_path = "not_using_data_bags"
     if (Test-Path "$scaffold_data_bags_path") {
         Copy-Item "$scaffold_data_bags_path/*" -Destination "$pkg_prefix" -Recurse
     }
