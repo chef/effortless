@@ -21,7 +21,7 @@ Describe "Inspec client run doesn't fail" {
 
     Context "Waiver: the yaml renders" {
         It "The waiver.yml has a foo_2 control" {
-            $yaml = Get-Content "C:\hab\svc\user-windows-waiver\config\waiver.yaml"
+            $yaml = Get-Content "C:\hab\svc\user-windows-waiver\config\waiver.yml"
             $yaml[1] | Should be "foo_2:"
         }
     }
