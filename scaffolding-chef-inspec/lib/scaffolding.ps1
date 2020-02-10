@@ -97,7 +97,7 @@ if(!`$env:CFG_CHEF_LICENSE){
     `$env:CFG_CHEF_LICENSE = "undefined"
 }
 `$env:CHEF_LICENSE = `$env:CFG_CHEF_LICENSE
-
+`$WAIVER="{{pkg.svc_config_path}}/waiver.yml"
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
@@ -105,8 +105,12 @@ function Invoke-Inspec {
 
     # TODO: This is set to --json-config due to the
     #  version of InSpec being used please update when InSpec is updated
-
-    inspec exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
+    if([Version](inspec --version) -gt [Version]"4.17.27"){
+        inspec exec `$PROFILE_PATH --json-config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
+    } 
+    else {
+        inspec exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
+    }
 }
 
 `$SPLAY_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY) -Count 1
@@ -184,5 +188,11 @@ enable = false
 server_url = 'https://<automate_url>'
 token = '<automate_token>'
 user = '<automate_user>'
+"@
+
+    Add-Content -Path "$pkg_prefix/config/waiver.yml" -Value @"
+{{#if cfg.waivers ~}}
+{{toYaml cfg.waivers}}
+{{/if ~}}
 "@
 }
