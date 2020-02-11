@@ -4,7 +4,7 @@ if [ -z "${scaffold_policy_name+x}" ]; then
 fi
 
 scaffolding_load() {
-  : "${scaffold_chef_client:=chef/chef-client}"
+  : "${scaffold_chef_client:=chef/chef-infra-client}"
   : "${scaffold_chef_dk:=chef/chef-dk}"
   : "${scaffold_cacerts:=core/cacerts}"
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
