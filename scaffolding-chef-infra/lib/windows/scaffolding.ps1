@@ -39,6 +39,7 @@ function Load-Scaffolding {
     )
 
     $pkg_build_deps += @(
+        "$scaffold_package",
         "core/git"
     )
 
@@ -56,10 +57,6 @@ function Invoke-DefaultBuildService {
         $_ -replace 'scaffold_cacerts', $scaffold_cacerts `
            -replace 'scaffold_chef_client', $scaffold_chef_client
     } | Set-Content "$pkg_prefix/hooks/run"
-}
-
-Invoke-SetupEnvironment {
-    Push-BuildtimeEnv -IsPath GEM_PATH "$(Get-HabPackagePath $scaffolding_package)/vendor"
 }
 
 function Invoke-DefaultBuild {
