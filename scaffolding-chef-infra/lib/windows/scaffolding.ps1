@@ -62,6 +62,7 @@ function Invoke-DefaultBuild {
     $env:CHEF_LICENSE = 'accept-no-persist'
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
+    $env:PATH += ";$(pkg_path_for "${pkg_scaffolding}")/vendor/bin"
 
     Get-Content $policyfile | ? { $_.StartsWith("include_policy") } | % {
         $p = $_.Split()[1]
@@ -78,6 +79,7 @@ function Invoke-DefaultBuild {
             exit 1
         }
         Write-BuildLine "Detected included policyfile, $p.rb, installing"
+
         chef-cli install "$scaffold_policyfile_path/$p.rb"
     }
     chef-cli install "$policyfile"
