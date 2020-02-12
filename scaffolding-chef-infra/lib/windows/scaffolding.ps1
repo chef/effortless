@@ -62,7 +62,7 @@ function Invoke-DefaultBuild {
     $env:CHEF_LICENSE = 'accept-no-persist'
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
-    $env:PATH += ";$(pkg_path_for "${pkg_scaffolding}")/vendor/bin"
+    $env:PATH += ";$(Get-HabPackagePath $scaffolding_package)/vendor/bin"
 
     Get-Content $policyfile | ? { $_.StartsWith("include_policy") } | % {
         $p = $_.Split()[1]
