@@ -2,4 +2,4 @@
 # Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
 
 [chef_license]
-acceptance = "undefined"
+acceptance = "accept-no-persist"
