@@ -39,7 +39,7 @@ function Load-Scaffolding {
     )
 
     $pkg_build_deps += @(
-        "$scaffolding_package",
+        "$pkg_scaffolding",
         "core/git"
     )
 
