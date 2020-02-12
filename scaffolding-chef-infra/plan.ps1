@@ -13,6 +13,7 @@ $pkg_bin_dirs=@("vendor/bin")
 
 function Invoke-Setupenvironment {
   Push-RuntimeEnv -IsPath GEM_PATH "$pkg_prefix/vendor"
+  Push-BuildtimeEnv -IsPath GEM_PATH "$pkg_prefix/vendor"
 }
 
 function Invoke-Build {
