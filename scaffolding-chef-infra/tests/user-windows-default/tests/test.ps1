@@ -23,7 +23,7 @@ Start-Sleep $SUP_WAIT_SECONDS
 
 $LOAD_WAIT_SECONDS = 60
 
-Write-Output "Waiting $LOAD_WAIT_SECONDS seconds for $PackageIdentifier to start..."
+Write-Output "Waiting $LOAD_WAIT_SECONDS seconds for $PackageIdentifier to start...."
 hab svc load $PackageIdentifier
 Start-Sleep $LOAD_WAIT_SECONDS
 
