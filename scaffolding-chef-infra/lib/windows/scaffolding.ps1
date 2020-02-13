@@ -110,7 +110,7 @@ function Invoke-DefaultInstall {
     (Get-Content -Path "$lib_dir/default.toml") -join "`n" | Add-Content -Path "$pkg_prefix/default.toml"
 
     if (Test-Path "$scaffold_data_bags_path") {
-        Copy-Item "$scaffold_data_bags_path/*" -Destination "$pkg_prefix" -Recurse
+        Copy-Item "$scaffold_data_bags_path" -Destination "$pkg_prefix" -Recurse
     }
 
     Remove-Item "$pkg_prefix/.chef" -Force -Recurse
