@@ -2,10 +2,7 @@
 # A scaffolding for Chef Policyfile packages
 #
 if(!$scaffold_chef_client){
-    $scaffold_chef_client = "stuartpreston/chef-client"
-}
-if(!$scaffold_chef_dk) {
-    $scaffold_chef_dk = "core/chef-dk"
+    $scaffold_chef_client = "chef/chef-infra-client"
 }
 if(!$scaffold_cacerts){
     $scaffold_cacerts = "core/cacerts"
@@ -42,7 +39,7 @@ function Load-Scaffolding {
     )
 
     $pkg_build_deps += @(
-        "$scaffold_chef_dk",
+        "$pkg_scaffolding",
         "core/git"
     )
 
@@ -63,6 +60,7 @@ function Invoke-DefaultBuildService {
 }
 
 function Invoke-DefaultBuild {
+    $env:CHEF_LICENSE = 'accept-no-persist'
     Remove-Item "$scaffold_policyfile_path/*.lock.json" -Force
     $policyfile = "$scaffold_policyfile_path/$scaffold_policy_name.rb"
 
@@ -81,13 +79,14 @@ function Invoke-DefaultBuild {
             exit 1
         }
         Write-BuildLine "Detected included policyfile, $p.rb, installing"
-        chef install "$scaffold_policyfile_path/$p.rb"
+
+        chef-cli install "$scaffold_policyfile_path/$p.rb"
     }
-    chef install "$policyfile"
+    chef-cli install "$policyfile"
 }
 
 function Invoke-DefaultInstall {
-    chef export "$scaffold_policyfile_path/$scaffold_policy_name.lock.json" "$pkg_prefix"
+    chef-cli export "$scaffold_policyfile_path/$scaffold_policy_name.lock.json" "$pkg_prefix"
 
     $dir = "$pkg_prefix/config"
     if (!(Test-Path -Path $dir)) {
