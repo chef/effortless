@@ -8,13 +8,16 @@ if(!$scaffold_cacerts){
     $scaffold_cacerts = "core/cacerts"
 }
 
+$scaffolding_package = $pkg_scaffolding.split("/")[1]
+$lib_dir = "$(Get-HabPackagePath $scaffolding_package)/lib"
+
 function Load-Scaffolding {
     $pkg_deps += @(
         $scaffold_inspec_client,
         $scaffold_cacerts
     )
 
-    $pkg_svc_user="administrator"
+    # $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 
@@ -46,7 +49,7 @@ function Invoke-DefaultBefore {
             exit 1
         }
         else{
-            inspec compliance login "$scaffold_automate_server_url" `
+          inspec compliance login "$scaffold_automate_server_url" `
                             --user "$scaffold_automate_user" `
                             --token "$scaffold_automate_token"
         }
@@ -65,69 +68,15 @@ function Invoke-DefaultUnpack {
 
 function Invoke-DefaultBuildService {
     Write-BuildLine "Creating lifecycle hooks"
-    New-Item -ItemType Directory -Path "$pkg_prefix/hooks"
-
-    Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
-`$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
-`$env:SSL_CERT_DIR="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/certs"
-`$env:PATH = "{{pkgPathFor "$scaffold_inspec_client"}}/bin;`$env:PATH"
-
-`$env:CFG_SPLAY_FIRST_RUN="{{cfg.splay_first_run}}"
-if(!`$env:CFG_SPLAY_FIRST_RUN) {
-    `$env:CFG_SPLAY_FIRST_RUN = "0"
-}
-
-`$env:CFG_INTERVAL="{{cfg.interval}}"
-if(!`$env:CFG_INTERVAL){
-    `$env:CFG_INTERVAL = "1800"
-}
-
-`$env:CFG_SPLAY="{{cfg.splay}}"
-if(!`$env:CFG_SPLAY){
-    `$env:CFG_SPLAY = "1800"
-}
-
-`$env:CFG_LOG_LEVEL="{{cfg.log_level}}"
-if (!`$env:CFG_LOG_LEVEL){
-    `$env:CFG_LOG_LEVEL = "warn"
-}
-
-`$env:CFG_CHEF_LICENSE="{{cfg.chef_license.acceptance}}"
-if(!`$env:CFG_CHEF_LICENSE){
-    `$env:CFG_CHEF_LICENSE = "undefined"
-}
-`$env:CHEF_LICENSE = `$env:CFG_CHEF_LICENSE
-`$WAIVER="{{pkg.svc_config_path}}/waiver.yml"
-`$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
-`$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
-
-function Invoke-Inspec {
-
-    # TODO: This is set to --json-config due to the
-    #  version of InSpec being used please update when InSpec is updated
-    if([Version](inspec --version) -gt [Version]"4.17.27"){
-        inspec exec `$PROFILE_PATH --json-config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
-    } 
-    else {
-        inspec exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
+    $dir = "$pkg_prefix/hooks"
+    if (!(Test-Path -Path $dir)) {
+        New-Item -ItemType directory -Path $dir
     }
-}
 
-`$SPLAY_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY) -Count 1
-
-`$SPLAY_FIRST_RUN_DURATION = Get-Random -InputObject (0..`$env:CFG_SPLAY_FIRST_RUN) -Count 1
-
-Start-Sleep -Seconds `$SPLAY_FIRST_RUN_DURATION
-Invoke-Inspec
-
-while(`$true){
-  `$SLEEP_TIME = `$SPLAY_DURATION + `$env:CFG_INTERVAL
-  Write-Host "InSpec is sleeping for `$SLEEP_TIME seconds"
-  Start-Sleep -Seconds `$SPLAY_DURATION
-  Start-Sleep -Seconds `$env:CFG_INTERVAL
-  Invoke-Inspec
-}
-"@
+    (Get-Content -Path "$lib_dir/run.ps1") -join "`n" | Foreach-Object {
+        $_ -replace 'scaffold_inspec_client', $scaffold_inspec_client `
+           -replace 'scaffold_cacerts', $scaffold_cacerts
+    } | Set-Content "$pkg_prefix/hooks/run"
 }
 
 function Invoke-DefaultBuild {
