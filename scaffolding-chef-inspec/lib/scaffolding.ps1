@@ -17,7 +17,7 @@ function Load-Scaffolding {
         $scaffold_cacerts
     )
 
-    # $pkg_svc_user="administrator"
+    $pkg_svc_user="administrator"
     $pkg_svc_run = "set_just_so_you_will_render"
 }
 
