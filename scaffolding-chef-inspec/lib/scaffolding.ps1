@@ -70,7 +70,7 @@ function Invoke-DefaultBuildService {
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
 `$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
 `$env:SSL_CERT_DIR="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/certs"
-`$env:PATH = "{{pkgPathFor "$scaffold_inspec_client"}}/bin;`$env:PATH"
+`$env:PATH = "{{pkgPathFor "$scaffold_inspec_client"}}/bin;C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin;`$env:PATH"
 
 `$env:CFG_SPLAY_FIRST_RUN="{{cfg.splay_first_run}}"
 if(!`$env:CFG_SPLAY_FIRST_RUN) {
