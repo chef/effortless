@@ -101,7 +101,7 @@ if(!`$env:CFG_CHEF_LICENSE){
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
 # Get the InSpec Version
-`$inspec_version = (inspec.bat --version)
+`$inspec_version = ({{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat --version)
 if (`$inspec_version.GetType().Name -eq "Object[]"){
     [Version]`$version = `$inspec_version[0]
 }
@@ -116,7 +116,7 @@ function Invoke-Inspec {
     # TODO: This is set to --json-config due to the
     #  version of InSpec being used please update when InSpec is updated
     if(`$version -gt [Version]"4.17.27"){
-        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --json-config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
+        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
     } 
     else {
         {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
