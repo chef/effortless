@@ -70,6 +70,7 @@ function Invoke-DefaultBuildService {
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
 `$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
 `$env:SSL_CERT_DIR="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/certs"
+`$env:PATH = "{{pkgPathFor "$scaffold_inspec_client"}}/bin;`$env:PATH"
 
 `$env:CFG_SPLAY_FIRST_RUN="{{cfg.splay_first_run}}"
 if(!`$env:CFG_SPLAY_FIRST_RUN) {
@@ -101,7 +102,7 @@ if(!`$env:CFG_CHEF_LICENSE){
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
 # Get the InSpec Version
-`$inspec_version = ({{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat --version)
+`$inspec_version = (inspec --version)
 if (`$inspec_version.GetType().Name -eq "Object[]"){
     [Version]`$version = `$inspec_version[0]
 }
