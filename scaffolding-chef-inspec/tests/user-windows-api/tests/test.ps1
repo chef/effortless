@@ -9,6 +9,10 @@ if (-Not (Get-Module -ListAvailable -Name Pester)){
     Import-Module "$(hab pkg path core/pester)\module\pester.psd1"
 }
 
+Write-Output ""
+Write-Output $env:PATH
+Write-Output ""
+
 # Install the package
 hab pkg install $PackageSource
 
