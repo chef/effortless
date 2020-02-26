@@ -29,7 +29,7 @@ chef_client_cmd()
   # causes the Chef Client to think that the policyfile is be overriden which is unsupported
   # and causes the chef run to fail.
   # shellcheck disable=SC2086
-  chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" $cfg_chef_license_cmd
+  {{pkgPathFor "${scaffold_chef_client}"}}/bin/chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" $cfg_chef_license_cmd
 }
 
 cfg_splay_duration=$(shuf -i 0-"${cfg_splay}" -n 1)

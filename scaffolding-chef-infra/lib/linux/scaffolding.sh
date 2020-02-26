@@ -49,7 +49,7 @@ do_default_build_service() {
   mkdir -p "${pkg_prefix}/hooks"
   # Template buildtime variables into the run hook.
   # This allows us to render the run hook from a file.
-  sed -e "s,\${scaffold_cacerts},${scaffold_cacerts},g" "${lib_dir}/run.bash" >> "${pkg_prefix}/hooks/run"
+  sed -e "s,\${scaffold_cacerts},${scaffold_cacerts},g;s,\${scaffold_chef_client},${scaffold_chef_client},g" "${lib_dir}/run.bash" >> "${pkg_prefix}/hooks/run"
   chmod 0750 -R "${pkg_prefix}/hooks"
 }
 

@@ -136,7 +136,7 @@ echo \${cfg_waiver_cmd}
 
 inspec_cmd()
 {
-  inspec exec \${PROFILE_PATH} --config \${CONFIG} \${cfg_waiver_cmd} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
+  {{pkgPathFor "${scaffold_inspec_client}"}}/bin/inspec exec \${PROFILE_PATH} --config \${CONFIG} \${cfg_waiver_cmd} --chef-license \$CFG_CHEF_LICENSE --log-level \$CFG_LOG_LEVEL
 }
 
 
