@@ -47,4 +47,3 @@ while true; do
   sleep "${cfg_interval}"
   chef_client_cmd
 done
-# shellcheck disable=SC1072,SC1056
