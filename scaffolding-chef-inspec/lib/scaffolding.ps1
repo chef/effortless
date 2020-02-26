@@ -70,7 +70,6 @@ function Invoke-DefaultBuildService {
     Add-Content -Path "$pkg_prefix/hooks/run" -Value @"
 `$env:SSL_CERT_FILE="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/cert.pem"
 `$env:SSL_CERT_DIR="{{pkgPathFor "$(if(![string]::IsNullOrWhiteSpace("$env:CFG_CACERTS")){$env:CFG_CACERTS} else{'core/cacerts'})"}}/ssl/certs"
-`$env:PATH = "{{pkgPathFor "$scaffold_inspec_client"}}/bin;`$env:PATH"
 
 `$env:CFG_SPLAY_FIRST_RUN="{{cfg.splay_first_run}}"
 if(!`$env:CFG_SPLAY_FIRST_RUN) {
@@ -101,15 +100,26 @@ if(!`$env:CFG_CHEF_LICENSE){
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
+# Get the InSpec Version
+`$inspec_version = ({{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat --version)
+if (`$inspec_version.GetType().Name -eq "Object[]"){
+    [Version]`$version = `$inspec_version[0]
+}
+# I'm going to assume it's a string then 
+# if it's not tell the InSpec team to stop chaning the output of inspec --version
+else {
+    [Version]`$version = `$inspec_version
+}
+
 function Invoke-Inspec {
 
     # TODO: This is set to --json-config due to the
     #  version of InSpec being used please update when InSpec is updated
-    if([Version](inspec --version) -gt [Version]"4.17.27"){
-        inspec exec `$PROFILE_PATH --json-config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
+    if(`$version -gt [Version]"4.17.27"){
+        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
     } 
     else {
-        inspec exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
+        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
     }
 }
 

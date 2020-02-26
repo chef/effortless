@@ -143,6 +143,21 @@ steps:
         always-pull: true
         propagate-environment: true
 
+  - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests api"
+    env:
+      HAB_LICENSE: "accept-no-persist"
+      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
+    command:
+      - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-api
+    agents:
+      queue: 'default-windows-2016-privileged'
+    plugins:
+      docker#v3.2.0:
+        image: "chefes/buildkite-windows-2016"
+        shell: [ "powershell", "-Command" ]
+        always-pull: true
+        propagate-environment: true
+
   - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests waivers"
     env:
       HAB_LICENSE: "accept-no-persist"
