@@ -28,7 +28,7 @@ chef_client_cmd()
   # This only applies to the cfg_chef_license_cmd because putting quotes around the variable
   # causes the Chef Client to think that the policyfile is be overriden which is unsupported
   # and causes the chef run to fail.
-  # shellcheck disable=SC2086
+  # shellcheck disable=SC2086,SC1073,SC1054,SC1054
   {{pkgPathFor "${scaffold_chef_client}"}}/bin/chef-client -z -l "${cfg_log_level}" -c {{pkg.svc_config_path}}/client-config.rb -j {{pkg.svc_config_path}}/attributes.json --once --no-fork --run-lock-timeout "${cfg_run_lock_timeout}" $cfg_chef_license_cmd
 }
 
@@ -47,3 +47,4 @@ while true; do
   sleep "${cfg_interval}"
   chef_client_cmd
 done
+# shellcheck disable=SC1072,SC1056
