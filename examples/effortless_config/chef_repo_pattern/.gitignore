@@ -1,0 +1,6 @@
+results/
+policyfiles/*.lock.json
+.kitchen
+.kitchen.local.yml
+.idea
+.vagrant
