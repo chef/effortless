@@ -40,6 +40,7 @@ If you're already familiar with the Chef stack, here's a quick rundown of how Ef
 
 If you are new to the `Effortless` pattern checkout some of the below examples and walk throughs that will help you understand what you can do with this pattern.
 
-## Examples **UNDER CONSTRUCTION**
-![working_on_it](https://media.giphy.com/media/3ov9jRPMChw9ZzVlUk/giphy.gif)
-1. [Chef Infra](examples/effortless_config/README.md)
+## Examples
+
+1. [Effortless Audit](examples/effortless_audit/Readme.md)
+1. [Effortless Config](examples/effortless_config/README.md)

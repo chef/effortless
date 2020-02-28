@@ -10,8 +10,12 @@ Before we build and test an Effortless Config application, it's important to und
 
 The Effortless Config application uses the Policyfiles feature of Chef to encapsulate an application which runs chef-solo against a compiled Policyfile and the collection of cookbooks it needs. This is done in the underlying habitat code by running the chef install command against a Policyfile and then the chef export command to produce a working copy of the compiled Policyfile and all cookbooks. This is then bundled up as a habitat application, and executed using the application hooks provided to actually run Chef on the desired node.
 
-It's possible to leverage the include_policy feature of Policyfiles to layer multiple Policyfiles on top of each other - we provide examples of doing this in the policyfiles directory.
+It's possible to leverage the include_policy feature of Policyfiles to layer multiple Policyfiles on top of each other - we provide examples of doing this in the chef_repo_pattern's policyfiles directory.
 
-It's important to note that as the Effortless Config application you're building is specific to the Policyfile it runs, the name of the artifact produced will be the $pkg_name from the plan file. So for example if you build Effortless Config for the base.rb policy, the resulting application artifact will be called config-baseline.
+It's important to note that as the Effortless Config application you're building is specific to the Policyfile it runs, the name of the artifact produced will be the $pkg_name from the plan file. So for example if you build Effortless Config for the base.rb policy in the chef_repo_pattern folder, the resulting application artifact will be called config-baseline.
 
 If you're layering multiple Policyfiles using include_policy, the application will be named for the 'leaf node' in the tree. So for example if you build Effortless Config for the production.rb policy which in turn includes base.rb, the resulting artifact will be called config-baseline.
+
+You can also use the scaffolding and the pattern to just manage a single cookbook that can be seen in the policy_cookbook_pattern folder.
+
+Both of these patterns are greate example of use Effortless Config but the chef_repo_pattern is the most common as it pulls from some best pratices already in place around managing cookbooks and policyfiles.
