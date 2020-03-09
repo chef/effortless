@@ -1,4 +1,4 @@
-pkg_name=linux-policyfile-cookbook
+pkg_name=policyfile-cookbook
 pkg_origin=example-corporation
 pkg_version="0.1.0"
 pkg_maintainer="Chef"

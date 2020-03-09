@@ -23,7 +23,7 @@ platforms:
 suites:
   - name: base
     provisioner:
-      arguments: ["thelunaticscripter", "effortless-config-baseline"]
+      arguments: ["thelunaticscripter", "policyfile-cookbook"]
     verifier:
       inspec_tests:
         test/integration/base
