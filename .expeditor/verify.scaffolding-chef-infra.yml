@@ -77,14 +77,11 @@ steps:
       HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
     command:
       - ./bin/ci/verify-plans.ps1 scaffolding-chef-infra user-windows-default
-    agents:
-      queue: 'default-windows-2016-privileged'
-    plugins:
-      docker#v3.2.0:
-        image: "chefes/buildkite-windows-2016"
-        shell: [ "powershell", "-Command" ]
-        always-pull: true
-        propagate-environment: true
+    expeditor:
+      executor:
+        docker:
+          host_os: windows
+          shell: [ "powershell", "-Command" ]
 
   - label: "[scaffolding-chef-infra] :windows: :habicat: Build and run tests API"
     env:
