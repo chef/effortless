@@ -1,10 +1,10 @@
 # Effortless Config
 
-Effortless Config is the pattern for managing your Chef Infra workloads. It uses [Habitat](https://www.habitat.sh/docs/) and [Chef Policyfiles](https://docs.chef.io/policyfile/) to build an artifact that contains the cookbooks and their dependencies alongside the scripts necessary to run them on your systems.
+Effortless Config is the pattern for managing your Chef Infra workloads. It uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef Policyfiles](https://docs.chef.io/policyfile/) to build an artifact that contains the cookbooks and their dependencies alongside the scripts necessary to run them on your systems.
 
 ## Patterns
 
-## Chef Repo Cookbook pattern
+### Chef Repo Cookbook pattern
 
 This pattern is used to build policyfiles using the chef_repo pattern for organizing your cookbooks. The chef-repo pattern can be found [here](https://docs.chef.io/chef_repo/).
 
@@ -138,7 +138,7 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
    ```
    > Note: This will spin up a CentOS 7 VM locally and run your cookbook using the latest Chef Client. If you get errors in the Chef run you may need to supply attributes to your policyfile or make modifications so that your cookbook can run using the latest Chef Client
 1. When you are ready destroy the VM by running `kitchen destroy`
-1. You can now upload your habitat pkg to builder by running the following
+1. You can now upload your policyfile pkg to builder by running the following
    ```
    source results/lastbuild.env
    hab pkg upload results/$pkg_artifact
