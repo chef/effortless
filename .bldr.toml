@@ -14,7 +14,7 @@ build_targets = [
 ]
 
 [effortless-config-baseline]
-plan_path = "examples/effortless_config"
+plan_path = "examples/effortless_config/chef_repo_pattern"
 build_targets = [
   "x86_64-linux",
   "x86_64-linux-kernel2",
