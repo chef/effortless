@@ -23,7 +23,7 @@ platforms:
 suites:
   - name: base
     provisioner:
-      arguments: ["effortless", "config-baseline"]
+      arguments: ["effortless", "effortless-config-baseline"]
     verifier:
       inspec_tests:
         test/integration/base
