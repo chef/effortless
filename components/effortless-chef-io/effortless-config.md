@@ -8,7 +8,9 @@ Effortless Config is the pattern for managing your Chef Infra workloads. It uses
 
 This pattern is used to build policyfiles using the chef_repo pattern for organizing your cookbooks. The chef-repo pattern can be found [here](https://docs.chef.io/chef_repo/).
 
-1. To use this pattern navigate to the cookbook you want to use
+> Note: You can view and example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern).
+
+1. To use this pattern navigate to the cookbook you want to 
    ```
    cd chef-repo
    ```
@@ -148,6 +150,8 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
 ### Policyfile Cookbook pattern
 
 This is a pattern of building an artifact for a single cookbook. 
+
+> Note: You can view and example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/policyfile_cookbook_pattern).
 
 1. To use this pattern navigate to the cookbook you want to use
    ```

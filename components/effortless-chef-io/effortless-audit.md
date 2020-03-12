@@ -10,6 +10,8 @@ Effortless Audit is the pattern for managing you Chef InSpec profiles. IT uses [
 
 In InSpec a common pattern is to write a wrapper profile that depends on another profile. This pattern is used to pull profiles from a main profile source like the [Chef Automate Profile Store](https://automate.chef.io/docs/profiles/).
 
+> Note: You can find an example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_audit).
+
 1. To use this pattern navigate to the profile you want to use
    ```
    cd my-profile
@@ -121,7 +123,7 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
 
 ### Waivers
 
-With the release of scaffolding-chef-inspec version 0.16.0 (Linux) and version 0.18.0 (Windows) we have added the Chef InSpec waivers feature. This feature allows you to specify a control id's in your habtiat config that you would like to skip/waive. 
+With the release of scaffolding-chef-inspec version 0.16.0 (Linux) and version 0.18.0 (Windows) we have added the Chef InSpec waivers feature. This feature allows you to specify a control id's in your habtitat config that you would like to skip/waive. 
 
 1. Build and Effortless Audit profile and load it on your systems
 1. Create a waiver toml file like the below example
