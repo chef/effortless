@@ -1,11 +1,4 @@
-#@IgnoreInspection BashAddShebang
-if [ -z ${CHEF_POLICYFILE+x} ]; then
-  policy_name="base"
-else
-  policy_name=${CHEF_POLICYFILE}
-fi
-
-pkg_name=effortless-config-${policy_name}line
+pkg_name=effortless-config-baseline
 pkg_origin=effortless
 pkg_version="0.1.0"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
