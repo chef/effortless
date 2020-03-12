@@ -1,11 +1,3 @@
-
-if ($env:CHEF_POLICYFILE -eq $null){
-  $policy_name = "base"
-}
-else{
-  $policy_name = $env:CHEF_POLICYFILE
-}
-
 $pkg_name="effortless-config-baseline"
 $pkg_origin="chef"
 $pkg_version="0.1.0"
