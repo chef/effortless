@@ -70,6 +70,7 @@ do_default_before() {
                               --user $scaffold_automate_user \
                               --token $scaffold_automate_token \
                               --insecure
+      fi
     fi
   fi
 }
