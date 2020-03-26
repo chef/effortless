@@ -60,9 +60,16 @@ do_default_before() {
       build_line "$message"
       exit 1
     else
-      inspec compliance login $scaffold_automate_server_url \
+      if [ ! $scaffold_compliance_insecure ]; then
+        inspec compliance login $scaffold_automate_server_url\
+                                --user $scaffold_automate_user \
+                                --token $scaffold_automate_token \
+
+      else
+        inspec compliance login $scaffold_automate_server_url \
                               --user $scaffold_automate_user \
-                              --token $scaffold_automate_token
+                              --token $scaffold_automate_token \
+                              --insecure
     fi
   fi
 }
