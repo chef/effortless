@@ -10,4 +10,4 @@ $pkg_scaffolding="chef/scaffolding-chef-inspec"
 $scaffold_automate_server_url = "$env:AUTOMATE_SERVER_URL" # Example: https://foo.bar.com
 $scaffold_automate_user = "$env:AUTOMATE_USER"             # Example: "admin"
 $scaffold_automate_token = "$env:AUTOMATE_TOKEN"           # Example: "DI0WVxInnyGnWKRlZBGizTXySgk="
-$scaffold_compliance_insecure=true
+$scaffold_compliance_insecure = $TRUE

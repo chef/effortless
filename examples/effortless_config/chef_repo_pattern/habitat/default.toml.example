@@ -59,3 +59,4 @@ token = "<automate_token>"
 
 [chef_license]
 acceptance = "undefined"
+
