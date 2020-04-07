@@ -27,7 +27,9 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
    touch plan.sh
    ```
 1. Add some information about your profile to your plan
-   ```
+
+   Linux: plan.sh 
+   ```sh
    pkg_name=<YOUR PROFILE NAME>
    pkg_origin=<YOUR ORIGIN>
    pkg_version=<THE VERSION OF YOUR PROFILE>
@@ -35,6 +37,16 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
    pkg_license=("Apache-2.0")
    pkg_scaffolding="chef/scaffolding-chef-inspec"
    ```
+   Windows: plan.ps1
+   ```powershell
+   $pkg_name="<YOUR PROFILE NAME>"
+   $pkg_origin="<YOUR ORIGIN>"
+   $pkg_version="<THE VERSION OF YOUR PROFILE>"
+   $pkg_maintainer="YOUR NAME AND EMAIL"
+   $pkg_license=("Apache-2.0")
+   $pkg_scaffolding="chef/scaffolding-chef-inspec"
+   ```
+
 1. Build the package
    ```
    hab pkg build
