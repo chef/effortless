@@ -108,7 +108,6 @@ if(!`$env:CFG_CHEF_LICENSE){
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
-
 # Get the InSpec Version
 `$inspec_version = ({{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat --version)
 if (`$inspec_version.GetType().Name -eq "Object[]"){
@@ -214,3 +213,4 @@ user = '<automate_user>'
 {{toYaml cfg.waivers}}
 {{/if ~}}
 "@
+}
