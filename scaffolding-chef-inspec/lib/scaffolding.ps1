@@ -46,9 +46,17 @@ function Invoke-DefaultBefore {
             exit 1
         }
         else{
-            inspec compliance login "$scaffold_automate_server_url" `
-                            --user "$scaffold_automate_user" `
-                            --token "$scaffold_automate_token"
+            if(!$scaffold_compliance_insecure){
+                inspec compliance login "$scaffold_automate_server_url" `
+                                --user "$scaffold_automate_user" `
+                                --token "$scaffold_automate_token"
+            }
+            else{
+                inspec compliance login "$scaffold_automate_server_url" `
+                                --user "$scaffold_automate_user" `
+                                --token "$scaffold_automate_token" `
+                                --insecure
+            }
         }
     }
 }
