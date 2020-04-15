@@ -105,6 +105,7 @@ if(!`$env:CFG_CHEF_LICENSE){
 }
 `$env:CHEF_LICENSE = `$env:CFG_CHEF_LICENSE
 `$WAIVER="{{pkg.svc_config_path}}/waiver.yml"
+`$INPUTS="{{pkg.svc_config_path}}/inputs.yml"
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 `$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
 
@@ -124,7 +125,7 @@ function Invoke-Inspec {
     # TODO: This is set to --json-config due to the
     #  version of InSpec being used please update when InSpec is updated
     if(`$version -gt [Version]"4.17.27"){
-        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --log-level `$env:CFG_LOG_LEVEL
+        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --input-file `$INPUTS --log-level `$env:CFG_LOG_LEVEL
     } 
     else {
         {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
@@ -211,6 +212,12 @@ user = '<automate_user>'
     Add-Content -Path "$pkg_prefix/config/waiver.yml" -Value @"
 {{#if cfg.waivers ~}}
 {{toYaml cfg.waivers}}
+{{/if ~}}
+"@
+
+    Add-Content -Path "$pkg_prefix/config/inputs.yml" -Value @"
+{{#if cfg.inputs ~}}
+{{toYaml cfg.inputs}}
 {{/if ~}}
 "@
 }
