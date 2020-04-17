@@ -27,11 +27,11 @@ function parse_yaml {
 }
 
 @test "Inputs: Ensure input file is written correctly" {
-  result="$(parse_yaml /hab/svc/user-linux-inputs/config/inputs.yml | grep 'foo_2')"
+  result="$(parse_yaml /hab/svc/${TEST_PKG_NAME}/config/inputs.yml | grep 'foo_2')"
   echo ${result}
   [ "${result}" = "foo_2=\"foo_2 from input-file\"" ]
   
-  result="$(parse_yaml /hab/svc/user-linux-inputs/config/inputs.yml | grep 'foo_3')"
+  result="$(parse_yaml /hab/svc/${TEST_PKG_NAME}/config/inputs.yml | grep 'foo_3')"
   [ "${result}" = "foo_3=\"3\"" ]
 }
 
