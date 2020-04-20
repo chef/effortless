@@ -10,7 +10,7 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
 
 > Note: You can view and example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern).
 
-1. To use this pattern navigate to the cookbook you want to 
+1. To use this pattern navigate to the chef-repo you want to use
    ```
    cd chef-repo
    ```
