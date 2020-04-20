@@ -1,3 +1,14 @@
+## v0.20.0 (2020-04-20)
+required version of habitat: 1.5.0 or greater
+
+#### Features
+ - Add inputs for Effortless Audit
+ - Add an insecure option for build when connecting to Automate to pull profiles
+ - Update the examples folder
+
+#### Bug fixes
+ - Fix issues with kitchen in examples folder
+
 ## v0.19.0 (2020-02-27)
 required version of habitat: 1.5.0 or greater
 
