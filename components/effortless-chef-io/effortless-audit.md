@@ -55,26 +55,26 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
    ```
    ---
    driver:
-   name: vagrant
-   synced_folders:
-      - ["./results", "/tmp/results"]
+     name: vagrant
+     synced_folders:
+       - ["./results", "/tmp/results"]
 
    provisioner:
-   name: shell
+     name: shell
 
    verifier:
-   name: inspec
+     name: inspec
 
    platforms:
-   - name: centos-7.6
+     - name: centos-7.6
 
    suites:
-   - name: base
-      provisioner:
-         arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
-      verifier:
-         inspec_tests:
-         test/integration/base
+     - name: base
+        provisioner:
+          arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
+        verifier:
+          inspec_tests:
+            test/integration/base
    ```
 1. Create a `bootstrap.sh` script
    ```
