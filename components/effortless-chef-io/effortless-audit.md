@@ -70,11 +70,11 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
 
    suites:
      - name: base
-        provisioner:
-          arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
-        verifier:
-          inspec_tests:
-            test/integration/base
+       provisioner:
+         arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
+       verifier:
+         inspec_tests:
+           test/integration/base
    ```
 1. Create a `bootstrap.sh` script
    ```

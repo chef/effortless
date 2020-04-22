@@ -86,11 +86,11 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
 
    suites:
      - name: base
-        provisioner:
-          arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
-        verifier:
-          inspec_tests:
-            test/integration/base
+       provisioner:
+         arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
+       verifier:
+         inspec_tests:
+           test/integration/base
    ```
 1. Create a `bootstrap.sh` script
    ```
