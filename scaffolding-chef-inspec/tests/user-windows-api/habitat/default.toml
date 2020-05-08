@@ -3,3 +3,8 @@
 
 [chef_license]
 acceptance = "accept-no-persist"
+
+[automate]
+enable = true
+server_url = "https://foo.com"
+token = "asfasdflkasjf"

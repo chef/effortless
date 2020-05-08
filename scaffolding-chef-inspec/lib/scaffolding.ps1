@@ -125,7 +125,7 @@ function Invoke-Inspec {
     # TODO: This is set to --json-config due to the
     #  version of InSpec being used please update when InSpec is updated
     if(`$version -gt [Version]"4.17.27"){
-        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --input-file `$INPUTS --log-level `$env:CFG_LOG_LEVEL
+        {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --input-file `$INPUTS --log-level `$env:CFG_LOG_LEVEL --reporter json:{{pkg.svc_path}}/results.json
     } 
     else {
         {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
