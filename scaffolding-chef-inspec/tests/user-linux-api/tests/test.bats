@@ -26,16 +26,6 @@ assert_file_exist() {
   assert_file_exist /hab/svc/${TEST_PKG_NAME}/results.json
 }
 
-@test "API: Setting output for json sets the correct file path" {
-  result="$(cat /hab/svc/${TEST_PKG_NAME}/config/inspec_exec_config.json | jq '.reporter.json.file')"
-  [ "${result}" = "/hab/svc/${TEST_PKG_NAME}/results.json" ]
-}
-
-@test "API: Setting the automate url correctly" {
-  result="$(cat /hab/svc/${TEST_PKG_NAME}/config/inspec_exec_config.json | jq '.reporter.automate.url')"
-  [ "${result}" = "https://foo.com/data-collector/v0/" ]
-}
-
 teardown(){
   if [ "${BATS_TEST_NUMBER}" -eq ${#BATS_TEST_NAMES[@]} ]; then
     hab svc unload "${TEST_PKG_IDENT}" || true
