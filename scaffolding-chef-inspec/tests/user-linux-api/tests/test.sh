@@ -21,6 +21,7 @@ export pkg_svc_path
 export scaffold_inspec_client
 
 hab pkg install core/bats --binlink
+hab pkg install core/jq-static --binlink
 hab pkg install "${TEST_PKG_IDENT}"
 
 SUP_WAIT_SECONDS=1

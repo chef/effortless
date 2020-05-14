@@ -195,7 +195,11 @@ EOF
     "reporter": {
       "cli": {
         "stdout": true
-      }{{#if cfg.automate.enable ~}},
+      }{{#if cfg.output.json}},
+      "json" : {
+        "file" : "{{pkg.svc_path}}/results.json",
+        "stdout" : false
+      }{{/if}}{{#if cfg.automate.enable ~}},
       "automate" : {
         "url": "{{cfg.automate.server_url}}/data-collector/v0/",
         "token": "{{cfg.automate.token}}",

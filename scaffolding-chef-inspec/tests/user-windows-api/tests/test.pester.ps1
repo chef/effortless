@@ -28,14 +28,10 @@ Describe "Inspec client run doesn't fail" {
         }
     }
 
-    Context "API: scaffold_inspec_client matches run hook chef/inspec" {
+    Context "API: there is a results.json file" {
         It "The inspec should be the official inspec client" {
-            $inspec_client_pkg = Get-Content "C:\hab\svc\user-windows-api\hooks\run" | Select-String -Pattern '\$env:PATH = "'
-            $inspec_client_pkg = $inspec_client_pkg -split ' '
-            $inspec_client_pkg = $inspec_client_pkg[2].split('\')
-            $inspec_client_pkg = $inspec_client_pkg[3] + '/' + $inspec_client_pkg[4]
-
-            $inspec_client_pkg | Should be "chef/inspec"
+            $result_json = Test-Path "C:\hab\svc\user-windows-api\results.json"
+            $result_json | Should be $true
         }
     }
 }

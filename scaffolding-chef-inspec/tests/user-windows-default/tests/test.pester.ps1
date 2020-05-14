@@ -27,15 +27,4 @@ Describe "Inspec client run doesn't fail" {
             $cert_pkg_dir | Should be "core/cacerts"
         }
     }
-
-    Context "API: scaffold_inspec_client matches run hook chef/inspec" {
-        It "The inspec should be the official inspec client" {
-            $inspec_client_pkg = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\$env:PATH = "'
-            $inspec_client_pkg = $inspec_client_pkg -split ' '
-            $inspec_client_pkg = $inspec_client_pkg[2].split('\')
-            $inspec_client_pkg = $inspec_client_pkg[3] + '/' + $inspec_client_pkg[4]
-
-            $inspec_client_pkg | Should be "chef/inspec"
-        }
-    }
 }

@@ -177,7 +177,11 @@ function Invoke-DefaultInstall {
     "reporter": {
         "cli": {
           "stdout": true
-        }{{#if cfg.automate.enable ~}},
+        }{{#if cfg.output.json}},
+        "json" : {
+          "file" : "c:/hab/svc/$pkg_name/results.json",
+          "stdout" : false
+        }{{/if}}{{#if cfg.automate.enable ~}},
         "automate" : {
           "url": "{{cfg.automate.server_url}}/data-collector/v0/",
           "token": "{{cfg.automate.token}}",
