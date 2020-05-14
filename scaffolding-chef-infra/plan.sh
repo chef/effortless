@@ -38,6 +38,6 @@ do_build() {
 
 do_install() {
   mkdir -p "${pkg_prefix}/lib/linux"/
-  cp -r "${HAB_CACHE_SRC_PATH}/${pkg_dirname}"/* ${pkg_prefix}
+  cp -r "${HAB_CACHE_SRC_PATH}/${pkg_dirname}"/* "${pkg_prefix}"
   cp -r "${PLAN_CONTEXT}/lib/linux"/* "${pkg_prefix}/lib"/
 }
