@@ -4,7 +4,10 @@
 [chef_license]
 acceptance = "accept-no-persist"
 
+[output]
+json = true
+
 [automate]
 enable = true
 server_url = "https://foo.com"
-token = "asfasdflkasjf"
+token = "a;lskfj;alskjf"
