@@ -5,7 +5,6 @@ fi
 
 scaffolding_load() {
   : "${scaffold_chef_client:=chef/chef-infra-client}"
-  : "${scaffold_chef_dk:=chef/chef-dk}"
   : "${scaffold_cacerts:=core/cacerts}"
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"
   : "${scaffold_data_bags_path:=$PLAN_CONTEXT/../data_bags}"
@@ -22,7 +21,6 @@ scaffolding_load() {
 
   pkg_build_deps=(
     "${pkg_build_deps[@]}"
-    "${scaffold_chef_dk}"
     "core/git"
   )
 
@@ -67,18 +65,18 @@ do_default_build() {
 
   for p in $(grep include_policy "${policyfile}" | awk -F "," '{print $1}' | awk -F '"' '{print $2}' | tr -d " "); do
     build_line "Detected included policyfile, ${p}.rb, installing"
-    chef install "${scaffold_policyfile_path}/${p}.rb"
+    chef-cli install "${scaffold_policyfile_path}/${p}.rb"
   done
   for p in $(grep include_policy "${policyfile}" | awk -F "," '{print $1}' | awk -F '\x27' '{print $2}' | tr -d " "); do
     build_line "Detected included policyfile, ${p}.rb, installing"
-    chef install "${scaffold_policyfile_path}/${p}.rb"
+    chef-cli install "${scaffold_policyfile_path}/${p}.rb"
   done
 
-  chef install "${policyfile}"
+  chef-cli install "${policyfile}"
 }
 
 do_default_install() {
-  chef export "${scaffold_policyfile_path}/${scaffold_policy_name}.lock.json" "${pkg_prefix}"
+  chef-cli export "${scaffold_policyfile_path}/${scaffold_policy_name}.lock.json" "${pkg_prefix}"
 
   mkdir -p "${pkg_prefix}/config"
 
