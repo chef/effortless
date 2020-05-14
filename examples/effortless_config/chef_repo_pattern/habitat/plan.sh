@@ -24,9 +24,6 @@ scaffold_policy_name="base"
 # scaffold_chef_client="chef/chef-client"
 # allows you to hard-pin to a version of the chef-infra-client
 
-# scaffold_chef_dk="chef/chef-dk"
-# allows you to hard-pin to a version of chef-dk
-
 # scaffold_data_bags_path="$PLAN_CONTEXT/../data_bags"
 # allows you to build data bags into the package
 

@@ -10,10 +10,6 @@ You can use all the default plan variables that are shipped with habitat you can
 
 **$scaffold_chef_client**: Variable to change the chef-client habitat package that is used. Default is `chef/chef-infra-client`
 
-**$scaffold_chef_dk**: Varible to change the chef-dk habitat package that is used. Default is `chef/chef-dk` (Linux Only)
-
-  > Note: The windows scaffolding no longer uses the chef-dk as of version 0.18.0 instead it ships with a vendored version of the `chef-cli` command.
-
 **$scaffold_cacerts**: Variable to change the CACerts habitat package that is used during the chef-client run. Default is `chef/cacerts`
 
 **$scaffold_policyfile_path**: Path to the policyfile to be built. Default is `$PLAN_CONTEXT/../policyfiles`
