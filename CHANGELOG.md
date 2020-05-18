@@ -1,3 +1,13 @@
+## v0.21.0 (2020-05-18)
+required version of habitat: 1.5.0 or greater. Tested with Habitat 1.6.0
+
+#### Features
+ - Remove the Chef-DK dependency for linux
+ - Add an output option to output a json file
+ - Add new docs to the repo
+
+#### Bug fixes
+
 ## v0.20.0 (2020-04-20)
 required version of habitat: 1.5.0 or greater
 
