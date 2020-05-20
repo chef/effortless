@@ -16,7 +16,7 @@ cfg_splay_first_run="${cfg_splay_first_run:-0}"
 cfg_chef_license={{cfg.chef_license.acceptance}}
 cfg_chef_license="${cfg_chef_license:-undefined}"
 
-if [ "${cfg_chef_license}" == "undefined" ]; then
+if [ "${cfg_chef_license}" = "undefined" ]; then
   cfg_chef_license_cmd=""
 else
   cfg_chef_license_cmd="--chef-license ${cfg_chef_license}"
