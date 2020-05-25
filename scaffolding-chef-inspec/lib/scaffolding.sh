@@ -8,6 +8,7 @@ scaffolding_load() {
   : "${scaffold_automate_token:=}"
   : "${scaffold_cacerts:=}"
   : "${scaffold_inspec_client:=chef/inspec}"
+  : "${scaffold_profiles:=}"
 
   pkg_deps=(
     "${pkg_deps[@]}"
@@ -29,50 +30,57 @@ scaffolding_load() {
 
 do_default_before() {
   export CHEF_LICENSE="accept-no-persist"
-
-  if [ ! -f "$PLAN_CONTEXT/../inspec.yml" ]; then
-    message="ERROR: Cannot find inspec.yml."
-    message="$message Please build from the profile root"
-    build_line "$message"
-
-    exit 1
-  fi
-
-  # Execute an 'inspec compliance login' if a profile needs to be fetched from
-  # the Automate server
-  if [ "$(grep "compliance: " "$PLAN_CONTEXT/../inspec.yml")" ]; then
-    if [ ! $scaffold_automate_server_url ]; then
-      message="You have a dependency on a profile in Automate"
-      message="$message please specify the \$scaffold_automate_server_url"
-      message="$message in your plan.sh file."
-      build_line "$message"
-      exit 1
-    elif [ ! $scaffold_automate_user ]; then
-      message="You have a dependency on a profile in Automate"
-      message="$message please specify the \$scaffold_automate_user"
-      message="$message in your plan.sh file."
-      build_line "$message"
-      exit 1
-    elif [ ! $scaffold_automate_token ]; then
-      message="You have a dependency on a profile in Automate"
-      message="$message please specify the \$scaffold_automate_token"
-      message="$message in your plan.sh file."
-      build_line "$message"
-      exit 1
+  # Check each profile specified (if multiple are included in scaffold_profile_list)
+  for profile in ${scaffold_profiles[*]} ; do
+    if [ ! -z $profile ] ;
+    then
+      profile_dir="$PLAN_CONTEXT/../$profile" ;
     else
-      if [ ! $scaffold_compliance_insecure ]; then
-        inspec compliance login $scaffold_automate_server_url\
+      profile_dir="$PLAN_CONTEXT/../" ;
+    fi
+    if [ ! -f "$profile_dir/inspec.yml" ]; then
+      message="ERROR: Cannot find $profile_dir/inspec.yml."
+      message="$message Please build from the profile root or specify scaffold_profiles in plan.sh with directory name for profile(s)"
+      build_line "$message"
+      exit 1
+    fi
+
+    # Execute an 'inspec compliance login' if a profile needs to be fetched from
+    # the Automate server
+    if [ "$(grep "compliance: " "$profile_dir/inspec.yml")" ]; then
+      if [ ! $scaffold_automate_server_url ]; then
+        message="You have a dependency on a profile in Automate"
+        message="$message please specify the \$scaffold_automate_server_url"
+        message="$message in your plan.sh file."
+        build_line "$message"
+        exit 1
+      elif [ ! $scaffold_automate_user ]; then
+        message="You have a dependency on a profile in Automate"
+        message="$message please specify the \$scaffold_automate_user"
+        message="$message in your plan.sh file."
+        build_line "$message"
+        exit 1
+      elif [ ! $scaffold_automate_token ]; then
+        message="You have a dependency on a profile in Automate"
+        message="$message please specify the \$scaffold_automate_token"
+        message="$message in your plan.sh file."
+        build_line "$message"
+        exit 1
+      else
+        if [ ! $scaffold_compliance_insecure ]; then
+          inspec compliance login $scaffold_automate_server_url\
+                                  --user $scaffold_automate_user \
+                                  --token $scaffold_automate_token \
+
+        else
+          inspec compliance login $scaffold_automate_server_url \
                                 --user $scaffold_automate_user \
                                 --token $scaffold_automate_token \
-
-      else
-        inspec compliance login $scaffold_automate_server_url \
-                              --user $scaffold_automate_user \
-                              --token $scaffold_automate_token \
-                              --insecure
+                                --insecure
+        fi
       fi
     fi
-  fi
+  done
 }
 
 do_default_setup_environment() {
@@ -128,7 +136,7 @@ CFG_CHEF_LICENSE="\${CFG_CHEF_LICENSE:-undefined}"
 CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
 WAIVER="{{pkg.svc_config_path}}/waiver.yml"
 INPUTS="{{pkg.svc_config_path}}/inputs.yml"
-PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
+PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}*.tar.gz"
 
 # This function compares the versions of inspec to ensure that
 # the waiver feature is present before building the InSpec command
@@ -168,13 +176,30 @@ EOF
 }
 
 do_default_build() {
-  inspec archive "$HAB_CACHE_SRC_PATH/$pkg_dirname" \
-                 --overwrite \
-                 -o "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz"
+  if [ ! -z ${scaffold_profiles} ] ;
+    then
+    for profile in ${scaffold_profiles[*]} ; do
+    build_line "Creating archive for $profile"
+      inspec archive "$HAB_CACHE_SRC_PATH/$pkg_dirname/$profile" \
+        --overwrite \
+        -o "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-${pkg_version}-${profile}.tar.gz"
+    done
+    else
+      inspec archive "$HAB_CACHE_SRC_PATH/$pkg_dirname" \
+        --overwrite \
+        -o "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-${pkg_version}.tar.gz"
+  fi
 }
 
 do_default_install() {
-  cp "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz" "$pkg_prefix"
+  if [ ! -z ${scaffold_profiles} ] ;
+  then
+    for profile in ${scaffold_profiles[*]} ; do
+      cp "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version-$profile.tar.gz" "$pkg_prefix"
+    done
+  else
+    cp "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz" "$pkg_prefix"
+  fi
 
   mkdir -p "$pkg_prefix/config"
   chmod 0750 "$pkg_prefix/config"
