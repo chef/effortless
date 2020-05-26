@@ -1,4 +1,4 @@
-$pkg_name="user-windows-default-profiles"
+$pkg_name="user-windows-waiver-profiles"
 $pkg_version="0.1.0"
 $pkg_origin="ci"
 $pkg_scaffolding="ci/scaffolding-chef-inspec"

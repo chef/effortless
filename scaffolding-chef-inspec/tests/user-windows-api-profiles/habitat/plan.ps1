@@ -1,7 +1,8 @@
-$pkg_name="user-windows-default-profiles"
+$pkg_name="user-windows-api"
 $pkg_version="0.1.0"
 $pkg_origin="ci"
 $pkg_scaffolding="ci/scaffolding-chef-inspec"
+$scaffold_inspec_client="chef/inspec/4.18.39"
 $scaffold_profiles=@(
   "profile1",
   "profile2"
