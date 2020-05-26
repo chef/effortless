@@ -1,0 +1,13 @@
+# You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
+# Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
+
+[chef_license]
+acceptance = "accept-no-persist"
+
+[output]
+json = true
+
+[automate]
+enable = true
+server_url = "https://foo.com"
+token = "a;lskfj;alskjf"
