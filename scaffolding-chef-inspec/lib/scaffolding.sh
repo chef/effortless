@@ -30,7 +30,7 @@ scaffolding_load() {
 
 do_default_before() {
   export CHEF_LICENSE="accept-no-persist"
-  # Check each profile specified (if multiple are included in scaffold_profile_list)
+  # Check each profile specified (if multiple are included in scaffold_profiles)
   for profile in ${scaffold_profiles[*]} ; do
     if [ ! -z $profile ] ;
     then

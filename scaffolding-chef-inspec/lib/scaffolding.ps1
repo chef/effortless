@@ -2,10 +2,15 @@
 # A scaffolding for an InSpec profile
 #
 if(!$scaffold_inspec_client){
-    $scaffold_inspec_client = "chef/inspec"
+  $scaffold_inspec_client = "chef/inspec"
 }
 if(!$scaffold_cacerts){
-    $scaffold_cacerts = "core/cacerts"
+  $scaffold_cacerts = "core/cacerts"
+}
+
+# Create empty object if no scaffold_profiles were passed
+if(!$scaffold_profiles) {
+  $scaffold_profiles = ''
 }
 
 function Load-Scaffolding {
@@ -20,45 +25,53 @@ function Load-Scaffolding {
 
 function Invoke-DefaultBefore {
     $env:CHEF_LICENSE='accept-no-persist'
-    if(!(Test-Path "$PLAN_CONTEXT/../inspec.yml")) {
+    # Check each profile specified (if multiple are included in scaffold_profiles)
+    foreach ($profile in $scaffold_profiles) {
+      if ($profile) {
+        $profile_dir = "${PLAN_CONTEXT}/../${profile}"
+      } else {
+        $profile_dir = "${PLAN_CONTEXT}/.."
+      }
+      if(!(Test-Path "${profile_dir}/inspec.yml")) {
         Write-BuildLine "Error: Cannot find inspec.yml"
-        Write-BuildLine "  Please build from the profile root"
+        Write-BuildLine "  Please build from the profile root or specify scaffold_profiles in plan.sh with directory name for profile(s)"
         exit 1
-    }
+      }
 
-    if((Select-String -Path "$PLAN_CONTEXT/../inspec.yml" -Pattern "compliance: ")){
+      if((Select-String -Path "${profile_dir}/inspec.yml" -Pattern "compliance: ")){
         if(!$scaffold_automate_server_url){
-            Write-BuildLine "You have a dependency on a profile in Automate"
-            Write-BuildLine " please specify the `$scaffold_automate_server_url"
-            Write-BuildLine " in your plan.ps1 file."
-            exit 1
+          Write-BuildLine "You have a dependency on a profile in Automate"
+          Write-BuildLine " please specify the `$scaffold_automate_server_url"
+          Write-BuildLine " in your plan.ps1 file."
+          exit 1
         }
         elseif(!$scaffold_automate_user){
-            Write-BuildLine "You have a dependency on a profile in Automate"
-            Write-BuildLine " please specify the `$scaffold_automate_user"
-            Write-BuildLine " in your plan.ps1 file."
-            exit 1
+          Write-BuildLine "You have a dependency on a profile in Automate"
+          Write-BuildLine " please specify the `$scaffold_automate_user"
+          Write-BuildLine " in your plan.ps1 file."
+          exit 1
         }
         elseif(!$scaffold_automate_token){
-            Write-BuildLine "You have a dependency on a profile in Automate"
-            Write-BuildLine " please specify the `$scaffold_automate_token"
-            Write-BuildLine " in your plan.ps1 file."
-            exit 1
+          Write-BuildLine "You have a dependency on a profile in Automate"
+          Write-BuildLine " please specify the `$scaffold_automate_token"
+          Write-BuildLine " in your plan.ps1 file."
+          exit 1
         }
         else{
             if(!$scaffold_compliance_insecure){
-                inspec compliance login "$scaffold_automate_server_url" `
-                                --user "$scaffold_automate_user" `
-                                --token "$scaffold_automate_token"
+              inspec compliance login "$scaffold_automate_server_url" `
+                              --user "$scaffold_automate_user" `
+                              --token "$scaffold_automate_token"
             }
             else{
-                inspec compliance login "$scaffold_automate_server_url" `
-                                --user "$scaffold_automate_user" `
-                                --token "$scaffold_automate_token" `
-                                --insecure
+              inspec compliance login "$scaffold_automate_server_url" `
+                              --user "$scaffold_automate_user" `
+                              --token "$scaffold_automate_token" `
+                              --insecure
             }
         }
-    }
+      }
+  }
 }
 
 function Invoke-DefaultSetupEnvironment {
@@ -107,14 +120,14 @@ if(!`$env:CFG_CHEF_LICENSE){
 `$WAIVER="{{pkg.svc_config_path}}/waiver.yml"
 `$INPUTS="{{pkg.svc_config_path}}/inputs.yml"
 `$CONFIG="{{pkg.svc_config_path}}/inspec_exec_config.json"
-`$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}.tar.gz"
+`$PROFILE_PATH="{{pkg.path}}/{{pkg.name}}-{{pkg.version}}*.tar.gz"
 
 # Get the InSpec Version
 `$inspec_version = ({{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat --version)
 if (`$inspec_version.GetType().Name -eq "Object[]"){
     [Version]`$version = `$inspec_version[0]
 }
-# I'm going to assume it's a string then 
+# I'm going to assume it's a string then
 # if it's not tell the InSpec team to stop chaning the output of inspec --version
 else {
     [Version]`$version = `$inspec_version
@@ -126,7 +139,7 @@ function Invoke-Inspec {
     #  version of InSpec being used please update when InSpec is updated
     if(`$version -gt [Version]"4.17.27"){
         {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --config `$CONFIG --waiver-file `$WAIVER --input-file `$INPUTS --log-level `$env:CFG_LOG_LEVEL
-    } 
+    }
     else {
         {{pkgPathFor "$scaffold_inspec_client"}}/bin/inspec.bat exec `$PROFILE_PATH --json-config `$CONFIG --log-level `$env:CFG_LOG_LEVEL
     }
@@ -150,14 +163,23 @@ while(`$true){
 }
 
 function Invoke-DefaultBuild {
-    inspec archive "$HAB_CACHE_SRC_PATH/$pkg_dirname" `
+  if ($scaffold_profiles) {
+    foreach ($profile in $scaffold_profiles) {
+      Write-BuildLine "Creating archive for ${profile}"
+      inspec archive "${HAB_CACHE_SRC_PATH}/${pkg_dirname}/${profile}" `
+                    --overwrite `
+                    -o "${HAB_CACHE_SRC_PATH}/${pkg_dirname}/${pkg_name}-${pkg_version}-${profile}.tar.gz"
+    }
+  } else {
+    inspec archive "${HAB_CACHE_SRC_PATH}/${pkg_dirname}" `
                    --overwrite `
-                   -o "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz"
+                   -o "${HAB_CACHE_SRC_PATH}/${pkg_dirname}/${pkg_name}-${pkg_version}.tar.gz"
+  }
 }
 
 function Invoke-DefaultInstall {
-    Copy-Item "$HAB_CACHE_SRC_PATH/$pkg_dirname/$pkg_name-$pkg_version.tar.gz" "$pkg_prefix"
-    New-Item -Type Directory $pkg_prefix/config
+    Copy-Item "${HAB_CACHE_SRC_PATH}/${pkg_dirname}/${pkg_name}-${pkg_version}*.tar.gz" "$pkg_prefix"
+    New-Item -Type Directory ${pkg_prefix}/config
 
     Write-BuildLine "Generating config/cli_only.json"
     Add-Content -Path "$pkg_prefix/config/cli_only.json" -Value @"
