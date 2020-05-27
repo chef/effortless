@@ -1,58 +1,70 @@
 # Effortless Audit
 
-Effortless Audit is the pattern for managing you Chef InSpec profiles. IT uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef InSpec](https://www.inspec.io/) to build an artifact that contains your profile and it's dependencies alongside the scripts necessary to run them on you systems.
+Effortless Audit is the pattern for managing you Chef Inspec profiles. IT uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef Inspec](https://www.inspec.io/) to build an artifact that contains your profile and its dependencies alongside the scripts necessary to run them on your systems.
 
-> Note: To learn more about InSpec profiles checkout the documentation [here](https://www.inspec.io/docs/reference/profiles/).
+> Note: To learn more about Chef Inspec profiles checkout the documentation [here](https://www.inspec.io/docs/reference/profiles/).
 
 ## Patterns
 
 ### Wrapper Profile Pattern
 
-In InSpec a common pattern is to write a wrapper profile that depends on another profile. This pattern is used to pull profiles from a main profile source like the [Chef Automate Profile Store](https://automate.chef.io/docs/profiles/).
+In Inspec a common pattern is to write a wrapper profile that depends on another profile. This pattern pulls profiles from a main profile source like the [Chef Automate Profile Store](https://automate.chef.io/docs/profiles/).
 
 > Note: You can find an example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_audit).
 
-1. To use this pattern navigate to the profile you want to use
+1. To use this pattern navigate to your profile:
+
+   ```bash
+   cd my_profile
    ```
-   cd my-profile
-   ```
-1. Make a habitat directory
-   ```
+
+1. Make a habitat directory:
+
+   ```bash
    mkdir habitat
    ```
+
 1. Make a plan file
-   
-   > Notes: For a profile targeting windows use a `plan.ps1` for Linux use a `plan.sh` if your profile targets both windows and linux you can have both a `plan.ps1` and a `plan.sh` in your habitat directory.
-   ```
+
+   > Notes: For a profile targeting Windows use a `plan.ps1` for Linux use a `plan.sh` if your profile targets both Windows and Linux you can have both a `plan.ps1` and a `plan.sh` in your Chef Habitat directory.
+
+   ```bash
    touch plan.sh
    ```
+
 1. Add some information about your profile to your plan
 
-   Linux: plan.sh 
-   ```sh
-   pkg_name=<YOUR PROFILE NAME>
-   pkg_origin=<YOUR ORIGIN>
-   pkg_version=<THE VERSION OF YOUR PROFILE>
-   pkg_maintainer="YOUR NAME AND EMAIL"
+   Linux: plan.sh
+
+   ```bash
+   pkg_name=<MY PROFILE NAME>
+   pkg_origin=<MY ORIGIN>
+   pkg_version=<THE VERSION OF MY PROFILE>
+   pkg_maintainer="MY NAME AND EMAIL"
    pkg_license=("Apache-2.0")
    pkg_scaffolding="chef/scaffolding-chef-inspec"
    ```
+
    Windows: plan.ps1
+
    ```powershell
-   $pkg_name="<YOUR PROFILE NAME>"
-   $pkg_origin="<YOUR ORIGIN>"
-   $pkg_version="<THE VERSION OF YOUR PROFILE>"
-   $pkg_maintainer="YOUR NAME AND EMAIL"
+   $pkg_name="<MY PROFILE NAME>"
+   $pkg_origin="<MY ORIGIN>"
+   $pkg_version="<THE VERSION OF MY PROFILE>"
+   $pkg_maintainer="MY NAME AND EMAIL"
    $pkg_license=("Apache-2.0")
    $pkg_scaffolding="chef/scaffolding-chef-inspec"
    ```
 
 1. Build the package
-   ```
+
+   ```shell
    hab pkg build
    ```
-1. Add a kitchen file to your profile with the following content
-   ```
+
+1. Add a kitchen file to your profile with the following content:
+
+   ```yaml
    ---
    driver:
      name: vagrant
@@ -71,13 +83,15 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
    suites:
      - name: base
        provisioner:
-         arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
+         arguments: ["<MY ORIGIN>", "<MY PACKAGE NAME>"]
        verifier:
          inspec_tests:
            test/integration/base
    ```
+
 1. Create a `bootstrap.sh` script
-   ```
+
+   ```bash
    #!/bin/bash
    export HAB_LICENSE="accept-no-persist"
    export CHEF_LICENSE="accept-no-persist"
@@ -109,7 +123,7 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
    echo "Installing $latest_hart_file"
    hab pkg install $latest_hart_file
 
-   echo "Determing pkg_prefix for $latest_hart_file"
+   echo "Determining pkg_prefix for $latest_hart_file"
    pkg_prefix=$(find /hab/pkgs/$pkg_origin/$pkg_name -maxdepth 2 -mindepth 2 | sort | tail -n 1)
 
    echo "Found $pkg_prefix"
@@ -118,36 +132,45 @@ In InSpec a common pattern is to write a wrapper profile that depends on another
    cd $pkg_prefix
    hab pkg exec $pkg_origin/$pkg_name inspec exec $pkg_prefix/*.tar.gz
    ```
-1. Run Test Kitchen to ensure your profile executes
-   ```
+
+1. Run Test Kitchen to ensure your profile executes:
+
+   ```shell
    kitchen converge base-centos
    ```
-   > Note: This will spin up a CentOS 7 VM locally and run you profile using the latest Chef InSpec. If you get failures that's okay most vanilla VM's are not fully hardened to your security policies. If you want to fix the failures take a look at using [Chef Infra and the Effortless Config Pattern](effortless-config.md).
-1. When you are ready destroy the VM by running `kitchen destroy`
-1. You can now upload your profile pkg to builder by running the following
-   ```
+
+   > Note: This will spin up a CentOS 7 VM locally and run you profile using the latest Chef Inspec. If you get failures that's okay most vanilla VMs are not fully hardened to your security policies. If you want to fix the failures take a look at using [Chef Infra and the Effortless Config Pattern](effortless-config.md).
+1. When you are ready, destroy the VM by running `kitchen destroy`
+1. You can now upload your profile pkg to Chef Habitat Builder by running:
+
+   ```shell
    source results/lastbuild.env
    hab pkg upload results/$pkg_artifact
    ```
-1. To run your profile on a system you just need to install habitat as a service and run `hab svc load <your_origin>/<your_profile_name>`
+
+1. To run your profile on a system you just need to install habitat as a service and run `hab svc load <my_origin>/<_profile_name>`
 
 ## Features
 
 ### Waivers
 
-With the release of scaffolding-chef-inspec version 0.16.0 (Linux) and version 0.18.0 (Windows) we have added the Chef InSpec waivers feature. This feature allows you to specify a control id's in your habtitat config that you would like to skip/waive. 
+We added the Chef Inspec waivers feature to Chef Compliance with scaffolding-chef-inspec version 0.16.0 (Linux) and version 0.18.0 (Windows) release. The waivers feature allows you to specify control IDs in your Chef Habitat configuration that you would like to skip/waive.
 
-1. Build and Effortless Audit profile and load it on your systems
-1. Create a waiver toml file like the below example
-   ```
-   [waivers]
-   [waivers.control_id]
-   run = false
-   expiration_date: 2021-11-31
-   justification = I don't want this control to run cause it breaks my app
-   ```
+1. Build an Effortless Audit profile and load it on your systems
+1. Create a `waiver.toml` file like the below example
+
+    ```toml
+    [waivers]
+    [waivers.control_id]
+    run = false
+    expiration_date: 2021-11-31
+    justification = I don't want this control to run cause it breaks my app
+    ```
+
 1. Apply the new change to your habitat config
+
+   ```shell
+   hab config apply <my_profile_service>.<my_profile_service_group> $(date) <my_config.toml>
    ```
-   hab config apply <your profile service>.<your profile service group> $(date) <your config toml file>
-   ```
-1. Habitat will now see there has been a configuration change and automatically re-run your profile and skip the control you specified in the toml file.
+
+1. Chef Habitat will now see there has been a configuration change and automatically re-run your profile and skip the control you specified in the `.toml` file.
