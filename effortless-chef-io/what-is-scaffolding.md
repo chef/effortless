@@ -1,11 +1,13 @@
-# What is Habitat Scaffolding?
+# Chef Habitat Scaffolding
 
-Habitat scaffolding is a way to build a habitat plan that overrides some of the default functions Habitat uses during it's build process. You can find out more about scaffolding on the [Habitat docs page](https://www.habitat.sh/docs/glossary/#sts=Scaffolding).
+Chef Habitat scaffolding is a way to build a Chef Habitat plan that overrides some of the default functions that Chef Habitat uses during its build process. You can find out more about [scaffolding](https://www.habitat.sh/docs/glossary/#sts=Scaffolding) in the Chef Habitat documentation.
 
-## Why does the Effortless Pattern use scaffolding?
+## Why The Effortless Pattern Uses Scaffolding
 
-The reason we use habitat scaffolding is it provides the effortless maintainers a way to better manage the build and runtime steps needed to be successful with Chef Infra and Chef InSpec. This means that the amount of code you the customer needs to maintain in order to build and run Chef Infra and Chef InSpec is in a small plan file. This lets you focus on writing Chef cookbooks and InSpec profiles and not on how to build and run those things.
+We use Chef Habitat scaffolding to provide the Effortless maintainers better management of the build and runtime steps needed to be successful with Chef Infra and Chef InSpec. This means a small plan file is the amount of code that you, the customer, need to maintain in order to build and run Chef Infra and Chef InSpec. Focus on writing Chef Infra cookbooks and Chef InSpec profiles, and not on how to build and run those things.
 
-## How does scaffolding work?
+## How Scaffolding Works
 
-By specifying the `pkg_scaffolding` variable in you plan Chef Habitat will pull in the necessary package dependencies, run the build steps for Chef Infra and/or Chef InSpec, and provide you with a Habitat artifact that contains your cookbooks or profiles and way to run them on your systems. The source code for these steps can be found here: [Chef Infra](https://github.com/chef/effortless/tree/master/scaffolding-chef-infra/lib) [Chef InSpec](https://github.com/chef/effortless/tree/master/scaffolding-chef-inspec/lib).
+By specifying the `pkg_scaffolding` variable in your plan, Chef Habitat will pull in the necessary package dependencies, run the build steps for Chef Infra and/or Chef InSpec, and provide you with a Chef Habitat artifact that contains your cookbooks or profiles and a way to run them on your systems.
+
+Find the source code for these steps here for [Chef Infra](https://github.com/chef/effortless/tree/master/scaffolding-chef-infra/lib) and for [Chef InSpec](https://github.com/chef/effortless/tree/master/scaffolding-chef-inspec/lib).

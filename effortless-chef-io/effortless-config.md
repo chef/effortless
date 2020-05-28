@@ -4,43 +4,51 @@ Effortless Config is the pattern for managing your Chef Infra workloads. It uses
 
 ## Patterns
 
-### Chef Repo Cookbook pattern
+### Chef Repo Cookbook Pattern
 
-This pattern is used to build policyfiles using the chef_repo pattern for organizing your cookbooks. The chef-repo pattern can be found [here](https://docs.chef.io/chef_repo/).
+This pattern builds Policyfiles using the chef-repo pattern for organizing your cookbooks. More information about the [chef-repo](https://docs.chef.io/chef_repo/) pattern can be found in our Chef Infra Documentation. View an example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern).
 
-> Note: You can view and example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern).
+1. To use this pattern, navigate to the chef-repo directory that you want to use:
 
-1. To use this pattern navigate to the chef-repo you want to use
-   ```
+   ```bash
    cd chef-repo
    ```
-1. Make a habitat directory
-   ```
+
+1. Create a `habitat` directory from the command line with:
+
+   ```bash
    mkdir habitat
    ```
+
 1. Make a plan file
-   
-   > Notes: For a cookbook targeting windows use a `plan.ps1` for Linux use a `plan.sh` if your cookbook targets both windows and linux you can have both a `plan.ps1` and a `plan.sh` in your habitat directory.
-   ```
+
+   Use a `plan.ps1` for a cookbook targeting Windows. Use a `plan.sh` for a cookbook targeting Linux. If the cookbook targets both Windows and Linux, you can have both a `plan.ps1` and a `plan.sh` in the `habitat` directory. Create a plan in Linux with the following command:
+
+   ```bash
    touch plan.sh
    ```
-1. Add some information about your cookbok to your plan
-   plan.sh
+
+1. Add information about the cookbook to the plan
+
+   Add this information to the `plan.sh` file:
+
    ```bash
-   pkg_name=<NAME FOR YOUR POLICYFILE>
-   pkg_origin=<YOUR ORIGIN>
+   pkg_name=<NAME FOR MY POLICYFILE>
+   pkg_origin=<MY ORIGIN>
    pkg_version="0.1.0"
-   pkg_maintainer="YOUR NAME AND EMAIL"
+   pkg_maintainer="MY NAME AND EMAIL"
    pkg_license=("Apache-2.0")
    pkg_scaffolding="chef/scaffolding-chef-infra"
    pkg_svc_user=("root")
-   scaffold_policy_name="<YOUR POLICYFILE NAME>"
+   scaffold_policy_name="<MY POLICYFILE NAME>"
    ```
-1. Create a policyfile directory in your chef-repo and build a policyfile
-   
-   Example of a policyfile.rb:
+
+1. Create a Policyfile directory in the chef-repo and build a Policyfile
+
+   Example of a `policyfile.rb`:
+
    ```ruby
-   # Policyfile.rb - Describe how you want Chef Infra to build your system.
+   # Policyfile.rb - Describe how Chef Infra should build your system.
    #
    # For more information on the Policyfile feature, visit
    # https://docs.chef.io/policyfile.html
@@ -63,12 +71,18 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
    default['patching'] = {}
 
    ```
-1. Build the package
-   ```
+
+1. Build the package:
+
+   Run the following command to build the package:
+
+   ```bash
    hab pkg build
    ```
-1. Modify your `kitchen.yml` file to look like this
-   ```
+
+1. Edit the `kitchen.yml` file to look similar to this:
+
+   ```yml
    ---
    driver:
      name: vagrant
@@ -87,13 +101,15 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
    suites:
      - name: base
        provisioner:
-         arguments: ["<YOUR ORIGIN>", "<YOUR PACKAGE NAME>"]
+         arguments: ["<MY ORIGIN>", "<MY PACKAGE NAME>"]
        verifier:
          inspec_tests:
            test/integration/base
    ```
-1. Create a `bootstrap.sh` script
-   ```
+
+1. Create a `bootstrap.sh` script and include:
+
+   ```bash
    #!/bin/bash
    export HAB_LICENSE="accept-no-persist"
    export CHEF_LICENSE="accept-no-persist"
@@ -125,7 +141,7 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
    echo "Installing $latest_hart_file"
    hab pkg install $latest_hart_file
 
-   echo "Determing pkg_prefix for $latest_hart_file"
+   echo "Determining pkg_prefix for $latest_hart_file"
    pkg_prefix=$(find /hab/pkgs/$pkg_origin/$pkg_name -maxdepth 2 -mindepth 2 | sort | tail -n 1)
 
    echo "Found $pkg_prefix"
@@ -134,55 +150,80 @@ This pattern is used to build policyfiles using the chef_repo pattern for organi
    cd $pkg_prefix
    hab pkg exec $pkg_origin/$pkg_name chef-client -z -c $pkg_prefix/config/bootstrap-config.rb
    ```
-1. Run Test Kitchen to ensure your cookbook works on Linux
-   ```
+
+1. Run Test Kitchen to ensure the cookbook works
+
+   Use this command to spin up a CentOS 7 virtual machine (VM) locally and run the cookbook using the latest Chef Infra Client:
+
+   ```bash
    kitchen converge base-centos
    ```
-   > Note: This will spin up a CentOS 7 VM locally and run your cookbook using the latest Chef Client. If you get errors in the Chef run you may need to supply attributes to your policyfile or make modifications so that your cookbook can run using the latest Chef Client
-1. When you are ready destroy the VM by running `kitchen destroy`
-1. You can now upload your policyfile pkg to builder by running the following
+
+   If you experience errors in this Chef run, you may need to supply attributes or make modifications to your Policyfile, so that your cookbook can run using the latest Chef Infra Client.
+
+1. When ready, delete the VM instance by running:
+
+   ```bash
+   kitchen destroy
    ```
+
+1. Upload the Policyfile pkg to Chef Habitat builder by running the following commands:
+
+   ```bash
    source results/lastbuild.env
    hab pkg upload results/$pkg_artifact
    ```
-1. To run your policyfile on a system you just need to install habitat as a service and run `hab svc load <your_origin>/<your_policyfile_name>`
+
+1. To run the Policyfile on a system, install Chef Habitat services and run:
+
+   ```bash
+   hab svc load <my_origin>/<my_policyfile_name>
+   ```
 
 ### Policyfile Cookbook pattern
 
-This is a pattern of building an artifact for a single cookbook. 
+This pattern builds an artifact for a single cookbook. View an example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/policyfile_cookbook_pattern).
 
-> Note: You can view and example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/policyfile_cookbook_pattern).
+1. To use this pattern, navigate to the cookbook you want to use:
 
-1. To use this pattern navigate to the cookbook you want to use
-   ```
+   ```bash
    cd chef-repo/cookbooks/foo_cookbook
    ```
-1. Make a habitat directory
-   ```
+
+1. Create a `habitat` directory from the command line with:
+
+   ```bash
    mkdir habitat
    ```
+
 1. Make a plan file
-   
-   > Notes: For a cookbook targeting windows use a `plan.ps1` for Linux use a `plan.sh` if your cookbook targets both windows and linux you can have both a `plan.ps1` and a `plan.sh` in your habitat directory.
-   ```
+
+   Use a `plan.ps1` for a cookbook targeting Windows. Use a `plan.sh` for a cookbook targeting Linux. If the cookbook targets both Windows and Linux, you can have both a `plan.ps1` and a `plan.sh` in the `habitat` directory. Create a plan in Linux with the following command:
+
+   ```bash
    touch plan.sh
    ```
-1. Add some information about your cookbok to your plan
+
+1. Add some information about the cookbook to the plan
+
    plan.sh
-   ```
-   pkg_name=<Name of your cookbook artifact>
-   pkg_origin=<your Origin>
+
+   ```bash
+   pkg_name=<Name of my cookbook artifact>
+   pkg_origin=<my Origin>
    pkg_version="<Cookbook version>"
-   pkg_maintainer="<Your Name>"
-   pkg_license=("<License for you cokbook example Apache-2.0>")
+   pkg_maintainer="<My Name>"
+   pkg_license=("<License for my cookbook example Apache-2.0>")
    pkg_scaffolding="chef/scaffolding-chef-infra"
    scaffold_policy_name="Policyfile"
    scaffold_policyfile_path="$PLAN_CONTEXT/../" # habitat/../Policyfile.rb
    ```
-1. Ensure you have a policyfile at in your cookbook directory
-   
-   Example of a policyfile:
-   ```
+
+1. Make a Policyfile in the `cookbook` directory
+
+   Example of a `policyfile.rb` file:
+
+   ```ruby
    # Policyfile.rb - Describe how you want Chef to build your system.
    #
    # For more information on the Policyfile feature, visit
@@ -200,12 +241,16 @@ This is a pattern of building an artifact for a single cookbook.
    # Specify a custom source for a single cookbook:
    cookbook '<Your Cookbook Name>', path: '.'
    ```
-1. Build the package
+
+1. Build the package:
+
+   ```bash
+   hab pkg build <My Cookbook Name>
    ```
-   hab pkg build <Your Cookbook Name>
-   ```
-1. Modify your `kitchen.yml` file to look like this
-   ```
+
+1. Edit the `kitchen.yml` file to look similar to this:
+
+   ```yml
    ---
    driver:
    name: vagrant
@@ -224,13 +269,15 @@ This is a pattern of building an artifact for a single cookbook.
    suites:
    - name: base
       provisioner:
-         arguments: ["<YOUR ORIGIN>", "<YOUR COOKBOOK NAME>"]
+         arguments: ["<MY ORIGIN>", "<MY COOKBOOK NAME>"]
       verifier:
          inspec_tests:
          test/integration/base
    ```
-1. Create a `bootstrap.sh` script
-   ```
+
+1. Create a `bootstrap.sh` script and include:
+
+   ```bash
    #!/bin/bash
    export HAB_LICENSE="accept-no-persist"
    export CHEF_LICENSE="accept-no-persist"
@@ -262,7 +309,7 @@ This is a pattern of building an artifact for a single cookbook.
    echo "Installing $latest_hart_file"
    hab pkg install $latest_hart_file
 
-   echo "Determing pkg_prefix for $latest_hart_file"
+   echo "Determining pkg_prefix for $latest_hart_file"
    pkg_prefix=$(find /hab/pkgs/$pkg_origin/$pkg_name -maxdepth 2 -mindepth 2 | sort | tail -n 1)
 
    echo "Found $pkg_prefix"
@@ -271,15 +318,32 @@ This is a pattern of building an artifact for a single cookbook.
    cd $pkg_prefix
    hab pkg exec $pkg_origin/$pkg_name chef-client -z -c $pkg_prefix/config/bootstrap-config.rb
    ```
-1. Run Test Kitchen to ensure your cookbook works on Linux
-   ```
+
+1. Run Test Kitchen to ensure the cookbook works on Linux
+
+   Use this command to spin up a CentOS 7 virtual machine (VM) locally and run the cookbook using the latest Chef Infra Client:
+
+   ```bash
    kitchen converge base-centos
    ```
-   > Note: This will spin up a CentOS 7 VM locally and run your cookbook using the latest Chef Client. If you get errors in the Chef run you may need to supply attributes to your policyfile or make modifications so that your cookbook can run using the latest Chef Client
-1. When you are ready destroy the VM by running `kitchen destroy`
-1. You can now upload your habitat pkg to builder by running the following
+
+   If you experience errors in this Chef run, you may need to supply attributes or make modifications to your Policyfile, so that your cookbook can run using the latest Chef Infra Client.
+
+1. When ready, delete the VM instance by running:
+
+   ```bash
+   kitchen destroy
    ```
+
+1. Upload the habitat pkg to Chef Habitat builder by running the following commands:
+
+   ```bash
    source results/lastbuild.env
    hab pkg upload results/$pkg_artifact
    ```
-1. To run your cookbook on a system you just need to install habitat as a service and run `hab svc load your_origin/your_cookbook`
+
+1. To run the cookbook on a system, install Chef Habitat services and run:
+
+   ```bash
+   hab svc load my_origin/my_cookbook
+   ```
