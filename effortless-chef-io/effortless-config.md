@@ -6,7 +6,13 @@ Effortless Config is the pattern for managing your Chef Infra workloads. It uses
 
 ### Chef Repo Cookbook Pattern
 
-This pattern builds Policyfiles using the chef-repo pattern for organizing your cookbooks. More information about the [chef-repo](https://docs.chef.io/chef_repo/) pattern can be found in our Chef Infra Documentation. View an example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern).
+This pattern uses the [chef-repo](https://docs.chef.io/chef_repo/) to store and organize everything you need to define your infrastructure with Chef Infra, including:
+
+- Cookbooks (including recipes, attributes, custom resources, libraries, and templates)
+- Data bags
+- Policyfiles
+  
+The Chef Effortless GitHub repository has an [example chef-repo](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern) for you to explore.
 
 1. To use this pattern, navigate to the chef-repo directory that you want to use:
 
@@ -22,7 +28,7 @@ This pattern builds Policyfiles using the chef-repo pattern for organizing your 
 
 1. Make a plan file
 
-   Use a `plan.ps1` for a cookbook targeting Windows. Use a `plan.sh` for a cookbook targeting Linux. If the cookbook targets both Windows and Linux, you can have both a `plan.ps1` and a `plan.sh` in the `habitat` directory. Create a plan in Linux with the following command:
+   Make  a `plan.ps1` for a cookbook that targets Microsoft Windows systems and a `plan.sh` for a cookbook that targets Linux systems. You can have both a `plan.ps1` and a `plan.sh` in the `habitat` directory for cookbooks that target both systems. Create a Linux plan:
 
    ```bash
    touch plan.sh
@@ -43,7 +49,17 @@ This pattern builds Policyfiles using the chef-repo pattern for organizing your 
    scaffold_policy_name="<MY POLICYFILE NAME>"
    ```
 
-1. Create a Policyfile directory in the chef-repo and build a Policyfile
+1. If you do not have a policyfiles directory in your chef-repo, create one:
+
+   ```bash
+   mkdir policyfiles
+   ```
+
+1. Generate a Policyfile:
+
+  ```bash
+  chef generate policyfile policyfiles/my_policyfile
+  ```
 
    Example of a `policyfile.rb`:
 
@@ -101,7 +117,7 @@ This pattern builds Policyfiles using the chef-repo pattern for organizing your 
    suites:
      - name: base
        provisioner:
-         arguments: ["<MY ORIGIN>", "<MY PACKAGE NAME>"]
+         arguments: ["<MY_ORIGIN>", "<MY_PACKAGE_NAME>"]
        verifier:
          inspec_tests:
            test/integration/base
@@ -180,9 +196,9 @@ This pattern builds Policyfiles using the chef-repo pattern for organizing your 
    hab svc load <my_origin>/<my_policyfile_name>
    ```
 
-### Policyfile Cookbook pattern
+### Policyfile Cookbook Pattern
 
-This pattern builds an artifact for a single cookbook. View an example of this pattern [here](https://github.com/chef/effortless/tree/master/examples/effortless_config/policyfile_cookbook_pattern).
+This pattern builds a Chef Habitat artifact for the Policyfile cookbook. You can find an [example Policyfile cookbook](https://github.com/chef/effortless/tree/master/examples/effortless_config/policyfile_cookbook_pattern) in the Chef Effortless GitHub repository.
 
 1. To use this pattern, navigate to the cookbook you want to use:
 
@@ -210,7 +226,7 @@ This pattern builds an artifact for a single cookbook. View an example of this p
 
    ```bash
    pkg_name=<Name of my cookbook artifact>
-   pkg_origin=<my Origin>
+   pkg_origin=<My Origin>
    pkg_version="<Cookbook version>"
    pkg_maintainer="<My Name>"
    pkg_license=("<License for my cookbook example Apache-2.0>")
@@ -269,7 +285,7 @@ This pattern builds an artifact for a single cookbook. View an example of this p
    suites:
    - name: base
       provisioner:
-         arguments: ["<MY ORIGIN>", "<MY COOKBOOK NAME>"]
+         arguments: ["<MY_ORIGIN>", "<MY_COOKBOOK_NAME>"]
       verifier:
          inspec_tests:
          test/integration/base
