@@ -156,14 +156,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    hab pkg upload results/$pkg_artifact
    ```
 
-1. To run your profile on a system, you need to run Chef Habitat as a service based on your operating system
-   
-   Install the Chef Habitat Windows service:
-
-   ```bash
-   hab pkg install core/windows-service
-   hab pkg exec core/windows-service install
-   ```
+1. To run your profile on a system, install Chef Habitat as a service and run:
 
    ```bash
    hab svc load <your_origin>/<your_profile_name>
