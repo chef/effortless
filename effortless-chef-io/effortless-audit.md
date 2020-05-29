@@ -32,7 +32,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
 
 1. Add some information about your profile to the plan file
 
-   Add this profile information to the `plan.sh` file for Linux:
+   Add this profile information to the Linux `plan.sh` file:
 
    ```bash
    pkg_name=<my_profile>
@@ -43,7 +43,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    pkg_scaffolding="chef/scaffolding-chef-inspec"
    ```
 
-   Add this profile information to the `plan.ps1` file for Microsoft Windows:
+   Add this profile information to the Microsoft Windows `plan.ps1` file:
 
    ```powershell
    $pkg_name="<my_profile>"
@@ -156,7 +156,14 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    hab pkg upload results/$pkg_artifact
    ```
 
-1. To run your profile on a system, you need to install Chef Habitat services and run:
+1. To run your profile on a system, you need to run Chef Habitat as a service based on your operating system
+   
+   Install the Chef Habitat Windows service:
+
+   ```bash
+   hab pkg install core/windows-service
+   hab pkg exec core/windows-service install
+   ```
 
    ```bash
    hab svc load <your_origin>/<your_profile_name>
@@ -169,7 +176,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
 With the release of `scaffolding-chef-inspec` version 0.16.0 (Linux) and version 0.18.0 (Windows), we added the Chef InSpec Waivers feature. This feature allows you to specify a control ID in your Chef Habitat config that you would like to skip, or waive.
 
 1. Build an Effortless Audit profile and load it on your systems.
-1. Create a `waiver.toml` file similar to:
+1. Create a `my_config.toml` file similar to:
 
    ```toml
    [waivers]
@@ -185,4 +192,4 @@ With the release of `scaffolding-chef-inspec` version 0.16.0 (Linux) and version
    hab config apply <my_profile_service>.<my_profile_service_group> $(date) <my_config.toml>
    ```
 
-1. Habitat will see a configuration change, automatically re-run your profile, and skip the control you specified in the `waiver.toml` file.
+1. Habitat will see a configuration change, automatically re-run your profile, and skip the control you specified in the `my_config.toml` file.
