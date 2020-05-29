@@ -35,9 +35,9 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    Add this profile information to the `plan.sh` file for Linux:
 
    ```bash
-   pkg_name=<my_profile_name>
+   pkg_name=<my_profile>
    pkg_origin=<my_origin>
-   pkg_version=<version_of_your_profile>
+   pkg_version=<my_profile_version>
    pkg_maintainer="Your Name and Email"
    pkg_license=("Apache-2.0")
    pkg_scaffolding="chef/scaffolding-chef-inspec"
@@ -46,10 +46,10 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    Add this profile information to the `plan.ps1` file for Microsoft Windows:
 
    ```powershell
-   $pkg_name="<YOUR PROFILE NAME>"
-   $pkg_origin="<YOUR ORIGIN>"
-   $pkg_version="<THE VERSION OF YOUR PROFILE>"
-   $pkg_maintainer="YOUR NAME AND EMAIL"
+   $pkg_name="<my_profile>"
+   $pkg_origin="<my_origin>"
+   $pkg_version="<my_profile_version>"
+   $pkg_maintainer="My Name and Email"
    $pkg_license=("Apache-2.0")
    $pkg_scaffolding="chef/scaffolding-chef-inspec"
    ```
@@ -149,7 +149,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    kitchen destroy
    ```
 
-1. You can know upload your profile pkg to Chef Habitat Builder by running the following commands:
+1. You can now upload your profile pkg to Chef Habitat Builder by running the following commands:
 
    ```bash
    source results/lastbuild.env
@@ -182,7 +182,7 @@ With the release of `scaffolding-chef-inspec` version 0.16.0 (Linux) and version
 1. Apply the new change to your Chef Habitat config:
 
    ```bash
-   hab config apply <your profile service>.<your profile service group> $(date) <your config toml file>
+   hab config apply <my_profile_service>.<my_profile_service_group> $(date) <my_config.toml>
    ```
 
 1. Habitat will see a configuration change, automatically re-run your profile, and skip the control you specified in the `waiver.toml` file.
