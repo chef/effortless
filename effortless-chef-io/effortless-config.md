@@ -39,17 +39,17 @@ The Chef Effortless GitHub repository has an [example chef-repo](https://github.
    Add this information to the `plan.sh` file:
 
    ```bash
-   pkg_name=<NAME FOR MY POLICYFILE>
-   pkg_origin=<MY ORIGIN>
+   pkg_name=<my_policyfile>
+   pkg_origin=<my_origin>
    pkg_version="0.1.0"
-   pkg_maintainer="MY NAME AND EMAIL"
+   pkg_maintainer="My Name and Email"
    pkg_license=("Apache-2.0")
    pkg_scaffolding="chef/scaffolding-chef-infra"
    pkg_svc_user=("root")
-   scaffold_policy_name="<MY POLICYFILE NAME>"
+   scaffold_policy_name="<my_policyfile>"
    ```
 
-1. If you do not have a policyfiles directory in your chef-repo, create one:
+1. If you do not have a `policyfiles` directory in your chef-repo, create one:
 
    ```bash
    mkdir policyfiles
@@ -117,7 +117,7 @@ The Chef Effortless GitHub repository has an [example chef-repo](https://github.
    suites:
      - name: base
        provisioner:
-         arguments: ["<MY_ORIGIN>", "<MY_PACKAGE_NAME>"]
+         arguments: ["<my_origin>", "<my_package_name>"]
        verifier:
          inspec_tests:
            test/integration/base
@@ -203,7 +203,7 @@ This pattern builds a Chef Habitat artifact for the Policyfile cookbook. You can
 1. To use this pattern, navigate to the cookbook you want to use:
 
    ```bash
-   cd chef-repo/cookbooks/foo_cookbook
+   cd chef-repo/cookbooks/my_cookbook
    ```
 
 1. Create a `habitat` directory from the command line with:
@@ -225,11 +225,11 @@ This pattern builds a Chef Habitat artifact for the Policyfile cookbook. You can
    plan.sh
 
    ```bash
-   pkg_name=<Name of my cookbook artifact>
-   pkg_origin=<My Origin>
+   pkg_name=<Name of my_cookbook artifact>
+   pkg_origin=<my_origin>
    pkg_version="<Cookbook version>"
    pkg_maintainer="<My Name>"
-   pkg_license=("<License for my cookbook example Apache-2.0>")
+   pkg_license=("<License for my_cookbook example Apache-2.0>")
    pkg_scaffolding="chef/scaffolding-chef-infra"
    scaffold_policy_name="Policyfile"
    scaffold_policyfile_path="$PLAN_CONTEXT/../" # habitat/../Policyfile.rb
@@ -246,22 +246,22 @@ This pattern builds a Chef Habitat artifact for the Policyfile cookbook. You can
    # https://docs.chef.io/policyfile.html
 
    # A name that describes what the system you're building with Chef does.
-   name '<Your Cookbook Name>'
+   name '<my_cookbook_name>'
 
    # Where to find external cookbooks:
    default_source :supermarket
 
    # run_list: chef-client will run these recipes in the order specified.
-   run_list '<Your Cookbook Name>::default'
+   run_list '<my_cookbook_name>::default'
 
    # Specify a custom source for a single cookbook:
-   cookbook '<Your Cookbook Name>', path: '.'
+   cookbook '<my_cookbook_name>', path: '.'
    ```
 
 1. Build the package:
 
    ```bash
-   hab pkg build <My Cookbook Name>
+   hab pkg build <my_cookbook>
    ```
 
 1. Edit the `kitchen.yml` file to look similar to this:
@@ -285,7 +285,7 @@ This pattern builds a Chef Habitat artifact for the Policyfile cookbook. You can
    suites:
    - name: base
       provisioner:
-         arguments: ["<MY_ORIGIN>", "<MY_COOKBOOK_NAME>"]
+         arguments: ["<my_origin>", "<my_cookbook>"]
       verifier:
          inspec_tests:
          test/integration/base
