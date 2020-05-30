@@ -23,7 +23,7 @@ export pkg_svc_path
 hab pkg install core/bats --binlink
 hab pkg install "${TEST_PKG_IDENT}"
 
-SUP_WAIT_SECONDS=1
+SUP_WAIT_SECONDS=5
 
 hab sup term
 sleep "${SUP_WAIT_SECONDS}"
