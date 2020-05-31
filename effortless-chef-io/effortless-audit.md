@@ -4,6 +4,12 @@ Effortless Audit is the pattern for managing your Chef InSpec profiles. It uses 
 
 Learn more about [Chef InSpec profiles](https://www.inspec.io/docs/reference/profiles/).
 
+## Effortless Environment Set-up
+
+1. Install [Chef Workstation](https://downloads.chef.io/chef-workstation)
+1. Install [Chef Habitat](https://www.habitat.sh/docs/install-habitat/)
+1. Configure Chef Habitat on your workstation by running `hab setup`
+
 ## Patterns
 
 ### Wrapper Profile Pattern

@@ -2,6 +2,12 @@
 
 Effortless Config is the pattern for managing your Chef Infra workloads. It uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef Policyfiles](https://docs.chef.io/policyfile/) to build an artifact that contains the cookbooks and their dependencies alongside the scripts necessary to run them on your systems.
 
+## Effortless Environment Set-up
+
+1. Install [Chef Workstation](https://downloads.chef.io/chef-workstation)
+1. Install [Chef Habitat](https://www.habitat.sh/docs/install-habitat/)
+1. Configure Chef Habitat on your workstation by running `hab setup`
+
 ## Patterns
 
 ### Chef Repo Cookbook Pattern
@@ -11,7 +17,7 @@ This pattern uses the [chef-repo](https://docs.chef.io/chef_repo/) to store and 
 - Cookbooks (including recipes, attributes, custom resources, libraries, and templates)
 - Data bags
 - Policyfiles
-  
+
 The Chef Effortless GitHub repository has an [example chef-repo](https://github.com/chef/effortless/tree/master/examples/effortless_config/chef_repo_pattern) for you to explore.
 
 1. To use this pattern, navigate to the chef-repo directory that you want to use:
