@@ -2,13 +2,18 @@
 
 This is a quick guide on how to get started with Effortless.
 
-## Effortless Config
+## Effortless Environment Set-up
 
 1. Install [Chef Workstation](https://downloads.chef.io/chef-workstation)
 1. Install [Chef Habitat](https://www.habitat.sh/docs/install-habitat/)
 1. Configure Chef Habitat on your workstation by running `hab setup`
+1. Clone the [Chef Effortless GitHub Repository](https://github.com/chef/effortless)
+
+## Effortless Config Quick Start Pattern
+
 1. Change Directory into `examples/effortless_config/chef_repo_pattern`
 1. Change the line 26 of the `kitchen.yml` file to use your origin:
+
 
    ```yml
    provisioner:
