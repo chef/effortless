@@ -1,3 +1,15 @@
++++
+title = "Effortless Overview"
+draft = false
+
+[menu]
+  [menu.effortless]
+    title = "Effortless Overview"
+    identifier = "effortless/_index.md Overview"
+    parent = "effortless"
+    weight = 10
++++
+
 # Welcome to the Chef Effortless Patterns
 
 The Effortless Pattern is a way to better manage Chef Infra and Chef InSpec workloads using Chef Habitat, and to visualize your fleet using Chef Automate. We believe that each of these technologies working together can help you better manage your infrastructure.

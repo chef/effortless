@@ -1,3 +1,15 @@
++++
+title = "Effortless What is Scaffolding"
+draft = false
+
+[menu]
+  [menu.effortless]
+    title = "What is Scaffolding"
+    identifier = "effortless/what_is_scaffolding.md Effortless What is Scaffolding"
+    parent = "effortless"
+    weight = 50
++++
+
 # Chef Habitat Scaffolding
 
 Chef Habitat scaffolding is a way to build a Chef Habitat plan that overrides some of the default functions that Chef Habitat uses during its build process. You can find out more about [scaffolding](https://www.habitat.sh/docs/glossary/#sts=Scaffolding) in the Chef Habitat documentation.
