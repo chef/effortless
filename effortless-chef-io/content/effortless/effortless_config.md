@@ -1,3 +1,15 @@
++++
+title = "Effortless Config"
+draft = false
+
+[menu]
+  [menu.effortless]
+    title = "Effortless Config"
+    identifier = "effortless/effortless_config.md Effortless config"
+    parent = "effortless"
+    weight = 30
++++
+
 # Effortless Config
 
 Effortless Config is the pattern for managing your Chef Infra workloads. It uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef Policyfiles](https://docs.chef.io/policyfile/) to build an artifact that contains the cookbooks and their dependencies alongside the scripts necessary to run them on your systems.

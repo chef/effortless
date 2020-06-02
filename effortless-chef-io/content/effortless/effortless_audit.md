@@ -1,3 +1,16 @@
++++
+title = "Effortless Audit"
+draft = false
+
+[menu]
+  [menu.effortless]
+    title = "Effortless Audit"
+    identifier = "effortless/effortless_audit.md Effortless Audit"
+    parent = "effortless"
+    weight = 20
++++
+
+
 # Effortless Audit
 
 Effortless Audit is the pattern for managing your Chef InSpec profiles. It uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef InSpec](https://www.inspec.io/docs/) to build an artifact that contains your profiles and its dependencies alongside the scripts necessary to run them on your systems.

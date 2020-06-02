@@ -1,3 +1,15 @@
++++
+title = "Effortless Variables and Config"
+draft = false
+
+[menu]
+  [menu.effortless]
+    title = "Variables and Config"
+    identifier = "effortless/variables_and_config.md Effortless Variables and Config"
+    parent = "effortless"
+    weight = 40
++++
+
 # Plan Variables and Chef Habitat Configurations
 
 This documents the options for both your plan and your `habitat` configuration file.

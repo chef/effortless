@@ -1,3 +1,16 @@
++++
+title = "Effortless Quick Start"
+draft = false
+
+[menu]
+  [menu.effortless]
+    title = "Quick Start"
+    identifier = "effortless/quick_start.md Quick Start"
+    parent = "effortless"
+    weight = 10
++++
+
+
 # Quick Start
 
 This is a quick guide on how to get started with Effortless.
