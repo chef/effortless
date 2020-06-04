@@ -7,7 +7,7 @@ $pkg_license=("Apache-2.0")
 $pkg_upstream_url="https://www.chef.sh"
 $pkg_deps=@(
     "core/git",
-    "chef/ruby-plus-devkit"
+    "chef/ruby27-plus-devkit"
 )
 $pkg_bin_dirs=@("vendor/bin")
 
@@ -18,7 +18,11 @@ function Invoke-Setupenvironment {
 
 function Invoke-Build {
   $env:GEM_HOME = "$HAB_CACHE_SRC_PATH/$pkg_dirname/vendor"
+  # WE NEED TO REMOVE THIS WHEN FFI IS FIXED OR CHEF-CLI PINS FFI
+  gem install ffi --version "< 1.13.0" --no-document
+  if (-not $?) { throw "Unable to install ffi gem." }
   gem install chef-cli --no-document
+  if (-not $?) { throw "Unable to install chef-cli gem." }
 }
 
 function Invoke-Install {
