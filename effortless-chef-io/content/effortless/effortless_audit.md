@@ -78,7 +78,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    Run the following command to build the package:
 
    ```bash
-   hab pkg build
+   hab pkg build .
    ```
 
 1. Add a `kitchen.yml` file to your profile with the following content:

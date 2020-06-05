@@ -111,7 +111,7 @@ The Chef Effortless GitHub repository has an [example chef-repo](https://github.
    Run the following command to build the package:
 
    ```bash
-   hab pkg build
+   hab pkg build .
    ```
 
 1. Edit the `kitchen.yml` file to look similar to this:
