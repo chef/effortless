@@ -19,8 +19,6 @@ function Invoke-Setupenvironment {
 function Invoke-Build {
   $env:GEM_HOME = "$HAB_CACHE_SRC_PATH/$pkg_dirname/vendor"
   # WE NEED TO REMOVE THIS WHEN FFI IS FIXED OR CHEF-CLI PINS FFI
-  gem install ffi --version "< 1.13.0" --no-document
-  if (-not $?) { throw "Unable to install ffi gem." }
   gem install chef-cli --no-document
   if (-not $?) { throw "Unable to install chef-cli gem." }
 }
