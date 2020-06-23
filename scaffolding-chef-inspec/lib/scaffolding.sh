@@ -205,7 +205,8 @@ EOF
         "token": "{{cfg.automate.token}}",
         "node_name": "{{ sys.hostname }}",
         "verify_ssl": false{{#if cfg.automate.environment}},
-        "environment": "{{cfg.automate.environment}}"{{/if }}
+        "environment": "{{cfg.automate.environment}}"{{/if }}{{#if cfg.automate.node_uuid}},
+        "node_uuid": "{{cfg.automate.node_uuid}}"{{/if }}
       }{{/if }}
     }
 }
