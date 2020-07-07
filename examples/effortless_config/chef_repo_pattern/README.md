@@ -73,7 +73,7 @@ there are times when you want to change the default settings. An example of this
 acceptance = "accept-no-persist" 
 
 [automate]
-enable = false
+enable = true
 server_url = "https://<automate_url>"
 token = "<automate_token>"
 ```
