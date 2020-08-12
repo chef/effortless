@@ -26,6 +26,9 @@ scaffold_chef_client
 scaffold_cacerts
 : The Chef Habitat `cacerts` package used during the Chef Infra Client run. Change to use a different package.Default is `chef/cacerts`
 
+scaffold_rubygems_url
+: The location to source rubygems. Default value: `https://www.rubygems.org`
+
 scaffold_policyfile_path
 : Path to the policyfile. Default is `$PLAN_CONTEXT/../policyfiles`
 

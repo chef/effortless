@@ -6,6 +6,10 @@ cfg_ssl_verify_mode = '{{cfg.ssl_verify_mode}}'
 cfg_ssl_verify_mode ||= ':verify_peer'
 ssl_verify_mode "#{cfg_ssl_verify_mode}"
 
+cfg_rubygems_url = '{{cfg.rubygems_url}}'
+cfg_rubygems_url ||= "https://www.rubygems.org"
+rubygems_url "#{cfg_rubygems_url}"
+
 cfg_verify_api_cert = '{{cfg.verify_api_cert}}'
 cfg_verify_api_cert ||= false
 verify_api_cert "#{cfg_verify_api_cert}"
