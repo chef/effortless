@@ -1,3 +1,6 @@
+## v0.21.0 (2020-08-20)
+Bump version of chef-cli
+
 ## v0.21.0 (2020-05-18)
 required version of habitat: 1.5.0 or greater. Tested with Habitat 1.6.0
 
