@@ -90,7 +90,7 @@ scaffold_inspec_client
 
 scaffold_cacerts
 : The Chef Habitat `cacerts` package during the Chef Infra Client run. Change to use a different package. Default is `chef/cacerts`. This variable is required if the profile had a `depends` line for compliance in the `inspec.yml` example as shown below
- 
+
 inspec.yml
 
 ```yml
