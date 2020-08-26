@@ -58,7 +58,7 @@ ssl_verify_mode
 verify_api_cert
 : Boolean option to determine if the API certification should be verified. Default is `false`
 
-scaffold_rubygems_url
+rubygems_url
 : The location to source rubygems. Default value: `https://www.rubygems.org`
 
 #### Effortless Config Chef License
