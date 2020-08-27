@@ -15,6 +15,11 @@ SCAFFOLD_PKG_CHEF_CLIENT_VERSION="$(echo "${scaffold_chef_client}" | cut -d/ -f3
   [ "${result}" = "${scaffold_cacerts}" ]
 }
 
+@test "API: rubygems_url matches default.toml" {
+  result="$(grep '^cfg_rubygems_url = .*' /hab/svc/${TEST_PKG_NAME}/config/client-config.rb | cut -d ' ' -f3)"
+  [ "${result}" = "https://www.mock-rubygems.org" ]
+}
+
 teardown(){
   if [ "${BATS_TEST_NUMBER}" -eq ${#BATS_TEST_NAMES[@]} ]; then
     hab svc unload "${TEST_PKG_IDENT}" || true
