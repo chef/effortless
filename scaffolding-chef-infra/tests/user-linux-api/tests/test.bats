@@ -11,8 +11,8 @@ SCAFFOLD_PKG_CHEF_CLIENT_VERSION="$(echo "${scaffold_chef_client}" | cut -d/ -f3
 }
 
 @test "API: rubygems_url matches default.toml" {
-  result="$(grep '^rubygems_url = .*' /hab/svc/${TEST_PKG_NAME}/config/client-config.rb | cut -d ' ' -f3)"
-  [ "${result}" = "${cfg_rubygems_url}" ]
+  result="$(grep '^cfg_rubygems_url = .*' /hab/svc/${TEST_PKG_NAME}/config/client-config.rb | awk '{print $3;exit}')"
+  [ "${result}" = "'https://www.mock-rubygems.org'" ]
 }
 
 @test "API: scaffold_cacerts matches run hook SSL_CERT_DIR" {
