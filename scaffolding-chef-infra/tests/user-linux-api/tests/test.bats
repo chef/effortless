@@ -10,14 +10,14 @@ SCAFFOLD_PKG_CHEF_CLIENT_VERSION="$(echo "${scaffold_chef_client}" | cut -d/ -f3
   [ "${result}" = "${scaffold_cacerts}" ]
 }
 
+@test "API: rubygems_url matches default.toml" {
+  result="$(grep '^rubygems_url = .*' /hab/svc/${TEST_PKG_NAME}/config/client-config.rb | cut -d ' ' -f3)"
+  [ "${result}" = "${cfg_rubygems_url}" ]
+}
+
 @test "API: scaffold_cacerts matches run hook SSL_CERT_DIR" {
   result="$(grep '^export SSL_CERT_DIR.*' /hab/svc/${TEST_PKG_NAME}/hooks/run | cut -d/ -f4-5)"
   [ "${result}" = "${scaffold_cacerts}" ]
-}
-
-@test "API: rubygems_url matches default.toml" {
-  result="$(grep '^cfg_rubygems_url = .*' /hab/svc/${TEST_PKG_NAME}/config/client-config.rb | cut -d ' ' -f3)"
-  [ "${result}" = "https://www.mock-rubygems.org" ]
 }
 
 teardown(){
