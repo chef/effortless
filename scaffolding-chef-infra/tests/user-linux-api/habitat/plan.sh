@@ -3,7 +3,7 @@
 # This tests a user interacting with scaffold API
 #######################################
 
-pkg_name=user-linux
+pkg_name=user-linux-api
 pkg_origin=ci
 pkg_version="1.0.0"
 pkg_scaffolding="ci/scaffolding-chef-infra"

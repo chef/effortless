@@ -9,6 +9,7 @@ log_level = "warn"
 env_path_prefix = ";C:/WINDOWS;C:/WINDOWS/system32/;C:/WINDOWS/system32/WindowsPowerShell/v1.0;C:/ProgramData/chocolatey/bin"
 ssl_verify_mode = ":verify_peer"
 verify_api_cert = false
+rubygems_url = "https://www.rubygems.org"
 
 [chef_license]
 acceptance = "undefined"

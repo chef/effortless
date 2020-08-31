@@ -9,6 +9,7 @@ log_level = "warn"
 env_path_prefix = "/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin"
 ssl_verify_mode = ":verify_peer"
 verify_api_cert = false
+rubygems_url = "https://www.rubygems.org"
 
 [chef_license]
 acceptance = "undefined"
