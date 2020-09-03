@@ -171,7 +171,7 @@ The Chef Effortless GitHub repository has an [example chef-repo](https://github.
 
    echo "Starting $pkg_origin/$pkg_name"
 
-   latest_hart_file=$(ls -la /tmp/results/$pkg_origin-$pkg_name* | tail -n 1 | cut -d " " -f 9)
+   latest_hart_file=$(ls -1 /tmp/results/$pkg_origin-$pkg_name*)
    echo "Latest hart file is $latest_hart_file"
 
    echo "Installing $latest_hart_file"
@@ -182,9 +182,17 @@ The Chef Effortless GitHub repository has an [example chef-repo](https://github.
 
    echo "Found $pkg_prefix"
 
+   echo "{\"bootstrap_mode\": true}" > /tmp/results/bootstrap.json
+
    echo "Running chef for $pkg_origin/$pkg_name"
    cd $pkg_prefix
-   hab pkg exec $pkg_origin/$pkg_name chef-client -z -c $pkg_prefix/config/bootstrap-config.rb
+   if [ -n "$bootstrap" ]; then
+     hab pkg exec $pkg_origin/$pkg_name chef-client -z -j /tmp/results/bootstrap.json -c $pkg_prefix/config/bootstrap-config.rb
+   else
+     hab pkg exec $pkg_origin/$pkg_name chef-client -z -c $pkg_prefix/config/bootstrap-config.rb
+   fi
+
+   rm /tmp/results/bootstrap.json
    ```
 
 1. Run Test Kitchen to ensure the cookbook works
@@ -350,9 +358,17 @@ This pattern builds a Chef Habitat artifact for the Policyfile cookbook. You can
 
    echo "Found $pkg_prefix"
 
+   echo "{\"bootstrap_mode\": true}" > /tmp/results/bootstrap.json
+
    echo "Running chef for $pkg_origin/$pkg_name"
    cd $pkg_prefix
-   hab pkg exec $pkg_origin/$pkg_name chef-client -z -c $pkg_prefix/config/bootstrap-config.rb
+   if [ -n "$bootstrap" ]; then
+     hab pkg exec $pkg_origin/$pkg_name chef-client -z -j /tmp/results/bootstrap.json -c $pkg_prefix/config/bootstrap-config.rb
+   else
+     hab pkg exec $pkg_origin/$pkg_name chef-client -z -c $pkg_prefix/config/bootstrap-config.rb
+   fi
+
+   rm /tmp/results/bootstrap.json
    ```
 
 1. Run Test Kitchen to ensure the cookbook works on Linux
