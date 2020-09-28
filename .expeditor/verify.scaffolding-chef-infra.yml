@@ -122,15 +122,6 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test InSpec profile with API changes (multi-profile)"
-    command:
-      - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-api-profiles ci
-    expeditor:
-      executor:
-        docker:
-          privileged: true
-    timeout_in_minutes: 60
-
   - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test InSpec profile with waivers"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-waiver ci
@@ -140,27 +131,9 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test InSpec profile with waivers (multi-profile)"
-    command:
-      - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-waiver-profiles ci
-    expeditor:
-      executor:
-        docker:
-          privileged: true
-    timeout_in_minutes: 60
-
   - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test InSpec profile with inputs"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-inputs ci
-    expeditor:
-      executor:
-        docker:
-          privileged: true
-    timeout_in_minutes: 60
-
-  - label: "[scaffolding-chef-inspec] :linux: :habicat: Run and test InSpec profile with inputs (multi-profile)"
-    command:
-      - bin/ci/verify-plans.sh scaffolding-chef-inspec user-linux-inputs-profiles ci
     expeditor:
       executor:
         docker:
@@ -203,18 +176,6 @@ steps:
           host_os: windows
           shell: [ "powershell", "-Command" ]
 
-  - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests api (multi-profile)"
-    env:
-      HAB_LICENSE: "accept-no-persist"
-      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
-    command:
-      - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-api-profiles
-    expeditor:
-      executor:
-        docker:
-          host_os: windows
-          shell: [ "powershell", "-Command" ]
-
   - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests waivers"
     env:
       HAB_LICENSE: "accept-no-persist"
@@ -227,36 +188,12 @@ steps:
           host_os: windows
           shell: [ "powershell", "-Command" ]
 
-  - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests waivers (multi-profile)"
-    env:
-      HAB_LICENSE: "accept-no-persist"
-      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
-    command:
-      - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-waiver-profiles
-    expeditor:
-      executor:
-        docker:
-          host_os: windows
-          shell: [ "powershell", "-Command" ]
-
   - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests inputs"
     env:
       HAB_LICENSE: "accept-no-persist"
       HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
     command:
       - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-inputs
-    expeditor:
-      executor:
-        docker:
-          host_os: windows
-          shell: [ "powershell", "-Command" ]
-
-  - label: "[scaffolding-chef-inspec] :windows: :habicat: Build and run tests inputs (multi-profile)"
-    env:
-      HAB_LICENSE: "accept-no-persist"
-      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
-    command:
-      - ./bin/ci/verify-plans.ps1 scaffolding-chef-inspec user-windows-inputs-profiles
     expeditor:
       executor:
         docker:
