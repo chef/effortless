@@ -2,13 +2,15 @@
 
 Effortless Audit is a way to package up your InSpec profiles into a Habitat Application allowing you to easily update them promote them through channels using Habitat Builder and be deterministic about the version of Inspec you are using with your profiles.
 
-## Introduction 
+## Introduction
 
 Welcome to the Effortless Audit Pattern! This set of examples provides an opinionated structure and usage methodology alongside documentation on the motivations for this pattern and it's typical usage.
 
 ## Directory Stucture
 
 This example demonstrates how to use the scaffolding to build a wrapper profile for a profile that is stored in Chef Automate. Since the profiles in automate are OS or platform specific this example is broken into two folders one for `Windows` and one for `Linux`. They are very similar and only differ in the source profiles they are wrapping.
+
+Also included is a reference for `linux-multi-profile` which includes the `scaffold_profiles` plan configuration option, showing how to include multiple discreet profiles in a single package.
 
 ## Requirements
 To configure and build a Effortless Audit application, you will need Habitat installed and configured on your development workstation. If you want to upload the package to Habitat Builder, you'll also need to have configured an origin and downloaded its keys into your local Habitat key cache.
