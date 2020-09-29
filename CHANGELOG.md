@@ -1,3 +1,12 @@
+## v0.22.0 (2020-09-29)
+required version of habitat: 1.5.0 or greater. Tested with Habitat 1.6.0
+
+#### Features
+- Add an option configuration option to select a ruby gems url to use for the chef client
+- Add an option to allow Effortless Audit to specify multiple profiles
+
+#### Bug Fixes
+
 ## v0.21.0 (2020-08-20)
 Bump version of chef-cli
 Remove the ffi gem pin
