@@ -31,7 +31,8 @@ scaffolding_load() {
 do_default_before() {
   export CHEF_LICENSE="accept-no-persist"
   # Check each profile specified (if multiple are included in scaffold_profiles)
-  for profile in ${scaffold_profiles[*]} ; do
+    for profile in ${scaffold_profiles[*]:-''} ; do
+    # if scaffold_profiles is empty, assume that this is a single profile repo and look in the top level of the repository for the Inspec profile data.
     if [ ! -z $profile ] ;
     then
       profile_dir="$PLAN_CONTEXT/../$profile" ;
