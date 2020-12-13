@@ -3,3 +3,6 @@
 
 [chef_license]
 acceptance = "accept-no-persist"
+
+[output]
+json = true

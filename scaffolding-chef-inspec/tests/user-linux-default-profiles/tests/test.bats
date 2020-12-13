@@ -8,6 +8,10 @@
   [ "${result}" = "core/cacerts" ]
 }
 
+@test "API: Inspec results.json should be present." {
+  [ -f /hab/svc/${TEST_PKG_NAME}/results.json ]
+}
+
 teardown(){
   if [ "${BATS_TEST_NUMBER}" -eq ${#BATS_TEST_NAMES[@]} ]; then
     hab svc unload "${TEST_PKG_IDENT}" || true

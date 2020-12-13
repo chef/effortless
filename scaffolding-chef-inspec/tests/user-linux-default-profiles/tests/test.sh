@@ -34,7 +34,14 @@ sleep "${SUP_WAIT_SECONDS}"
 
 LOAD_WAIT_SECONDS=10
 hab svc load "${TEST_PKG_IDENT}"
-echo "Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to start..."
 
-sleep "${LOAD_WAIT_SECONDS}"
+# Wait for the service to run and generate report output or for 30 seconds to proceed.
+wait_count=1
+while [[ $wait_count -gt 3 ]] || [ ! -f /hab/svc/${TEST_PKG_NAME}/results.json ] ;
+do
+    echo "Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to run..."
+    wait_count=$((wait_count + 1))
+    sleep "${LOAD_WAIT_SECONDS}"
+done
+
 bats "$(dirname "${0}")/test.bats"
