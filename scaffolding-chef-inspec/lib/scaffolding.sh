@@ -31,64 +31,23 @@ scaffolding_load() {
 do_default_before() {
   export CHEF_LICENSE="accept-no-persist"
   # Check each profile specified (if multiple are included in scaffold_profiles)
-  if [ ! -z $scaffold_profiles ]; then
-    for profile in ${scaffold_profiles[*]} ; do
-      export profile_dir="$PLAN_CONTEXT/../$profile" ;
-      if [ ! -f "$profile_dir/inspec.yml" ]; then
-        message="ERROR: Cannot find $profile_dir/inspec.yml."
-        message="$message Please build from the profile root or specify scaffold_profiles in plan.sh with directory name for profile(s)"
-        build_line "$message"
-        exit 1
-      fi
-
-      # Execute an 'inspec compliance login' if a profile needs to be fetched from
-      # the Automate server
-      if [ "$(grep "compliance: " "$profile_dir/inspec.yml")" ]; then
-        if [ ! $scaffold_automate_server_url ]; then
-          message="You have a dependency on a profile in Automate"
-          message="$message please specify the \$scaffold_automate_server_url"
-          message="$message in your plan.sh file."
-          build_line "$message"
-          exit 1
-        elif [ ! $scaffold_automate_user ]; then
-          message="You have a dependency on a profile in Automate"
-          message="$message please specify the \$scaffold_automate_user"
-          message="$message in your plan.sh file."
-          build_line "$message"
-          exit 1
-        elif [ ! $scaffold_automate_token ]; then
-          message="You have a dependency on a profile in Automate"
-          message="$message please specify the \$scaffold_automate_token"
-          message="$message in your plan.sh file."
-          build_line "$message"
-          exit 1
-        else
-          if [ ! $scaffold_compliance_insecure ]; then
-            inspec compliance login $scaffold_automate_server_url\
-                                    --user $scaffold_automate_user \
-                                    --token $scaffold_automate_token \
-
-          else
-            inspec compliance login $scaffold_automate_server_url \
-                                  --user $scaffold_automate_user \
-                                  --token $scaffold_automate_token \
-                                  --insecure
-          fi
-        fi
-      fi
-    done
-  else
-    export profile_dir="$PLAN_CONTEXT/../" ;
+  for profile in ${scaffold_profiles[*]} ; do
+    if [ ! -z $profile ] ;
+    then
+      profile_dir="$PLAN_CONTEXT/../$profile" ;
+    else
+      profile_dir="$PLAN_CONTEXT/../" ;
+    fi
     if [ ! -f "$profile_dir/inspec.yml" ]; then
       message="ERROR: Cannot find $profile_dir/inspec.yml."
       message="$message Please build from the profile root or specify scaffold_profiles in plan.sh with directory name for profile(s)"
       build_line "$message"
       exit 1
     fi
-    
+
     # Execute an 'inspec compliance login' if a profile needs to be fetched from
     # the Automate server
-    if [ "$(grep "compliance: " "$profile_dir/inspec.yml")" ]; then  
+    if [ "$(grep "compliance: " "$profile_dir/inspec.yml")" ]; then
       if [ ! $scaffold_automate_server_url ]; then
         message="You have a dependency on a profile in Automate"
         message="$message please specify the \$scaffold_automate_server_url"
@@ -121,7 +80,7 @@ do_default_before() {
         fi
       fi
     fi
-  fi
+  done
 }
 
 do_default_setup_environment() {
