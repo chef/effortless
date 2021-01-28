@@ -18,7 +18,7 @@ assert_file_exist() {
 }
 
 @test "API: scaffold_inspec_client version matches whats in the plan" {
-  result="$(hab pkg exec ${TEST_PKG_IDENT} inspec --version)"
+  result="$(hab pkg exec ${TEST_PKG_IDENT} -- inspec --version)"
   [ "${result}" = "${SCAFFOLD_PKG_INSPEC_CLIENT_VERSION}" ]
 }
 
