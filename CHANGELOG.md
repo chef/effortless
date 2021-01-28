@@ -1,3 +1,11 @@
+## v0.22.1 (2020-01-28)
+
+#### Features
+
+#### Bug Fixes
+
+- fix issue with automate dependency when using 1 profile. Issue #262
+
 ## v0.22.0 (2020-09-29)
 required version of habitat: 1.5.0 or greater. Tested with Habitat 1.6.0
 
