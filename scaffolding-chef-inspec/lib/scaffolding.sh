@@ -40,10 +40,10 @@ do_default_before() {
         build_line "$message"
         exit 1
       fi
-      
+
       # Execute an 'inspec compliance login' if a profile needs to be fetched from
       # the Automate server
-      if [ "$(grep "compliance: " "$profile_dir/inspec.yml")" ]; then  
+      if [ "$(grep "compliance: " "$profile_dir/inspec.yml")" ]; then
         if [ ! $scaffold_automate_server_url ]; then
           message="You have a dependency on a profile in Automate"
           message="$message please specify the \$scaffold_automate_server_url"
