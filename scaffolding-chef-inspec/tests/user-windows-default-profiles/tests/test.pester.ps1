@@ -11,7 +11,7 @@ Describe "Inspec client run doesn't fail" {
 
     Context "API: scaffold_cacerts matches run hook core/cacerts" {
         It "SSL_CERT_FILE should be core/cacerts" {
-            $cert_file = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\$env:SSL_CERT_FILE'
+            $cert_file = Get-Content "C:\hab\svc\user-windows-default-profiles\hooks\run" | Select-String -Pattern '\$env:SSL_CERT_FILE'
             $cert_file = $cert_file -split '='
             $cert_file = $cert_file[1].split('\')
             $cert_pkg = $cert_file[3] + '/' + $cert_file[4]
@@ -19,7 +19,7 @@ Describe "Inspec client run doesn't fail" {
             $cert_pkg | Should be "core/cacerts"
         }
         It "SSL_CERT_DIR should be core/cacerts" {
-            $cert_dir = Get-Content "C:\hab\svc\user-windows-default\hooks\run" | Select-String -Pattern '\$env:SSL_CERT_DIR'
+            $cert_dir = Get-Content "C:\hab\svc\user-windows-default-profiles\hooks\run" | Select-String -Pattern '\$env:SSL_CERT_DIR'
             $cert_dir = $cert_dir -split '='
             $cert_dir = $cert_dir[1].split('\')
             $cert_pkg_dir = $cert_dir[3] + '/' + $cert_dir[4]
