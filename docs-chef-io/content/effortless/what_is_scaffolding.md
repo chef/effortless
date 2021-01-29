@@ -14,7 +14,7 @@ draft = false
 
 # Chef Habitat Scaffolding
 
-Chef Habitat scaffolding is a way to build a Chef Habitat plan that overrides some of the default functions that Chef Habitat uses during its build process. You can find out more about [scaffolding](https://www.habitat.sh/docs/glossary/#sts=Scaffolding) in the Chef Habitat documentation.
+Chef Habitat scaffolding is a way to build a Chef Habitat plan that overrides some of the default functions that Chef Habitat uses during its build process. You can find out more about [scaffolding](/habitat/scaffolding/) in the Chef Habitat documentation.
 
 ## Why The Effortless Pattern Uses Scaffolding
 

@@ -14,12 +14,12 @@ draft = false
 
 # Effortless Config
 
-Effortless Config is the pattern for managing your Chef Infra workloads. It uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef Policyfiles](https://docs.chef.io/policyfile/) to build an artifact that contains the cookbooks and their dependencies alongside the scripts necessary to run them on your systems.
+Effortless Config is the pattern for managing your Chef Infra workloads. It uses [Chef Habitat](/habitat/) and [Chef Policyfiles](/policyfile/) to build an artifact that contains the cookbooks and their dependencies alongside the scripts necessary to run them on your systems.
 
 ## Effortless Environment Set-up
 
 1. Install [Chef Workstation](https://downloads.chef.io/chef-workstation)
-1. Install [Chef Habitat](https://www.habitat.sh/docs/install-habitat/)
+1. Install [Chef Habitat](/habitat/install_habitat/)
 1. Configure Chef Habitat on your workstation by running `hab setup`
 
 ## Patterns

@@ -20,7 +20,7 @@ This documents the options for both your plan and your `habitat` configuration f
 
 ### Effortless Config Plan Variables
 
-You can use all the default plan variables shipped with Chef Habitat. Read more about [plan variables](https://www.habitat.sh/docs/reference/#plan-variables) in the Chef Habitat documentation.
+You can use all the default plan variables shipped with Chef Habitat. Read more about [plan variables](/habitat/plan_variables) in the Chef Habitat documentation.
 
 scaffold_chef_client
 : The Chef Habitat `chef-infra-client` package used. Change to use a different package. Default is `chef/chef-infra-client`

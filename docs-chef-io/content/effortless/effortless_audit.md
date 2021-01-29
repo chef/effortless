@@ -14,14 +14,14 @@ draft = false
 
 # Effortless Audit
 
-Effortless Audit is the pattern for managing your Chef InSpec profiles. It uses [Chef Habitat](https://www.habitat.sh/docs/) and [Chef InSpec](/inspec/) to build an artifact that contains your profiles and its dependencies alongside the scripts necessary to run them on your systems.
+Effortless Audit is the pattern for managing your Chef InSpec profiles. It uses [Chef Habitat](/habitat/) and [Chef InSpec](/inspec/) to build an artifact that contains your profiles and its dependencies alongside the scripts necessary to run them on your systems.
 
 Learn more about [Chef InSpec profiles](/inspec/profiles/).
 
 ## Effortless Environment Set-up
 
 1. Install [Chef Workstation](https://downloads.chef.io/chef-workstation)
-1. Install [Chef Habitat](https://www.habitat.sh/docs/install-habitat/)
+1. Install [Chef Habitat](/habitat/install_habitat/)
 1. Configure Chef Habitat on your workstation by running `hab setup`
 
 ## Patterns
@@ -161,7 +161,7 @@ In Chef InSpec, a common pattern is to write a wrapper profile that depends on a
    kitchen converge base-centos
    ```
 
-   If you experience failures when running the profile, know that most basic virtual machines are not fully hardened to your security policies. If you want to fix the failures, look at [Chef Infra and the Effortless Config Pattern](effortless-config.md).
+   If you experience failures when running the profile, know that most basic virtual machines are not fully hardened to your security policies. If you want to fix the failures, look at [Chef Infra and the Effortless Config Pattern]({{< relref "effortless_config" >}}).
 
 1. When ready, delete the VM instance by running:
 
