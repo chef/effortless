@@ -6,7 +6,7 @@
 pkg_name=user-linux-default
 pkg_origin=ci
 pkg_version="1.0.0"
-pkg_scaffolding="gscho/scaffolding-chef-infra"
+pkg_scaffolding="ci/scaffolding-chef-infra"
 pkg_svc_user=("root")
 scaffold_policy_name="ci"
 

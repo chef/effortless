@@ -44,10 +44,6 @@ blocked_override_attributes {{cfg.blocked_override_attributes}}
 allowed_automatic_attributes {{cfg.allowed_automatic_attributes}}
 {{/if ~}}
 
-{{# if cfg.blocked_automatic_attributes ~}}
-blocked_automatic_attributes {{cfg.blocked_automatic_attributes}}
-{{/if ~}}
-
 {{# if cfg.allowed_default_attributes ~}}
 allowed_default_attributes {{cfg.allowed_default_attributes}}
 {{/if ~}}
