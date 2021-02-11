@@ -40,6 +40,25 @@ ssl_verify_mode = ":verify_peer"
 # Depending on how OpenSSL is configured, the ssl_ca_path may need to be specified.
 # Default value: :verify_peer.
 
+rubygems_url = "https://www.rubygems.org"
+# The ruby gem server that is used to resolve gem depedencies
+# Default value: "https://www.rubygems.org".
+
+verify_api_cert = false
+# Setting verify_api_cert = true will instruct the Chef Infra Client to always verify the SSL certificate of the Chef Infra Server.
+# Default value: false
+
+blocked_<precedence>_attributes = "[['my_attribute', 'foo/bar']]"
+# A hash that blocklists attributes by precedence level, preventing blocklisted attributes from being saved
+# Valid precedence levels are automatic, normal, default, override
+# Default value: nil
+
+allowed_automatic_attributes = "[['my_attribute', 'foo/bar']]"
+# A hash that allowlists attributes by precedence level, preventing non-allowlisted attributes from being saved.
+# Valid precedence levels are automatic, normal, default, override
+# Default value: nil
+
+
 [automate]
 enable = false
 server_url = "https://<automate_url>/data-collector/v0/"
