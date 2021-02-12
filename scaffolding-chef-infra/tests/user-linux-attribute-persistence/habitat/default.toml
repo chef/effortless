@@ -3,5 +3,3 @@
 
 [chef_license]
 acceptance = "accept-no-persist"
-
-blocked_default_attributes = "[['blocked/default']]"
