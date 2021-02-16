@@ -32,7 +32,7 @@ SUP_WAIT_SECONDS=1
 echo "Waiting ${SUP_WAIT_SECONDS} seconds for hab sup to start..."
 sleep "${SUP_WAIT_SECONDS}"
 
-LOAD_WAIT_SECONDS=10
+LOAD_WAIT_SECONDS=30
 hab svc load "${TEST_PKG_IDENT}"
 echo "Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to start..."
 
