@@ -1,7 +1,14 @@
 # You must accept the Chef License to use this software: https://www.chef.io/end-user-license-agreement/
 # Change [chef_license] from acceptance = "undefined" to acceptance = "accept-no-persist" if you agree to the license.
+blocked_automatic_attributes = "[['blocked/automatic']]"
+blocked_default_attributes = "[['blocked/default']]"
+blocked_normal_attributes = "[['blocked/normal']]"
+blocked_override_attributes = "[['blocked/override']]"
+
+allowed_automatic_attributes = "[['allowed/automatic']]"
+allowed_default_attributes = "[['allowed/default']]"
+allowed_normal_attributes = "[['allowed/normal']]"
+allowed_override_attributes = "[['allowed/override']]"
 
 [chef_license]
 acceptance = "accept-no-persist"
-
-blocked_default_attributes = "[['blocked/default']]"

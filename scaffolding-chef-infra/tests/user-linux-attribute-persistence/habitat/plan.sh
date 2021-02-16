@@ -3,7 +3,7 @@
 # This tests a user interacting with scaffold API
 #######################################
 
-pkg_name=user-linux-default
+pkg_name=user-linux-attribute-persistence
 pkg_origin=ci
 pkg_version="1.0.0"
 pkg_scaffolding="ci/scaffolding-chef-infra"
