@@ -15,9 +15,8 @@ TEST_PKG_IDENT="${1}"
 export TEST_PKG_IDENT
 TEST_PKG_NAME="$(echo "${TEST_PKG_IDENT}" | cut -d/ -f2)"
 export TEST_PKG_NAME
+
 source "$(dirname "${0}")/../habitat/plan.sh"
-export scaffold_chef_client
-export scaffold_cacerts
 export pkg_svc_path
 
 hab pkg install core/bats --binlink
@@ -27,12 +26,15 @@ SUP_WAIT_SECONDS=5
 
 hab sup term
 sleep "${SUP_WAIT_SECONDS}"
+echo "--- :habicat: Starting the supervisor"
 hab sup run &
+
 echo "Waiting ${SUP_WAIT_SECONDS} seconds for hab sup to start..."
 sleep "${SUP_WAIT_SECONDS}"
 
 LOAD_WAIT_SECONDS=30
 hab svc load "${TEST_PKG_IDENT}"
 echo "Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to start..."
+
 sleep "${LOAD_WAIT_SECONDS}"
 bats "$(dirname "${0}")/test.bats"
