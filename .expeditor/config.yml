@@ -1,10 +1,10 @@
 # Documentation https://expeditor.chef.io/docs/getting-started/
 ---
+project:
+  alias: effortless
+
 github:
   delete_branch_on_merge: true
-
-merge_actions:
-  - trigger_pipeline:habitat/build
 
 pipelines:
   - habitat/build
@@ -12,21 +12,31 @@ pipelines:
       public: true
       definition: .expeditor/verify.scaffolding-chef-infra.yml
 
-project:
-  alias: effortless
-
-promote:
-  channels:
-    - unstable
-    - current
-    - stable
-  actions:
-    - built_in:promote_habitat_packages
+artifact_channels:
+  - unstable
+  - current
+  - stable
 
 slack:
   notify_channel: effortless-notify
 
 subscriptions:
-  - workload: pull_request_opened:{{agent_id}}:*
+  # When a PR is opened, post a welcome message
+  - workload: pull_request_opened:{{github_repo}}:{{release_branch}}:*
     actions:
       - post_github_comment:.expeditor/templates/welcome.mustache
+
+  # When a PR is merged, build the Chef Habitat packages
+  - workload: pull_request_merged:{{github_repo}}:{{release_branch}}:*
+    actions:
+      - trigger_pipeline:habitat/build
+
+  # Promote the Habitat packages to current if the build was successful
+  - workload: buildkite_build_passed:{{agent_id}}:habitat/build:*
+    actions:
+      - built_in:promote_habitat_packages
+
+  # Promote the Habitat packages to stable via `/expeditor promote effortless <VERSION>` in Slack
+  - workload: project_promoted:{{agent_id}}:*
+    actions:
+      - built_in:promote_habitat_packages
