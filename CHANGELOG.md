@@ -5,7 +5,7 @@
 - Adds ability to specify attribute persistence in configuration #271
 #### Bug Fixes
 
-- Updates expiditor configuration for release management #272
+- Updates expeditor configuration for release management #272
 
 ## v0.22.1 (2020-01-28)
 
