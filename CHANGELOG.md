@@ -1,3 +1,9 @@
+## v0.23.0 (2021-04-30)
+
+#### Bug Fixes
+
+- Updates `scaffolding-chef-infra` to use Ruby3 package dependencies for Chef Infra Client v17 usage, updating from Ruby 2.7.  Issue #274
+
 ## v0.22.1 (2020-01-28)
 
 #### Features
@@ -55,7 +61,7 @@ required version of habitat: 1.5.0 or greater
 ## v0.18.0 (2020-02-13)
 required version of habitat: 1.5.0 or greater
 
-#### Features 
+#### Features
  - Set the default client for Chef official chef builds for windows
  - Add vendor of `chef-cli` gem to windows scaffolding
  - Remove dependency on windows chef-dk
@@ -120,7 +126,7 @@ not promoted to stable
 ## v0.11.0 (2019-07-24)
 
 #### Features
- - Updates to the examples 
+ - Updates to the examples
  - Add scaffolding-chef-inspec for windows
 
 #### Bug Fixes
