@@ -1,3 +1,9 @@
+## v0.23.1 (2021-06-16)
+
+#### Bug Fixes
+
+- Removes publishing of example package `effortless-config-baseline` from `.bldr.toml`
+
 ## v0.23.0 (2021-04-30)
 
 #### Bug Fixes
