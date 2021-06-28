@@ -25,10 +25,7 @@ subscriptions:
   - workload: pull_request_opened:{{github_repo}}:{{release_branch}}:*
     actions:
       - post_github_comment:.expeditor/templates/welcome.mustache
-
-  # When a PR is merged, build the Chef Habitat packages
-  - workload: pull_request_merged:{{github_repo}}:{{release_branch}}:*
-    actions:
+      # When a PR is merged, build the Chef Habitat packages
       - trigger_pipeline:habitat/build
 
   # Promote the Habitat packages to current if the build was successful
