@@ -220,7 +220,7 @@ EOF
     "target_id": "{{ sys.member_id }}",
     "reporter": {
       "cli": {
-        {{#if cfg.cli.stdout}}"stdout": {{cfg.cli.stdout}}{{/if}}
+        "stdout": {{#if cfg.cli.stdout}}true{{else}}false{{/if}}
       }{{#if cfg.output.json}},
       "json" : {
         "file" : "{{pkg.svc_path}}/results.json",
