@@ -3,6 +3,7 @@
 #### Bug Fixes
 
 - Builds with dependencies from 2021 Q3 Habitat Core Plans refresh
+- Updates `master` branch references to `main` branch
 - Removes publishing of example package `effortless-config-baseline` from `.bldr.toml`
 
 ## v0.23.0 (2021-04-30)
