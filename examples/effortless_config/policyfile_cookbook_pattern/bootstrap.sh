@@ -3,7 +3,7 @@ export HAB_LICENSE="accept-no-persist"
 export CHEF_LICENSE="accept-no-persist"
 
 if [ ! -e "/bin/hab" ]; then
-curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
+curl https://raw.githubusercontent.com/habitat-sh/habitat/main/components/hab/install.sh | sudo bash
 fi
 
 if grep "^hab:" /etc/passwd > /dev/null; then
