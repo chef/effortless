@@ -11,7 +11,7 @@ param(
 $env:HAB_ORIGIN = 'ci'
 $HAB_VERSION = '1.5.0'
 Write-Host "--- :habicat: Install Habitat 1.5.0"
-Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.ps1) } -Version $HAB_VERSION"
+Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/habitat-sh/habitat/main/components/hab/install.ps1) } -Version $HAB_VERSION"
 
 
 Write-Host "--- :key: Generating fake origin key"

@@ -40,12 +40,12 @@ Code review takes place in GitHub pull requests. See [this article](https://help
 Once you open a pull request, approvers and project owners will review your code and respond to your pull request with any feedback they might have.
 
 1. Approval is required from at least one approver or project owner. See (CODEOWNERS)[/CODEOWNERS] for a full list. If an approver or project owner requests changes, then the changes must be addressed before continuing.
-2. Your change will be merged into the project's `master` branch.
+2. Your change will be merged into the project's `main` branch.
 3. The Expeditor bot will automatically update the project's changelog with your contribution.
 
 ### Developer Certification of Origin (DCO)
 
-Chef uses [the Apache 2.0 license](https://github.com/chef/chef/blob/master/LICENSE) for its software projects.
+Chef uses [the Apache 2.0 license](https://github.com/chef/chef/blob/main/LICENSE) for its software projects.
 
 The license tells you what rights you have that are provided by the copyright holder. It is important that the contributor fully understands what rights they are licensing and agrees to them. Sometimes the copyright holder isn't the contributor, such as when the contributor is doing work on behalf of a company.
 
@@ -118,7 +118,7 @@ Our version numbering follows [Semantic Versioning](http://semver.org/) standard
 
 ## Project Membership
 
-As you make more contributions to this project, you may desire greater responsibility and privileges for the direction of the project. Project membership is governed by Chef Software's OSS Practices [project membership](https://github.com/chef/chef-oss-practices/blob/master/project-membership.md). This document details all of the procedures neccessary for project membership and role changes.
+As you make more contributions to this project, you may desire greater responsibility and privileges for the direction of the project. Project membership is governed by Chef Software's OSS Practices [project membership](https://github.com/chef/chef-oss-practices/blob/main/project-membership.md). This document details all of the procedures neccessary for project membership and role changes.
 
 ## Documentation
 
