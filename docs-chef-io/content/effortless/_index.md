@@ -16,7 +16,7 @@ gh_repo = "effortless"
 
 # Welcome to the Chef Effortless Patterns
 
-The Effortless Pattern is a way to better manage Chef Infra and Chef InSpec workloads using Chef Habitat, and to visualize your fleet using Chef Automate. We believe that each of these technologies working together can help you better manage your infrastructure.
+The Effortless Pattern is a way to manage Chef Infra and Chef InSpec workloads using Chef Habitat and visualize your fleet using Chef Automate. We believe that each of these technologies working together can help you better manage your infrastructure.
 
 ## Who Should Use Effortless
 
