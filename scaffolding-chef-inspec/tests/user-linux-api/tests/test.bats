@@ -17,11 +17,6 @@ assert_file_exist() {
   [ "${result}" = "core/cacerts" ]
 }
 
-@test "API: scaffold_inspec_client version matches whats in the plan" {
-  result="$(hab pkg exec ${TEST_PKG_IDENT} -- inspec --version)"
-  [ "${result}" = "${SCAFFOLD_PKG_INSPEC_CLIENT_VERSION}" ]
-}
-
 @test "API: setting a json output creates a json file." {
   assert_file_exist /hab/svc/${TEST_PKG_NAME}/results.json
 }

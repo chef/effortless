@@ -1,3 +1,9 @@
+## v0.25.0 (2022-05-17)
+
+#### Bug Fixes
+
+- Builds with dependencies from 2022 Q2 Habitat Core Plans refresh
+
 ## v0.24.0 (2021-11-19)
 
 #### Bug Fixes
