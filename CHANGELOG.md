@@ -1,3 +1,9 @@
+## v0.25.1 (2022-12-19)
+
+#### Bug Fixes
+
+- fix rugygems_url variable to point to cfg_rubygems_url for windows
+
 ## v0.25.0 (2022-05-17)
 
 #### Bug Fixes

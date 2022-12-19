@@ -12,7 +12,7 @@ ssl_verify_mode "#{cfg_ssl_verify_mode}"
 
 cfg_rubygems_url = '{{cfg.rubygems_url}}'
 cfg_rubygems_url ||= "https://www.rubygems.org"
-rubygems_url "#{rubygems_url}"
+rubygems_url "#{cfg_rubygems_url}"
 
 cfg_verify_api_cert = '{{cfg.verify_api_cert}}'
 cfg_verify_api_cert ||= false

@@ -1,16 +1,18 @@
 # Effortless Config
+
 > ## chef-repo Pattern
 
 For more information on the a chef-repo checkout the docs [here](https://docs.chef.io/chef_repo/)
 
 ## Directory Structure
+
 Before we build the app, this section will outline the contents of the directories that comprise it.
+
   * cookbooks: This directory contains the cookbooks our application will run that aren't downloaded from a supermarket
   * habitat: This directory contains the plan.sh and plan.ps1 files to build the habitat application for Effortless Config
   * policyfiles: This directory contains the chef Policyfiles that will control what Effortless Config runs and the attributes used to configure it
 
 ## Building the Effortless Config App
-
 
 Now that we have prepared the Policyfile we're going to use to build our Effortless Config application, it's time to build the application itself.
 

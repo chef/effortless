@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export SSL_CERT_FILE="{{ pkgPathFor "${scaffold_cacerts}" }}/ssl/cert.pem"
 export SSL_CERT_DIR="{{ pkgPathFor "${scaffold_cacerts}" }}/ssl/certs"
