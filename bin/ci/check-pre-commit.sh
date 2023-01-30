@@ -12,6 +12,7 @@ if [[ "${CI:-}" == "true" ]]; then
 else
   echo "Not in CI! Skipping installation of pre-commit. Please install it manually if executing this on your workstation"
 fi
+pre-commit migrate-config
 pre-commit --version
 
 echo "--- :git: [${plan_path}] Running checks provided by pre-commit hooks"
