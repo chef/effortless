@@ -1,3 +1,9 @@
+## v0.25.2 (2023-01-30)
+
+#### Bug Fixes
+
+- Updates `scaffolding-chef-infra` to use Ruby31 package dependencies as in chef infra client. Incident #IN-910
+
 ## v0.25.1 (2022-12-19)
 
 #### Bug Fixes
