@@ -9,7 +9,7 @@ pkg_version="1.0.0"
 pkg_scaffolding="ci/scaffolding-chef-infra"
 pkg_svc_user=("root")
 scaffold_policy_name="ci"
-scaffold_chef_client="chef/chef-infra-client/18.1.0/20230104193220"
+scaffold_chef_client="chef/chef-infra-client/18.1.0"
 scaffold_cacerts="ci/cacerts"
 
 # Required Metadata for CI
