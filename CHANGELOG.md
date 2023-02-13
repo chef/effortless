@@ -1,3 +1,8 @@
+## v0.25.3 (2023-02-10)
+
+- fix rugygems_url variable to point to cfg_rubygems_url for Linux as well
+- properly handle empty strings generated if values are missing, instead of using `||=`
+
 ## v0.25.2 (2023-01-30)
 
 #### Bug Fixes
