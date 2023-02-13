@@ -1,17 +1,17 @@
 cfg_env_path_prefix = '{{cfg.env_path_prefix}}'
-cfg_env_path_prefix ||= '/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin'
+cfg_env_path_prefix = '/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin' if cfg_env_path_prefix.empty?
 ENV['PATH'] = "#{cfg_env_path_prefix}:#{ENV['PATH']}"
 
 cfg_ssl_verify_mode = '{{cfg.ssl_verify_mode}}'
-cfg_ssl_verify_mode ||= ':verify_peer'
+cfg_ssl_verify_mode = ':verify_peer' if cfg_ssl_verify_mode.empty?
 ssl_verify_mode "#{cfg_ssl_verify_mode}"
 
 cfg_rubygems_url = '{{cfg.rubygems_url}}'
-cfg_rubygems_url ||= "https://www.rubygems.org"
+cfg_rubygems_url = "https://www.rubygems.org" if cfg_rubygems_url.empty?
 rubygems_url "#{cfg_rubygems_url}"
 
 cfg_verify_api_cert = '{{cfg.verify_api_cert}}'
-cfg_verify_api_cert ||= false
+cfg_verify_api_cert = false if cfg_verify_api_cert.empty?
 verify_api_cert "#{cfg_verify_api_cert}"
 
 {{#if cfg.automate.enable ~}}
