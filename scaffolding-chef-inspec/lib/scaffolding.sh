@@ -9,6 +9,10 @@ scaffolding_load() {
   : "${scaffold_cacerts:=}"
   : "${scaffold_inspec_client:=chef/inspec}"
   : "${scaffold_profiles:=}"
+  # nimit: changes for license server
+  : "${scaffold_license_server:=}"
+  : "${scaffold_license_key:=}"
+  # nimit: end
 
   pkg_deps=(
     "${pkg_deps[@]}"
@@ -29,6 +33,16 @@ scaffolding_load() {
 }
 
 do_default_before() {
+	# nimit: changes for license server
+	inspec_version=$(inspec --version | cut -d"." -f1)
+
+	if [[ ${inspec_version} -ge 6 ]] ;
+	then
+		build_line "Inspec v6 or higher is installed"
+		export CHEF_LICENSE_SERVER=${scaffold_license_server}
+		export CHEF_LICENSE_KEY=${scaffold_license_key}
+	fi
+	# nimit: end
   export CHEF_LICENSE="accept-no-persist"
   # Check each profile specified (if multiple are included in scaffold_profiles)
     for profile in ${scaffold_profiles[*]:-''} ; do
