@@ -4,6 +4,10 @@ if [ -z "${scaffold_policy_name+x}" ]; then
 fi
 
 scaffolding_load() {
+  # Default to the base-2025 channel to resolve Chef 19 packages
+  : "${scaffold_hab_bldr_channel:=base-2025}"
+  export HAB_BLDR_CHANNEL="${scaffold_hab_bldr_channel}"
+
   : "${scaffold_chef_client:=chef/chef-infra-client}"
   : "${scaffold_cacerts:=core/cacerts}"
   : "${scaffold_policyfile_path:=$PLAN_CONTEXT/../policyfiles}"

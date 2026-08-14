@@ -16,6 +16,8 @@ artifact_channels:
   - unstable
   - current
   - stable
+  - base-2025
+  - base
 
 slack:
   notify_channel: effortless-notify
@@ -40,3 +42,10 @@ subscriptions:
   - workload: project_promoted:{{agent_id}}:*
     actions:
       - built_in:promote_habitat_packages
+
+  # Once promoted to stable, also promote to base-2025 and base channels so that
+  # user packages building against scaffolding-chef-infra can resolve it from
+  # the same channel as their other Chef 19 dependencies (e.g. core/ruby3_4).
+  - workload: hab_package_published:stable:chef/scaffolding-chef-infra/*
+    actions:
+      - bash:.expeditor/scripts/base-2025-promote.sh
