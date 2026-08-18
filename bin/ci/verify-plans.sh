@@ -7,6 +7,36 @@ test_plan="$(basename "${2}")"
 chef_policy_name="$(basename "${3}")"
 HAB_ORIGIN=ci
 export HAB_ORIGIN
+export HAB_BLDR_CHANNEL="${HAB_BLDR_CHANNEL:-base-2025}"
+
+# Fetch HAB_AUTH_TOKEN from AWS SSM if not already provided.
+# The expeditor Docker executor does not forward host env vars automatically —
+# only vars listed in the pipeline YAML env: section are injected into Docker.
+if [[ -z "${HAB_AUTH_TOKEN:-}" ]]; then
+  echo "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
+  HAB_AUTH_TOKEN=$(aws ssm get-parameter \
+    --name 'habitat-prod-auth-token' \
+    --with-decryption \
+    --query Parameter.Value \
+    --output text \
+    --region "${AWS_REGION:-us-west-2}" 2>/dev/null) || HAB_AUTH_TOKEN=""
+fi
+export HAB_AUTH_TOKEN
+# Pass token and channel into Habitat studios via HAB_STUDIO_SECRET_ mechanism.
+# The `build` alias inside a studio calls hab-plan-build and does NOT accept
+# --refresh-channel; instead it reads HAB_BLDR_CHANNEL from the studio env.
+export HAB_STUDIO_SECRET_HAB_AUTH_TOKEN="${HAB_AUTH_TOKEN}"
+export HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL="${HAB_BLDR_CHANNEL}"
+# Git 2.35.2+ refuses to operate in directories owned by a different UID.
+# Inside the Hab studio /src is mounted and owned by the host user, causing
+# "dubious ownership" errors when chef-cli calls git to resolve Policyfiles.
+export HAB_STUDIO_SECRET_GIT_CONFIG_COUNT=1
+export HAB_STUDIO_SECRET_GIT_CONFIG_KEY_0=safe.directory
+export HAB_STUDIO_SECRET_GIT_CONFIG_VALUE_0='*'
+
+echo "--- :habicat: Installing Habitat 2.x"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"${SCRIPT_DIR}/install-hab.sh" x86_64-linux
 
 echo "--- :key: Generating fake origin key"
 # This is intended to be run in the context of public CI where
@@ -32,7 +62,7 @@ project_root="$(git rev-parse --show-toplevel)"
 ( cd "$project_root" || exit 1
 
   echo "--- :construction: :linux: Building ${plan}"
-  env DO_CHECK=true hab pkg build "${plan}"
+  env DO_CHECK=true hab pkg build "${plan}" --refresh-channel "${HAB_BLDR_CHANNEL}"
 )
 
 source $project_root/results/last_build.env # scaffolding last_build.env
@@ -61,3 +91,4 @@ SCAFFOLDING_PKG_ARTIFACT=${pkg_artifact}
 
   hab studio -q -r "/hab/studios/${test_plan}-${TEST_PKG_RELEASE}" run "export CHEF_POLICYFILE=${chef_policy_name} && hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
 )
+

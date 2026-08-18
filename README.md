@@ -30,6 +30,35 @@ If you're already familiar with the Chef stack, here's a quick rundown of how Ef
 
 ![Image of the Effortless pattern](/docs/effortless-graphic.png)
 
+## Chef 19 Support
+
+As of `v0.26.0`, the `scaffolding-chef-infra` has been updated to support **Chef Infra Client 19**:
+
+| Change | Details |
+|--------|---------|
+| Ruby version (Linux/ARM) | `core/ruby3_4` (was `core/ruby31`) |
+| Ruby version (Windows) | `core/ruby3_4-plus-devkit` (was `chef/ruby31-plus-devkit`) |
+| Habitat Builder channel | `base-2025` (required for Chef 19 packages) |
+
+### Certified Platforms for Chef 19
+
+| Platform | Architecture | Status |
+|----------|-------------|--------|
+| Linux | x86_64 | ✅ Certified |
+| Linux | ARM | ✅ Certified |
+| Windows | x86_64 | ✅ Certified |
+| Windows | ARM | 🔄 In progress ([CHEF-33898](https://progresssoftware.atlassian.net/browse/CHEF-33898)) |
+| macOS | x86_64 | 🔄 In progress ([CHEF-33898](https://progresssoftware.atlassian.net/browse/CHEF-33898)) |
+| macOS | ARM | 🔄 In progress ([CHEF-33898](https://progresssoftware.atlassian.net/browse/CHEF-33898)) |
+
+### Migrating from Chef 18 to Chef 19 Effortless
+
+If you are currently using the Effortless pattern with Chef 18, no changes to your user-facing `plan.sh` or `plan.ps1` are required. The scaffolding automatically resolves the correct Ruby and Chef client versions. Simply update your `pkg_scaffolding` to pick up the latest `chef/scaffolding-chef-infra` from the `base-2025` channel.
+
+If you pin `scaffold_chef_client` explicitly, ensure it points to a Chef 19 package (e.g., `chef/chef-infra-client/19.x.x`).
+
+> **Note:** The scaffolding defaults `HAB_BLDR_CHANNEL` to `base-2025`. You can override this per-package by setting `scaffold_hab_bldr_channel` in your `plan.sh` / `plan.ps1`.
+
 ## Next Steps
 
 If you are new to the `Effortless` pattern checkout some of the below examples and walk throughs that will help you understand what you can do with this pattern.

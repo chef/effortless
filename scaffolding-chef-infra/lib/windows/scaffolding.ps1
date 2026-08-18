@@ -33,6 +33,10 @@ $scaffolding_package = $pkg_scaffolding.split("/")[1]
 $lib_dir = "$(Get-HabPackagePath $scaffolding_package)/lib"
 
 function Load-Scaffolding {
+    # Default to the base-2025 channel to resolve Chef 19 packages
+    if (!$scaffold_hab_bldr_channel) { $scaffold_hab_bldr_channel = "base-2025" }
+    $env:HAB_BLDR_CHANNEL = $scaffold_hab_bldr_channel
+
     $pkg_deps += @(
         "$scaffold_chef_client",
         "$scaffold_cacerts"

@@ -1,3 +1,13 @@
+## v0.26.0 (2026-08-13)
+
+#### Chef 19 Support — Effortless Pattern Certification
+
+- Updates `scaffolding-chef-infra/plan.sh` to use `core/ruby3_4` (replaces `core/ruby31`) for Chef Infra Client 19 compatibility
+- Updates `scaffolding-chef-infra/plan.ps1` to use `core/ruby3_4-plus-devkit` (replaces `chef/ruby31-plus-devkit`) for Windows
+- Sets `HAB_BLDR_CHANNEL=base-2025` in `plan.sh` and `plan.ps1` to resolve Chef 19 packages from the correct channel
+- Updates `lib/linux/scaffolding.sh` and `lib/windows/scaffolding.ps1` to default `HAB_BLDR_CHANNEL` to `base-2025` at scaffolding load time, allowing override via `$scaffold_hab_bldr_channel`
+- Certified platforms for Chef 19: Linux x86_64, Linux ARM, Windows x86_64
+
 ## v0.25.3 (2023-02-10)
 
 - fix rugygems_url variable to point to cfg_rubygems_url for Linux as well

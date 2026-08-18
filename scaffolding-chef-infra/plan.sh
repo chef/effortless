@@ -1,3 +1,4 @@
+export HAB_BLDR_CHANNEL="base-2025"
 pkg_name=scaffolding-chef-infra
 pkg_description="Scaffolding for Chef Infra Policyfiles"
 pkg_origin=chef
@@ -7,7 +8,7 @@ pkg_license=('Apache-2.0')
 pkg_upstream_url="https://www.chef.sh"
 pkg_deps=(
   core/git
-  core/ruby31
+  core/ruby3_4
   core/make
   core/gcc
 )
