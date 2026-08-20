@@ -2,13 +2,19 @@
 plan_path = "scaffolding-chef-infra"
 build_targets = [
   "x86_64-linux",
-  "x86_64-linux-kernel2",
+  "aarch64-linux",
   "x86_64-windows"
 ]
-[scaffolding-chef-inspec]
-plan_path = "scaffolding-chef-inspec"
-build_targets = [
-  "x86_64-linux",
-  "x86_64-linux-kernel2",
-  "x86_64-windows"
-]
+
+# scaffolding-chef-inspec is commented out until it is certified for InSpec 7.
+# The habitat/build pipeline uses this .bldr.toml file to determine which packages
+# to build and publish. With this section enabled, it would unnecessarily build and
+# publish the InSpec scaffolding package on every PR merge until InSpec 7 support
+# is fully validated.
+# [scaffolding-chef-inspec]
+# plan_path = "scaffolding-chef-inspec"
+# build_targets = [
+#   "x86_64-linux",
+#   "aarch64-linux",
+#   "x86_64-windows"
+# ]
