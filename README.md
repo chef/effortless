@@ -67,3 +67,6 @@ If you are new to the `Effortless` pattern checkout some of the below examples a
 
 1. [Effortless Audit](examples/effortless_audit/Readme.md)
 1. [Effortless Config](examples/effortless_config/Readme.md)
+
+# Copyright
+See [COPYRIGHT.md](./COPYRIGHT.md).
