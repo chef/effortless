@@ -9,7 +9,7 @@ $pkg_version="1.0.0"
 $pkg_scaffolding="ci/scaffolding-chef-infra"
 $scaffold_policy_name="ci"
 $scaffold_cacerts="core/cacerts"
-$scaffold_chef_client="stuartpreston/chef-client-detox"
+$scaffold_chef_client="chef/chef-infra-client"
 
 # Required Metadata for CI
 $pkg_description="CI Test Plan for Linux"

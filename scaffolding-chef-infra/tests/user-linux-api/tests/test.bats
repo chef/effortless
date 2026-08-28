@@ -3,6 +3,7 @@ SCAFFOLD_PKG_CHEF_CLIENT_VERSION="$(echo "${scaffold_chef_client}" | cut -d/ -f3
 @test "API: scaffold_chef_client version matches test version" {
   result="$(hab pkg exec ${TEST_PKG_IDENT} chef-client -v | head -n 1 | awk '{print $2}')"
   [ "${result}" = "${SCAFFOLD_PKG_CHEF_CLIENT_VERSION}" ]
+  echo $result
 }
 
 @test "API: scaffold_cacerts matches run hook SSL_CERT_FILE" {
