@@ -1,0 +1,55 @@
+# Integration Test Pipeline: scaffolding-chef-infra
+#
+# PURPOSE:
+#   This pipeline validates the PUBLISHED chef/scaffolding-chef-infra package
+#   (just promoted to unstable by the habitat/build pipeline) against the
+#   LATEST chef/chef-infra-client from unstable. It catches integration issues
+#   before packages are promoted to base-2025 for release.
+#
+#   This is distinct from the verify pipeline (verify.scaffolding-chef-infra.yml)
+#   which tests scaffolding built FROM SOURCE on every PR using a fake 'ci' origin.
+#   This pipeline tests packages exactly as end users will consume them from Builder.
+#
+# TRIGGER:
+#   Triggered by the buildkite_hab_build_group_published workload subscription
+#   in .expeditor/config.yml after the habitat/build pipeline successfully
+#   publishes scaffolding packages to the unstable channel on Builder.
+#
+# CHANNEL STRATEGY:
+#   chef/scaffolding-chef-infra  ->  latest from unstable (just published)
+#   chef/chef-infra-client       ->  latest from unstable
+#   core/* and all other deps    ->  base-2025 (stable)
+#
+#   See bin/ci/integration-test.sh and bin/ci/integration-test.ps1 for the
+#   full channel strategy explanation and pre-install mechanism details.
+#
+expeditor:
+  defaults:
+    buildkite:
+      timeout_in_minutes: 90
+      retry:
+        automatic:
+          limit: 1
+
+steps:
+  - label: "[integration] :linux: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+    command:
+      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+
+  - label: "[integration] :windows: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+    env:
+      HAB_LICENSE: "accept-no-persist"
+      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
+      HAB_BLDR_CHANNEL: "base-2025"
+      HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL: "base-2025"
+    command:
+      - ./bin/ci/integration-test.ps1 scaffolding-chef-infra user-windows-chef19
+    expeditor:
+      executor:
+        docker:
+          host_os: windows
+          shell: [ "powershell", "-Command" ]
