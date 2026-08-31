@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `habitat/integration-test` pipeline validates the **published** `chef/scaffolding-chef-infra` package against the **latest** `chef/chef-infra-client` from the `unstable` channel. It is the pre-release quality gate that catches integration issues before packages are promoted to `base-2025`.
+The `integration-test` pipeline validates the **published** `chef/scaffolding-chef-infra` package against the **latest** `chef/chef-infra-client` from the `unstable` channel. It is the pre-release quality gate that catches integration issues before packages are promoted to `base-2025`.
 
 ## Why This Pipeline Exists
 
@@ -11,7 +11,7 @@ There are two test pipelines for `scaffolding-chef-infra`:
 | Pipeline | When it runs | What it tests |
 |---|---|---|
 | `verify` | Every PR | Scaffolding built **from source** against `base-2025` deps |
-| `habitat/integration-test` | After every `habitat/build` succeeds | **Published** scaffolding from unstable against **latest chef-infra-client** from unstable |
+| `integration-test` | After every `habitat/build` succeeds | **Published** scaffolding from unstable against **latest chef-infra-client** from unstable |
 
 The `verify` pipeline catches regressions in scaffolding source code. The integration test pipeline catches the harder-to-catch class of issues: **does the just-published scaffolding package actually work with the version of chef-infra-client that will ship alongside it?**
 
@@ -83,7 +83,7 @@ PR merged to main
                                         │
                                         ▼
                          ┌─────────────────────────────┐
-                         │  habitat/integration-test   │
+                         │  integration-test   │
                          │  (Buildkite)                │
                          │                             │
                          │  Runs per platform:         │
@@ -114,11 +114,11 @@ habitat/build publishes all platforms to unstable
             ┌──────────┴──────────┐
             │                     │
             ▼                     ▼
-  unstable → current     habitat/integration-test
+  unstable → current     integration-test
   (seconds later)        (pulls from current)
 ```
 
-Because `promote_habitat_packages` and `trigger_pipeline:habitat/integration-test` both fire from the same workload, the promotion to `current` and the integration test start simultaneously. By the time Buildkite agents spin up and begin executing, both packages are already in `current`.
+Because `promote_habitat_packages` and `trigger_pipeline:integration-test` both fire from the same workload, the promotion to `current` and the integration test start simultaneously. By the time Buildkite agents spin up and begin executing, both packages are already in `current`.
 
 ### Expeditor Config Excerpt
 
@@ -127,7 +127,7 @@ Because `promote_habitat_packages` and `trigger_pipeline:habitat/integration-tes
 - workload: buildkite_hab_build_group_published:{{agent_id}}:*
   actions:
     - built_in:promote_habitat_packages   # unstable → current
-    - trigger_pipeline:habitat/integration-test
+    - trigger_pipeline:integration-test
 ```
 
 ## Test Packages
