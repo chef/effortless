@@ -50,7 +50,13 @@ $UNSTABLE_CHANNEL = "unstable"
 if ($env:HAB_AUTH_TOKEN) {
   Write-Host "    HAB_AUTH_TOKEN is set"
 } else {
-  Write-Host "    WARNING: HAB_AUTH_TOKEN is empty"
+  Write-Host "--- :key: Fetching HAB_AUTH_TOKEN from Vault"
+  $env:HAB_AUTH_TOKEN = (vault kv get -field auth_token account/static/habitat/chef-ci 2>$null)
+  if ($env:HAB_AUTH_TOKEN) {
+    Write-Host "    HAB_AUTH_TOKEN retrieved from Vault successfully"
+  } else {
+    Write-Host "    WARNING: HAB_AUTH_TOKEN is still empty"
+  }
 }
 
 # Pass token and channel into the Hab studio via HAB_STUDIO_SECRET_ mechanism.
