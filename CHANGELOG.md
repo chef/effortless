@@ -1,3 +1,17 @@
+<!-- latest_release 0.26.1 -->
+## [v0.26.1](https://github.com/chef/effortless/tree/v0.26.1) (2026-08-27)
+
+#### Merged Pull Requests
+- Add Chef 19 integration test pipeline for scaffolding-chef-infra
+- Fix verify-plans.ps1 for Chef 19 / base-2025 compatibility
+<!-- latest_release -->
+
+<!-- release_rollup since=0.26.0 -->
+### Changes not yet released to stable
+
+#### Merged Pull Requests
+<!-- end_release_rollup -->
+
 ## v0.26.0 (2026-08-13)
 
 #### Chef 19 Support — Effortless Pattern Certification

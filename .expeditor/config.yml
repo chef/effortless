@@ -5,6 +5,23 @@ project:
 
 github:
   delete_branch_on_merge: true
+  # The tag format to use when Expeditor creates a version tag after bumping
+  version_tag_format: "v{{version}}"
+  # Allow bumping the minor version via PR label
+  minor_bump_labels:
+    - "Expeditor: Bump Version Minor"
+  # Allow bumping the major version via PR label
+  major_bump_labels:
+    - "Expeditor: Bump Version Major"
+
+# Which GitHub branches to build releases from, and what versions
+# (as determined by the value in the VERSION file) those branches are responsible for.
+release_branches:
+  - main:
+      version_constraint: 0.*
+
+changelog:
+  rollup_header: Changes not yet released to stable
 
 pipelines:
   - habitat/build
@@ -30,10 +47,27 @@ subscriptions:
     actions:
       - post_github_comment:.expeditor/templates/welcome.mustache
 
-  # When a PR is merged, build the Chef Habitat packages
+  # When a PR is merged, bump the version, update the changelog, then build the Habitat packages
   - workload: pull_request_merged:{{github_repo}}:{{release_branch}}:*
     actions:
-      - trigger_pipeline:habitat/build
+      # STEP 1: File-modifying actions (must come before pipeline triggers)
+      # Bumps the PATCH digit in VERSION by default. Use PR labels to control:
+      #   "Expeditor: Bump Version Minor" -> bumps MINOR
+      #   "Expeditor: Bump Version Major" -> bumps MAJOR
+      #   "Expeditor: Skip Version Bump"  -> skips the bump entirely (doc/CI-only PRs)
+      - built_in:bump_version:
+          ignore_labels:
+            - "Expeditor: Skip Version Bump"
+            - "Expeditor: Skip All"
+      - built_in:update_changelog:
+          ignore_labels:
+            - "Expeditor: Skip Changelog"
+            - "Expeditor: Skip All"
+
+      # STEP 2: Pipeline triggers (must come after all file modifications)
+      - trigger_pipeline:habitat/build:
+          ignore_labels:
+            - "Expeditor: Skip All"
 
   # Promote the Habitat packages to current if the build was successful,
   # and trigger the integration test pipeline to validate the just-published
