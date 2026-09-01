@@ -47,19 +47,14 @@ steps:
     env:
       HAB_LICENSE: "accept-no-persist"
       HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
-    agents:
-      queue: default-privileged-aarch64
-    plugins:
-      - docker#v3.5.0:
-          image: chefes/omnibus-toolchain-ubuntu-2204:aarch64
-          privileged: true
-          environment:
-            - HAB_LICENSE
-            - HAB_STUDIO_SECRET_HAB_LICENSE
-            - HAB_AUTH_TOKEN
-          propagate-environment: true
     command:
       - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-integration ci aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
+    expeditor:
+      executor:
+        docker:
+          privileged: true
     timeout_in_minutes: 60
 
   - label: "[integration] :windows: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"

@@ -47,20 +47,7 @@ $env:HAB_ORIGIN = 'ci'
 $env:HAB_BLDR_CHANNEL = if ($env:HAB_BLDR_CHANNEL) { $env:HAB_BLDR_CHANNEL } else { "base-2025" }
 $UNSTABLE_CHANNEL = "unstable"
 
-# HAB_AUTH_TOKEN is NOT automatically injected by the Expeditor Windows docker executor.
-# Fetch it from AWS SSM, same as the Linux integration-test.sh does.
-if (-not $env:HAB_AUTH_TOKEN) {
-  Write-Host "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
-  $prevEAP = $ErrorActionPreference
-  $ErrorActionPreference = 'SilentlyContinue'
-  $env:HAB_AUTH_TOKEN = (aws ssm get-parameter `
-    --name 'habitat-prod-auth-token' `
-    --with-decryption `
-    --query Parameter.Value `
-    --output text `
-    --region $(if ($env:AWS_REGION) { $env:AWS_REGION } else { 'us-west-2' }) 2>$null)
-  $ErrorActionPreference = $prevEAP
-}
+# Pass token and channel into the Hab studio via HAB_STUDIO_SECRET_ mechanism.
 $env:HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL = $env:HAB_BLDR_CHANNEL
 $env:HAB_STUDIO_SECRET_HAB_AUTH_TOKEN = $env:HAB_AUTH_TOKEN
 
