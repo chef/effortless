@@ -51,12 +51,15 @@ $UNSTABLE_CHANNEL = "unstable"
 # Fetch it from AWS SSM, same as the Linux integration-test.sh does.
 if (-not $env:HAB_AUTH_TOKEN) {
   Write-Host "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
-  $env:HAB_AUTH_TOKEN = aws ssm get-parameter `
+  $prevEAP = $ErrorActionPreference
+  $ErrorActionPreference = 'SilentlyContinue'
+  $env:HAB_AUTH_TOKEN = (aws ssm get-parameter `
     --name 'habitat-prod-auth-token' `
     --with-decryption `
     --query Parameter.Value `
     --output text `
-    --region $(if ($env:AWS_REGION) { $env:AWS_REGION } else { 'us-west-2' }) 2>$null
+    --region $(if ($env:AWS_REGION) { $env:AWS_REGION } else { 'us-west-2' }) 2>$null)
+  $ErrorActionPreference = $prevEAP
 }
 $env:HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL = $env:HAB_BLDR_CHANNEL
 $env:HAB_STUDIO_SECRET_HAB_AUTH_TOKEN = $env:HAB_AUTH_TOKEN
