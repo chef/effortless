@@ -72,7 +72,10 @@ export HAB_STUDIO_SECRET_GIT_CONFIG_VALUE_0='*'
 
 echo "--- :habicat: Installing Habitat"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"${SCRIPT_DIR}/install-hab.sh" "${hab_target}"
+# Always install x86_64-linux hab CLI — Expeditor's docker executor runs on x86_64
+# hosts regardless of the agents: queue: label (e.g. default-privileged-aarch64).
+# hab_target controls the build target passed to hab pkg build, not the host arch.
+"${SCRIPT_DIR}/install-hab.sh" x86_64-linux
 
 echo "--- :key: Generating fake origin key"
 hab origin key generate "${HAB_ORIGIN}"
