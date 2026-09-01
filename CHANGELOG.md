@@ -1,10 +1,15 @@
-<!-- latest_release 0.26.1 -->
+<!-- latest_release 0.26.2 -->
+## [v0.26.2](https://github.com/chef/effortless/tree/v0.26.2) (2026-09-01)
+
+#### Merged Pull Requests
+- Add automatic version bump and changelog update on PR merge [#313](https://github.com/chef/effortless/pull/313) ([neha-p6](https://github.com/neha-p6))
+<!-- latest_release -->
+
 ## [v0.26.1](https://github.com/chef/effortless/tree/v0.26.1) (2026-08-27)
 
 #### Merged Pull Requests
 - Add Chef 19 integration test pipeline for scaffolding-chef-infra
 - Fix verify-plans.ps1 for Chef 19 / base-2025 compatibility
-<!-- latest_release -->
 
 <!-- release_rollup since=0.26.0 -->
 ### Changes not yet released to stable
