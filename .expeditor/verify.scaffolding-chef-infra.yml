@@ -35,7 +35,7 @@ steps:
       executor:
         docker:
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with defaults"
+  - label: "[scaffolding-chef-infra] :linux: x86_64 :habicat: Run and test user plan with defaults"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-default ci
     expeditor:
@@ -44,7 +44,18 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with attribute persistence blocks"
+  - label: "[scaffolding-chef-infra] :linux: aarch64 :habicat: Run and test user plan with defaults"
+    command:
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-default ci aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: x86_64 :habicat: Run and test user plan with attribute persistence blocks"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-attribute-persistence ci
     expeditor:
@@ -53,7 +64,18 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan with change to API's"
+  - label: "[scaffolding-chef-infra] :linux: aarch64 :habicat: Run and test user plan with attribute persistence blocks"
+    command:
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-attribute-persistence ci aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: x86_64 :habicat: Run and test user plan with change to API's"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-api ci
     expeditor:
@@ -62,7 +84,18 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan that includes a policy defined in single quotes"
+  - label: "[scaffolding-chef-infra] :linux: aarch64 :habicat: Run and test user plan with change to API's"
+    command:
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-api ci aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: x86_64 :habicat: Run and test user plan that includes a policy defined in single quotes"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-include-policy single
     expeditor:
@@ -71,9 +104,31 @@ steps:
           privileged: true
     timeout_in_minutes: 60
 
-  - label: "[scaffolding-chef-infra] :linux: :habicat: Run and test user plan that includes a policy defined in double quotes"
+  - label: "[scaffolding-chef-infra] :linux: aarch64 :habicat: Run and test user plan that includes a policy defined in single quotes"
+    command:
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-include-policy single aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: x86_64 :habicat: Run and test user plan that includes a policy defined in double quotes"
     command:
       - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-include-policy double
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+    timeout_in_minutes: 60
+
+  - label: "[scaffolding-chef-infra] :linux: aarch64 :habicat: Run and test user plan that includes a policy defined in double quotes"
+    command:
+      - bin/ci/verify-plans.sh scaffolding-chef-infra user-linux-include-policy double aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
     expeditor:
       executor:
         docker:
