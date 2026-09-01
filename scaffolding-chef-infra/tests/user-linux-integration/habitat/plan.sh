@@ -11,7 +11,7 @@
 # package names and resolves from HAB_BLDR_CHANNEL as usual.
 #######################################
 
-pkg_name=user-linux-chef19
+pkg_name=user-linux-integration
 pkg_origin=ci
 pkg_version="1.0.0"
 pkg_scaffolding="${INTEGRATION_SCAFFOLDING_IDENT:-chef/scaffolding-chef-infra}"

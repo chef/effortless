@@ -1,3 +1,3 @@
-file 'C:/temp/test-chef19' do
+file 'C:/temp/test-integration' do
   content "Hello from Chef 19!"
 end

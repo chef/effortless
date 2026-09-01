@@ -1,7 +1,7 @@
 #!/bin/bash
 #/ Usage: test.sh <pkg_ident>
 #/
-#/ Example: test.sh ci/user-linux-chef19/1.0.0/20260827000000
+#/ Example: test.sh ci/user-linux-integration/1.0.0/20260827000000
 #/
 
 set -euo pipefail
@@ -26,15 +26,16 @@ SUP_WAIT_SECONDS=1
 
 hab sup term || true
 sleep "${SUP_WAIT_SECONDS}"
-echo "--- :habicat: Starting the supervisor"
+echo "--- :habicat: *** Starting the Habitat supervisor ***"
 hab sup run &
 
-echo "Waiting ${SUP_WAIT_SECONDS} seconds for hab sup to start..."
+echo "*** Waiting ${SUP_WAIT_SECONDS} seconds for hab sup to start... ***"
 sleep "${SUP_WAIT_SECONDS}"
 
 LOAD_WAIT_SECONDS=30
 hab svc load "${TEST_PKG_IDENT}"
-echo "Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to start..."
+echo "*** Waiting ${LOAD_WAIT_SECONDS} seconds for ${TEST_PKG_IDENT} to start and run Chef... ***"
 
 sleep "${LOAD_WAIT_SECONDS}"
+echo "--- :mag: *** Running bats tests for ${TEST_PKG_IDENT} ***"
 bats "$(dirname "${0}")/test.bats"

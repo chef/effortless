@@ -1,7 +1,7 @@
 param (
     [Parameter()]
-    [string]$PackageIdentifier = $(throw "Usage: test.ps1 [test_pkg_ident] e.g. test.ps1 ci/user-windows-chef19/1.0.0/20260827000000"),
-    [string]$PackageSource = $(throw "Usage: test.ps1 [test_pkg_source] e.g. test.ps1 ./results/ci-user-windows-chef19-1.0.0-20260827000000-x86_64-windows.hart")
+    [string]$PackageIdentifier = $(throw "Usage: test.ps1 [test_pkg_ident] e.g. test.ps1 ci/user-windows-integration/1.0.0/20260827000000"),
+    [string]$PackageSource = $(throw "Usage: test.ps1 [test_pkg_source] e.g. test.ps1 ./results/ci-user-windows-integration-1.0.0-20260827000000-x86_64-windows.hart")
 )
 
 if (-Not (Get-Module -ListAvailable -Name Pester)){
@@ -17,14 +17,16 @@ $SUP_WAIT_SECONDS = 60
 
 Start-Sleep $SUP_WAIT_SECONDS
 $hab_supervisor = Start-Process hab -ArgumentList sup,run -NoNewWindow -PassThru
-Write-Output "Waiting $SUP_WAIT_SECONDS seconds for hab sup to start..."
+Write-Output "*** Waiting $SUP_WAIT_SECONDS seconds for hab sup to start... ***"
 Start-Sleep $SUP_WAIT_SECONDS
 
 $LOAD_WAIT_SECONDS = 60
 
-Write-Output "Waiting $LOAD_WAIT_SECONDS seconds for $PackageIdentifier to start...."
 hab svc load $PackageIdentifier
+Write-Output "*** Waiting $LOAD_WAIT_SECONDS seconds for $PackageIdentifier to start and run Chef... ***"
 Start-Sleep $LOAD_WAIT_SECONDS
+
+Write-Output "*** Running Pester tests for $PackageIdentifier ***"
 
 $__dir=(Get-Item $PSScriptRoot)
 $test_result = Invoke-Pester -Strict -PassThru -Script @{

@@ -11,7 +11,7 @@
 # package names and resolves from HAB_BLDR_CHANNEL as usual.
 #######################################
 
-$pkg_name="user-windows-chef19"
+$pkg_name="user-windows-integration"
 $pkg_origin="ci"
 $pkg_version="1.0.0"
 $pkg_scaffolding=if($env:INTEGRATION_SCAFFOLDING_IDENT){$env:INTEGRATION_SCAFFOLDING_IDENT}else{"chef/scaffolding-chef-infra"}

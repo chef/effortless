@@ -135,8 +135,8 @@ Because `promote_habitat_packages` and `trigger_pipeline:integration-test` both 
 The sample user packages used by this pipeline live permanently in the repo:
 
 ```
-scaffolding-chef-infra/tests/user-linux-chef19/    # Linux test package
-scaffolding-chef-infra/tests/user-windows-chef19/  # Windows test package
+scaffolding-chef-infra/tests/user-linux-integration/    # Linux test package
+scaffolding-chef-infra/tests/user-windows-integration/  # Windows test package
 ```
 
 Each test package contains:
@@ -158,8 +158,8 @@ The test asserts:
 | `.expeditor/integration-test.scaffolding-chef-infra.yml` | Buildkite pipeline definition |
 | `bin/ci/integration-test.sh` | Linux CI script |
 | `bin/ci/integration-test.ps1` | Windows CI script |
-| `scaffolding-chef-infra/tests/user-linux-chef19/` | Linux test package |
-| `scaffolding-chef-infra/tests/user-windows-chef19/` | Windows test package |
+| `scaffolding-chef-infra/tests/user-linux-integration/` | Linux test package |
+| `scaffolding-chef-infra/tests/user-windows-integration/` | Windows test package |
 
 ## Interpreting Failures
 
@@ -175,9 +175,9 @@ The test asserts:
 ```bash
 # Linux
 export HAB_AUTH_TOKEN="<your-token>"
-./bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci
+./bin/ci/integration-test.sh scaffolding-chef-infra user-linux-integration ci
 
 # Windows
 $env:HAB_AUTH_TOKEN = "<your-token>"
-.\bin\ci\integration-test.ps1 scaffolding-chef-infra user-windows-chef19
+.\bin\ci\integration-test.ps1 scaffolding-chef-infra user-windows-integration
 ```

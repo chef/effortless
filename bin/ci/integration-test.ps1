@@ -16,23 +16,22 @@
 #
 # CHANNEL STRATEGY:
 #   chef/scaffolding-chef-infra  ->  latest from unstable (just published by habitat/build)
-#   chef/chef-infra-client       ->  latest from unstable (pre-installed into studio)
+#   chef/chef-infra-client       ->  latest from unstable (pre-installed before build)
 #   core/* and all other deps    ->  base-2025 (stable, prevents flakiness from
 #                                    unrelated core package churn in unstable)
 #
 # HOW IT WORKS (Windows):
-#   Unlike Linux, Windows Habitat studios do NOT bind-mount the host package cache.
-#   Instead we resolve the latest unstable idents first (without downloading), then
-#   start a studio session and install those exact packages from unstable inside the
-#   studio before running the build. The build step runs with HAB_BLDR_CHANNEL=base-2025
-#   so core/* deps are resolved from base-2025 while the pre-installed exact idents
-#   are used for scaffolding and chef-infra-client.
+#   Unlike Linux, Windows Habitat studios share the host package cache. We pre-install
+#   exact idents from unstable on the host before the build. The build runs with
+#   --refresh-channel base-2025 so core/* deps are resolved from base-2025, while
+#   the pre-installed scaffolding and chef-infra-client are found in the shared cache.
+#   Exact idents are injected via HAB_STUDIO_SECRET_* so plan.ps1 can pin to them.
 #
 # USAGE:
 #   Normally invoked by the Buildkite integration-test pipeline. Can also be run
 #   locally with HAB_AUTH_TOKEN set:
 #     $env:HAB_AUTH_TOKEN = "<token>"
-#     .\bin\ci\integration-test.ps1 scaffolding-chef-infra user-windows-chef19
+#     .\bin\ci\integration-test.ps1 scaffolding-chef-infra user-windows-integration
 #
 
 #Requires -Version 5
@@ -42,12 +41,23 @@ param(
     [string]$test_plan
 )
 
+$ErrorActionPreference = 'Stop'
+
 $env:HAB_ORIGIN = 'ci'
 $env:HAB_BLDR_CHANNEL = if ($env:HAB_BLDR_CHANNEL) { $env:HAB_BLDR_CHANNEL } else { "base-2025" }
 $UNSTABLE_CHANNEL = "unstable"
 
-# Pass channel and auth token into the Hab studio via HAB_STUDIO_SECRET_ mechanism.
-# On Windows, outer-process env vars are not reliably inherited by the studio process.
+# HAB_AUTH_TOKEN is NOT automatically injected by the Expeditor Windows docker executor.
+# Fetch it from AWS SSM, same as the Linux integration-test.sh does.
+if (-not $env:HAB_AUTH_TOKEN) {
+  Write-Host "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
+  $env:HAB_AUTH_TOKEN = aws ssm get-parameter `
+    --name 'habitat-prod-auth-token' `
+    --with-decryption `
+    --query Parameter.Value `
+    --output text `
+    --region ($env:AWS_REGION ?? 'us-west-2') 2>$null
+}
 $env:HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL = $env:HAB_BLDR_CHANNEL
 $env:HAB_STUDIO_SECRET_HAB_AUTH_TOKEN = $env:HAB_AUTH_TOKEN
 
@@ -60,42 +70,36 @@ hab origin key generate $env:HAB_ORIGIN
 $project_root = "$(git rev-parse --show-toplevel)"
 Set-Location $project_root
 
-Write-Host "--- :habicat: Resolving latest chef/scaffolding-chef-infra from $UNSTABLE_CHANNEL"
-# Resolve the latest ident without downloading — we will install inside the studio below.
-$scaffoldingInfo = (hab pkg show "chef/scaffolding-chef-infra" --channel $UNSTABLE_CHANNEL 2>&1) -join "" | ConvertFrom-Json
-$SCAFFOLDING_IDENT = "$($scaffoldingInfo.origin)/$($scaffoldingInfo.name)/$($scaffoldingInfo.version)/$($scaffoldingInfo.release)"
+Write-Host "--- :habicat: Installing chef/scaffolding-chef-infra from $UNSTABLE_CHANNEL"
+# Install from unstable so the package lands in the host's package cache, which is
+# shared with the Windows studio. After install, capture the exact 4-part ident
+# so the test plan pins to this specific version rather than re-resolving.
+hab pkg install chef/scaffolding-chef-infra --channel $UNSTABLE_CHANNEL
+$scaffoldingPath = hab pkg path chef/scaffolding-chef-infra
+$SCAFFOLDING_IDENT = $scaffoldingPath -replace "^C:\\hab\\pkgs\\", "" -replace "\\", "/"
 Write-Host "    Resolved scaffolding: $SCAFFOLDING_IDENT"
 
-Write-Host "--- :habicat: Resolving latest chef/chef-infra-client from $UNSTABLE_CHANNEL"
-$clientInfo = (hab pkg show "chef/chef-infra-client" --channel $UNSTABLE_CHANNEL 2>&1) -join "" | ConvertFrom-Json
-$CHEF_CLIENT_IDENT = "$($clientInfo.origin)/$($clientInfo.name)/$($clientInfo.version)/$($clientInfo.release)"
+Write-Host "--- :habicat: Installing chef/chef-infra-client from $UNSTABLE_CHANNEL"
+hab pkg install chef/chef-infra-client --channel $UNSTABLE_CHANNEL
+$clientPath = hab pkg path chef/chef-infra-client
+$CHEF_CLIENT_IDENT = $clientPath -replace "^C:\\hab\\pkgs\\", "" -replace "\\", "/"
 Write-Host "    Resolved chef-infra-client: $CHEF_CLIENT_IDENT"
+
+# Inject exact idents into the studio so plan.ps1 can pin to them.
+$env:HAB_STUDIO_SECRET_INTEGRATION_SCAFFOLDING_IDENT = $SCAFFOLDING_IDENT
+$env:HAB_STUDIO_SECRET_INTEGRATION_CHEF_CLIENT_IDENT = $CHEF_CLIENT_IDENT
 
 Write-Host "--- :construction: :windows: Building $test_plan"
 Write-Host "    scaffolding:        $SCAFFOLDING_IDENT"
 Write-Host "    chef-infra-client:  $CHEF_CLIENT_IDENT"
 Write-Host "    dep channel:        $($env:HAB_BLDR_CHANNEL)"
 
-# Inject exact idents into the studio so plan.ps1 can pin to them.
-$env:HAB_STUDIO_SECRET_INTEGRATION_SCAFFOLDING_IDENT = $SCAFFOLDING_IDENT
-$env:HAB_STUDIO_SECRET_INTEGRATION_CHEF_CLIENT_IDENT = $CHEF_CLIENT_IDENT
+# Build the test user package. The scaffolding and chef-infra-client are already
+# in the host package cache (shared with the Windows studio), so Habitat uses
+# those cached idents. All core/* deps are resolved from base-2025.
+hab pkg build "$Plan/tests/$test_plan" --refresh-channel $env:HAB_BLDR_CHANNEL
 
-# Pre-install exact unstable idents inside the studio, then build with base-2025
-# channel so core/* deps are resolved from base-2025. All commands run in a single
-# studio session so the installed packages are available to the build step.
-$buildScript = @"
-`$env:HAB_BLDR_CHANNEL = '$($env:HAB_BLDR_CHANNEL)'
-Write-Host '--- Pre-installing scaffolding from unstable inside studio'
-hab pkg install '$SCAFFOLDING_IDENT' --channel $UNSTABLE_CHANNEL
-Write-Host '--- Pre-installing chef-infra-client from unstable inside studio'
-hab pkg install '$CHEF_CLIENT_IDENT' --channel $UNSTABLE_CHANNEL
-Write-Host '--- Building test plan'
-hab pkg build '$Plan/tests/$test_plan' --refresh-channel '$($env:HAB_BLDR_CHANNEL)'
-"@
-
-hab studio run $buildScript
-
-. ./results/last_build.ps1
+. .\results\last_build.ps1
 $TEST_PKG_ARTIFACT = $pkg_artifact
 $TEST_PKG_IDENT = $pkg_ident
 
@@ -106,4 +110,4 @@ if (!(Test-Path "$Plan\tests\$test_plan\tests\test.ps1")) {
     exit 1
 }
 
-powershell -File ".\$Plan\tests\$test_plan\tests\test.ps1" -PackageIdentifier $TEST_PKG_IDENT -PackageSource ./results/$TEST_PKG_ARTIFACT
+powershell -File ".\$Plan\tests\$test_plan\tests\test.ps1" -PackageIdentifier $TEST_PKG_IDENT -PackageSource ".\results\$TEST_PKG_ARTIFACT"

@@ -38,7 +38,7 @@
 # USAGE:
 #   Normally invoked by the Buildkite integration-test pipeline. Can also be run
 #   locally with HAB_AUTH_TOKEN set:
-#     HAB_AUTH_TOKEN=<token> ./bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci
+#     HAB_AUTH_TOKEN=<token> ./bin/ci/integration-test.sh scaffolding-chef-infra user-linux-integration ci
 #
 
 set -eou pipefail
@@ -46,6 +46,7 @@ set -eou pipefail
 plan="$(basename "${1}")"
 test_plan="$(basename "${2}")"
 chef_policy_name="$(basename "${3}")"
+hab_target="${4:-x86_64-linux}"
 export HAB_ORIGIN=ci
 export HAB_BLDR_CHANNEL="${HAB_BLDR_CHANNEL:-base-2025}"
 UNSTABLE_CHANNEL="unstable"
@@ -71,7 +72,7 @@ export HAB_STUDIO_SECRET_GIT_CONFIG_VALUE_0='*'
 
 echo "--- :habicat: Installing Habitat"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"${SCRIPT_DIR}/install-hab.sh" x86_64-linux
+"${SCRIPT_DIR}/install-hab.sh" "${hab_target}"
 
 echo "--- :key: Generating fake origin key"
 hab origin key generate "${HAB_ORIGIN}"

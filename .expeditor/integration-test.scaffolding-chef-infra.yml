@@ -32,13 +32,35 @@ expeditor:
           limit: 1
 
 steps:
-  - label: "[integration] :linux: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+  - label: "[integration] :linux: x86_64 :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+    env:
+      HAB_LICENSE: "accept-no-persist"
+      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
     command:
-      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci
+      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-integration ci x86_64-linux
     expeditor:
       executor:
         docker:
           privileged: true
+
+  - label: "[integration] :linux: aarch64 :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+    env:
+      HAB_LICENSE: "accept-no-persist"
+      HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
+    agents:
+      queue: default-privileged-aarch64
+    plugins:
+      - docker#v3.5.0:
+          image: chefes/omnibus-toolchain-ubuntu-2204:aarch64
+          privileged: true
+          environment:
+            - HAB_LICENSE
+            - HAB_STUDIO_SECRET_HAB_LICENSE
+            - HAB_AUTH_TOKEN
+          propagate-environment: true
+    command:
+      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-integration ci aarch64-linux
+    timeout_in_minutes: 60
 
   - label: "[integration] :windows: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
     env:
@@ -47,9 +69,10 @@ steps:
       HAB_BLDR_CHANNEL: "base-2025"
       HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL: "base-2025"
     command:
-      - ./bin/ci/integration-test.ps1 scaffolding-chef-infra user-windows-chef19
+      - ./bin/ci/integration-test.ps1 scaffolding-chef-infra user-windows-integration
     expeditor:
       executor:
         docker:
           host_os: windows
           shell: [ "powershell", "-Command" ]
+    timeout_in_minutes: 90
