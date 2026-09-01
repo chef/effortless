@@ -47,6 +47,12 @@ $env:HAB_ORIGIN = 'ci'
 $env:HAB_BLDR_CHANNEL = if ($env:HAB_BLDR_CHANNEL) { $env:HAB_BLDR_CHANNEL } else { "base-2025" }
 $UNSTABLE_CHANNEL = "unstable"
 
+if ($env:HAB_AUTH_TOKEN) {
+  Write-Host "    HAB_AUTH_TOKEN is set"
+} else {
+  Write-Host "    WARNING: HAB_AUTH_TOKEN is empty"
+}
+
 # Pass token and channel into the Hab studio via HAB_STUDIO_SECRET_ mechanism.
 $env:HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL = $env:HAB_BLDR_CHANNEL
 $env:HAB_STUDIO_SECRET_HAB_AUTH_TOKEN = $env:HAB_AUTH_TOKEN
