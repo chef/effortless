@@ -56,7 +56,7 @@ if (-not $env:HAB_AUTH_TOKEN) {
     --with-decryption `
     --query Parameter.Value `
     --output text `
-    --region ($env:AWS_REGION ?? 'us-west-2') 2>$null
+    --region $(if ($env:AWS_REGION) { $env:AWS_REGION } else { 'us-west-2' }) 2>$null
 }
 $env:HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL = $env:HAB_BLDR_CHANNEL
 $env:HAB_STUDIO_SECRET_HAB_AUTH_TOKEN = $env:HAB_AUTH_TOKEN
