@@ -24,6 +24,15 @@
 #   chef-infra-client from base-2025. Testing against unstable for chef-owned
 #   packages validates the upcoming release combination before it lands in base-2025.
 #
+# WHY REAL PLATFORMS, NOT DOCKER:
+#   This step runs directly on a real per-architecture machine (Expeditor's
+#   native `linux` executor for x86_64, or a bare-metal aarch64 Buildkite queue
+#   for ARM) instead of a Docker container. Loading a service via `hab sup run`
+#   + `hab svc load` exercises real supervisor process/network/service-directory
+#   behavior that does not reliably reproduce inside (nested/emulated) containers,
+#   and packages here are platform-specific (x86_64 vs aarch64 vs windows), so
+#   emulating one architecture from another host does not give a real guarantee.
+#
 # HOW IT WORKS (Linux bind-mount trick):
 #   Linux Habitat studios bind-mount the host's /hab/pkgs into the studio.
 #   By pre-installing exact package idents from unstable on the HOST before
@@ -38,7 +47,7 @@
 # USAGE:
 #   Normally invoked by the Buildkite integration-test pipeline. Can also be run
 #   locally with HAB_AUTH_TOKEN set:
-#     HAB_AUTH_TOKEN=<token> ./bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci
+#     HAB_AUTH_TOKEN=<token> ./bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci x86_64-linux
 #
 
 set -eou pipefail
@@ -46,13 +55,23 @@ set -eou pipefail
 plan="$(basename "${1}")"
 test_plan="$(basename "${2}")"
 chef_policy_name="$(basename "${3}")"
+# Habitat install target for this machine's real architecture, e.g. x86_64-linux
+# or aarch64-linux. Defaults to x86_64-linux for backward compatibility.
+hab_target="${4:-x86_64-linux}"
 export HAB_ORIGIN=ci
 export HAB_BLDR_CHANNEL="${HAB_BLDR_CHANNEL:-base-2025}"
 UNSTABLE_CHANNEL="unstable"
 
+# These machines run the Buildkite agent as a non-root user with passwordless
+# sudo (Expeditor's `privileged` executor setting / the CI queue's own setup).
+# Fall back to running commands directly if we're already root.
+if [[ "$(id -u)" -eq 0 ]]; then
+  SUDO=()
+else
+  SUDO=(sudo -E)
+fi
+
 # Fetch HAB_AUTH_TOKEN from AWS SSM if not already provided.
-# The expeditor Docker executor does not forward host env vars automatically —
-# only vars listed in the pipeline YAML env: section are injected into Docker.
 if [[ -z "${HAB_AUTH_TOKEN:-}" ]]; then
   echo "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
   HAB_AUTH_TOKEN=$(aws ssm get-parameter \
@@ -69,32 +88,45 @@ export HAB_STUDIO_SECRET_GIT_CONFIG_COUNT=1
 export HAB_STUDIO_SECRET_GIT_CONFIG_KEY_0=safe.directory
 export HAB_STUDIO_SECRET_GIT_CONFIG_VALUE_0='*'
 
-echo "--- :habicat: Installing Habitat"
+echo "--- :habicat: Installing Habitat for ${hab_target}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"${SCRIPT_DIR}/install-hab.sh" x86_64-linux
+"${SCRIPT_DIR}/install-hab.sh" "${hab_target}"
 
-echo "--- :key: Generating fake origin key"
-hab origin key generate "${HAB_ORIGIN}"
+echo "--- :habicat: Ensuring 'hab' group/user exist"
+# The Habitat supervisor requires a 'hab' group to create service directories
+# under /hab/svc/ on a fresh machine. Idempotent so re-runs on shared/reused
+# hosts don't fail.
+getent group hab >/dev/null 2>&1 || "${SUDO[@]}" groupadd hab
+id -u hab >/dev/null 2>&1 || "${SUDO[@]}" useradd -g hab hab
 
 if type git 2>/dev/null; then
   echo "--- :thumbsup: git's installed"
 else
   echo "--- :hammer_and_wrench: Installing git"
-  hab pkg install core/git --binlink
+  "${SUDO[@]}" hab pkg install core/git --binlink
 fi
 project_root="$(git rev-parse --show-toplevel)"
+
+echo "--- :key: Generating fake origin key"
+hab origin key generate "${HAB_ORIGIN}"
+# The Hab studio (and `hab pkg build`/`hab sup run`) run as root and read keys
+# from /hab/cache/keys (system-level cache), not ~/.hab/cache/keys (user-level
+# cache). Copy so the studio can sign/verify the built package correctly.
+"${SUDO[@]}" mkdir -p /hab/cache/keys
+"${SUDO[@]}" cp "${HOME}/.hab/cache/keys/${HAB_ORIGIN}-"*.sig.key /hab/cache/keys/
+"${SUDO[@]}" cp "${HOME}/.hab/cache/keys/${HAB_ORIGIN}-"*.pub /hab/cache/keys/
 
 echo "--- :habicat: Pre-installing chef/scaffolding-chef-infra from ${UNSTABLE_CHANNEL}"
 # Install from unstable so the package lands in the host's /hab/pkgs, which is
 # bind-mounted into the Linux studio. After install, capture the exact 4-part
 # ident so the test plan pins to this specific version rather than re-resolving.
-HAB_BLDR_CHANNEL="${UNSTABLE_CHANNEL}" hab pkg install chef/scaffolding-chef-infra \
+HAB_BLDR_CHANNEL="${UNSTABLE_CHANNEL}" "${SUDO[@]}" hab pkg install chef/scaffolding-chef-infra \
   --channel "${UNSTABLE_CHANNEL}"
 SCAFFOLDING_IDENT="$(hab pkg path chef/scaffolding-chef-infra | sed 's|^/hab/pkgs/||')"
 echo "    Resolved scaffolding: ${SCAFFOLDING_IDENT}"
 
 echo "--- :habicat: Pre-installing chef/chef-infra-client from ${UNSTABLE_CHANNEL}"
-HAB_BLDR_CHANNEL="${UNSTABLE_CHANNEL}" hab pkg install chef/chef-infra-client \
+HAB_BLDR_CHANNEL="${UNSTABLE_CHANNEL}" "${SUDO[@]}" hab pkg install chef/chef-infra-client \
   --channel "${UNSTABLE_CHANNEL}"
 CHEF_CLIENT_IDENT="$(hab pkg path chef/chef-infra-client | sed 's|^/hab/pkgs/||')"
 echo "    Resolved chef-infra-client: ${CHEF_CLIENT_IDENT}"
@@ -106,6 +138,7 @@ export HAB_STUDIO_SECRET_INTEGRATION_SCAFFOLDING_IDENT="${SCAFFOLDING_IDENT}"
 export HAB_STUDIO_SECRET_INTEGRATION_CHEF_CLIENT_IDENT="${CHEF_CLIENT_IDENT}"
 
 echo "--- :construction: Building ${test_plan}"
+echo "    target:             ${hab_target}"
 echo "    scaffolding:        ${SCAFFOLDING_IDENT}"
 echo "    chef-infra-client:  ${CHEF_CLIENT_IDENT}"
 echo "    dep channel:        ${HAB_BLDR_CHANNEL}"
@@ -115,7 +148,7 @@ echo "    dep channel:        ${HAB_BLDR_CHANNEL}"
   # The scaffolding and chef-infra-client are already in /hab/pkgs (bind-mounted
   # from the pre-install steps above), so Habitat uses the cached exact idents.
   # All core/* and other deps are resolved from base-2025.
-  hab pkg build "${plan}/tests/${test_plan}" --refresh-channel "${HAB_BLDR_CHANNEL}"
+  "${SUDO[@]}" hab pkg build "${plan}/tests/${test_plan}" --refresh-channel "${HAB_BLDR_CHANNEL}"
 
   source results/last_build.env
   TEST_PKG_RELEASE="${pkg_release}"
@@ -128,6 +161,6 @@ echo "    dep channel:        ${HAB_BLDR_CHANNEL}"
     exit 0
   fi
 
-  hab studio -q -r "/hab/studios/${test_plan}-${TEST_PKG_RELEASE}" run \
+  "${SUDO[@]}" hab studio -q -r "/hab/studios/${test_plan}-${TEST_PKG_RELEASE}" run \
     "export CHEF_POLICYFILE=${chef_policy_name} && hab pkg install results/${TEST_PKG_ARTIFACT} && ./${plan}/tests/${test_plan}/tests/test.sh ${TEST_PKG_IDENT}"
 )

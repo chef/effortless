@@ -21,12 +21,13 @@
 #                                    unrelated core package churn in unstable)
 #
 # HOW IT WORKS (Windows):
-#   Unlike Linux, Windows Habitat studios do NOT bind-mount the host package cache.
-#   Instead we resolve the latest unstable idents first (without downloading), then
-#   start a studio session and install those exact packages from unstable inside the
-#   studio before running the build. The build step runs with HAB_BLDR_CHANNEL=base-2025
-#   so core/* deps are resolved from base-2025 while the pre-installed exact idents
-#   are used for scaffolding and chef-infra-client.
+#   Unlike Linux, Windows Habitat studios do NOT bind-mount the host package
+#   cache. So, in addition to the host pre-install (which lets us read back
+#   the exact 4-part idents via `hab pkg path`, same as the Linux script), we
+#   also install those same exact idents again inside the studio before
+#   running the build. The build step runs with HAB_BLDR_CHANNEL=base-2025 so
+#   core/* deps are resolved from base-2025 while the pre-installed exact
+#   idents are used for scaffolding and chef-infra-client.
 #
 # USAGE:
 #   Normally invoked by the Buildkite integration-test pipeline. Can also be run
@@ -42,9 +43,41 @@ param(
     [string]$test_plan
 )
 
+# PowerShell does not treat a non-zero exit code from a native command (hab,
+# aws, etc.) as a terminating error, so without explicit checks a failed step
+# can silently fall through to later steps and the whole script still exits 0.
+# Assert-Success makes that failure loud and stops the build.
+function Assert-Success {
+    param([string]$Message)
+    if ($LASTEXITCODE -ne 0) {
+        throw "FAILED: $Message (exit code $LASTEXITCODE)"
+    }
+}
+
 $env:HAB_ORIGIN = 'ci'
 $env:HAB_BLDR_CHANNEL = if ($env:HAB_BLDR_CHANNEL) { $env:HAB_BLDR_CHANNEL } else { "base-2025" }
 $UNSTABLE_CHANNEL = "unstable"
+
+# In CI, HAB_AUTH_TOKEN is injected by Expeditor from Vault (see the `secrets`
+# block on this step in integration-test.scaffolding-chef-infra.yml) before this
+# script runs. As a fallback (e.g. local runs, or if that injection didn't
+# happen), try AWS SSM. Without a token, `hab pkg show`/`hab pkg install`
+# against the unstable channel can fail since scaffolding/chef-infra-client
+# are not public there.
+if (-not $env:HAB_AUTH_TOKEN) {
+    Write-Host "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
+    $region = if ($env:AWS_REGION) { $env:AWS_REGION } else { "us-west-2" }
+    try {
+        $env:HAB_AUTH_TOKEN = (aws ssm get-parameter `
+            --name 'habitat-prod-auth-token' `
+            --with-decryption `
+            --query Parameter.Value `
+            --output text `
+            --region $region 2>$null)
+    } catch {
+        $env:HAB_AUTH_TOKEN = ""
+    }
+}
 
 # Pass channel and auth token into the Hab studio via HAB_STUDIO_SECRET_ mechanism.
 # On Windows, outer-process env vars are not reliably inherited by the studio process.
@@ -56,19 +89,28 @@ Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/hab
 
 Write-Host "--- :key: Generating fake origin key"
 hab origin key generate $env:HAB_ORIGIN
+Assert-Success "hab origin key generate $($env:HAB_ORIGIN)"
 
 $project_root = "$(git rev-parse --show-toplevel)"
 Set-Location $project_root
 
-Write-Host "--- :habicat: Resolving latest chef/scaffolding-chef-infra from $UNSTABLE_CHANNEL"
-# Resolve the latest ident without downloading — we will install inside the studio below.
-$scaffoldingInfo = (hab pkg show "chef/scaffolding-chef-infra" --channel $UNSTABLE_CHANNEL 2>&1) -join "" | ConvertFrom-Json
-$SCAFFOLDING_IDENT = "$($scaffoldingInfo.origin)/$($scaffoldingInfo.name)/$($scaffoldingInfo.version)/$($scaffoldingInfo.release)"
+Write-Host "--- :habicat: Pre-installing chef/scaffolding-chef-infra from $UNSTABLE_CHANNEL"
+# Same approach as the Linux script: install directly from unstable on the
+# host, then read back the exact 4-part ident via `hab pkg path` so the test
+# plan pins to this specific version rather than re-resolving later.
+hab pkg install "chef/scaffolding-chef-infra" --channel $UNSTABLE_CHANNEL
+Assert-Success "hab pkg install chef/scaffolding-chef-infra --channel $UNSTABLE_CHANNEL"
+$scaffoldingPath = (hab pkg path "chef/scaffolding-chef-infra") -replace '\\', '/'
+Assert-Success "hab pkg path chef/scaffolding-chef-infra"
+$SCAFFOLDING_IDENT = ($scaffoldingPath -split '/' | Select-Object -Last 4) -join '/'
 Write-Host "    Resolved scaffolding: $SCAFFOLDING_IDENT"
 
-Write-Host "--- :habicat: Resolving latest chef/chef-infra-client from $UNSTABLE_CHANNEL"
-$clientInfo = (hab pkg show "chef/chef-infra-client" --channel $UNSTABLE_CHANNEL 2>&1) -join "" | ConvertFrom-Json
-$CHEF_CLIENT_IDENT = "$($clientInfo.origin)/$($clientInfo.name)/$($clientInfo.version)/$($clientInfo.release)"
+Write-Host "--- :habicat: Pre-installing chef/chef-infra-client from $UNSTABLE_CHANNEL"
+hab pkg install "chef/chef-infra-client" --channel $UNSTABLE_CHANNEL
+Assert-Success "hab pkg install chef/chef-infra-client --channel $UNSTABLE_CHANNEL"
+$clientPath = (hab pkg path "chef/chef-infra-client") -replace '\\', '/'
+Assert-Success "hab pkg path chef/chef-infra-client"
+$CHEF_CLIENT_IDENT = ($clientPath -split '/' | Select-Object -Last 4) -join '/'
 Write-Host "    Resolved chef-infra-client: $CHEF_CLIENT_IDENT"
 
 Write-Host "--- :construction: :windows: Building $test_plan"
@@ -94,6 +136,7 @@ hab pkg build '$Plan/tests/$test_plan' --refresh-channel '$($env:HAB_BLDR_CHANNE
 "@
 
 hab studio run $buildScript
+Assert-Success "hab studio run (build $test_plan)"
 
 . ./results/last_build.ps1
 $TEST_PKG_ARTIFACT = $pkg_artifact
@@ -107,3 +150,4 @@ if (!(Test-Path "$Plan\tests\$test_plan\tests\test.ps1")) {
 }
 
 powershell -File ".\$Plan\tests\$test_plan\tests\test.ps1" -PackageIdentifier $TEST_PKG_IDENT -PackageSource ./results/$TEST_PKG_ARTIFACT
+exit $LASTEXITCODE
