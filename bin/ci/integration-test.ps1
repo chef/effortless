@@ -58,26 +58,11 @@ $env:HAB_ORIGIN = 'ci'
 $env:HAB_BLDR_CHANNEL = if ($env:HAB_BLDR_CHANNEL) { $env:HAB_BLDR_CHANNEL } else { "base-2025" }
 $UNSTABLE_CHANNEL = "unstable"
 
-# In CI, HAB_AUTH_TOKEN is injected by Expeditor from Vault (see the `secrets`
-# block on this step in integration-test.scaffolding-chef-infra.yml) before this
-# script runs. As a fallback (e.g. local runs, or if that injection didn't
-# happen), try AWS SSM. Without a token, `hab pkg show`/`hab pkg install`
-# against the unstable channel can fail since scaffolding/chef-infra-client
-# are not public there.
-if (-not $env:HAB_AUTH_TOKEN) {
-    Write-Host "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
-    $region = if ($env:AWS_REGION) { $env:AWS_REGION } else { "us-west-2" }
-    try {
-        $env:HAB_AUTH_TOKEN = (aws ssm get-parameter `
-            --name 'habitat-prod-auth-token' `
-            --with-decryption `
-            --query Parameter.Value `
-            --output text `
-            --region $region 2>$null)
-    } catch {
-        $env:HAB_AUTH_TOKEN = ""
-    }
-}
+# Windows Buildkite agents run with `shell=powershell`, so the repository's
+# bash .buildkite/hooks/pre-command hook never fires here. HAB_AUTH_TOKEN is
+# injected by Expeditor from Vault instead (see the `secrets` block on this
+# step in integration-test.scaffolding-chef-infra.yml). Set it yourself when
+# running locally.
 
 # Pass channel and auth token into the Hab studio via HAB_STUDIO_SECRET_ mechanism.
 # On Windows, outer-process env vars are not reliably inherited by the studio process.
