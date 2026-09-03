@@ -1,9 +1,14 @@
-<!-- latest_release 0.26.2 -->
+<!-- latest_release 0.26.3 -->
+## [v0.26.3](https://github.com/chef/effortless/tree/v0.26.3) (2026-09-03)
+
+#### Merged Pull Requests
+- Run integration-test pipeline on real per-arch platforms instead of Docker [#316](https://github.com/chef/effortless/pull/316) ([neha-p6](https://github.com/neha-p6))
+<!-- latest_release -->
+
 ## [v0.26.2](https://github.com/chef/effortless/tree/v0.26.2) (2026-09-01)
 
 #### Merged Pull Requests
 - Add automatic version bump and changelog update on PR merge [#313](https://github.com/chef/effortless/pull/313) ([neha-p6](https://github.com/neha-p6))
-<!-- latest_release -->
 
 ## [v0.26.1](https://github.com/chef/effortless/tree/v0.26.1) (2026-08-27)
 
