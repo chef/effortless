@@ -31,4 +31,18 @@ $test_result = Invoke-Pester -Strict -PassThru -Script @{
     Path = "$__dir/test.pester.ps1";
     Parameters = @{PackageIdentifier=$PackageIdentifier}
 }
+
+# hab svc unload (called in test.pester.ps1's AfterAll) only unloads the
+# service - it does not stop the supervisor itself. Start-Process launched
+# hab-sup as a detached background process above, so without explicitly
+# stopping it here, hab-sup/hab-launch keeps running after this script
+# "finishes", and the Buildkite Windows agent waits for the whole process
+# tree to exit - hanging the step until it's eventually killed by the
+# step timeout.
+Write-Output "--- :habicat: Stopping the supervisor"
+hab sup term 2>$null | Out-Null
+Start-Sleep 5
+Get-Process hab-launch -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process hab-sup -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+
 Exit $test_result.FailedCount

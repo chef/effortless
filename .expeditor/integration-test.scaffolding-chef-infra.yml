@@ -23,6 +23,19 @@
 #   See bin/ci/integration-test.sh and bin/ci/integration-test.ps1 for the
 #   full channel strategy explanation and pre-install mechanism details.
 #
+# WHY REAL PLATFORMS, NOT DOCKER:
+#   scaffolding-chef-infra ships platform-specific packages for x86_64-linux,
+#   aarch64-linux, and x86_64-windows. Testing loads each package as a real
+#   Habitat service via `hab sup run` + `hab svc load`, which exercises
+#   supervisor process/network/service-directory behavior that does not
+#   reliably reproduce inside (nested or emulated) Docker containers.
+#   Running one architecture from a container on a different host architecture
+#   also does not actually validate that architecture. Each step below runs
+#   directly on a real machine of its target architecture:
+#     - Linux x86_64:  Expeditor's native `linux` executor (real, single-use VM)
+#     - Linux aarch64: bare-metal ARM Buildkite queue (real ARM host)
+#     - Windows x86_64: Expeditor's native `windows` executor (real, single-use VM)
+#
 expeditor:
   defaults:
     buildkite:
@@ -32,15 +45,22 @@ expeditor:
           limit: 1
 
 steps:
-  - label: "[integration] :linux: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+  - label: "[integration] :linux: x86_64 :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
     command:
-      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci
+      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci x86_64-linux
     expeditor:
       executor:
-        docker:
+        linux:
           privileged: true
+          single-use: true
 
-  - label: "[integration] :windows: :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+  - label: "[integration] :linux: aarch64 :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
+    command:
+      - bin/ci/integration-test.sh scaffolding-chef-infra user-linux-chef19 ci aarch64-linux
+    agents:
+      queue: default-privileged-aarch64
+
+  - label: "[integration] :windows: x86_64 :habicat: scaffolding-chef-infra + chef-infra-client (Chef 19)"
     env:
       HAB_LICENSE: "accept-no-persist"
       HAB_STUDIO_SECRET_HAB_LICENSE: "accept-no-persist"
@@ -49,7 +69,15 @@ steps:
     command:
       - ./bin/ci/integration-test.ps1 scaffolding-chef-infra user-windows-chef19
     expeditor:
+      # The Windows executor may not have the aws CLI available (unlike the
+      # Linux/aarch64 machines, where integration-test.sh's AWS SSM lookup
+      # already works). Inject HAB_AUTH_TOKEN directly from Vault instead.
+      secrets:
+        HAB_AUTH_TOKEN:
+          path: account/static/habitat/chef-ci
+          field: auth_token
       executor:
-        docker:
-          host_os: windows
+        windows:
+          privileged: true
+          single-use: true
           shell: [ "powershell", "-Command" ]
