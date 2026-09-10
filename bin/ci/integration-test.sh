@@ -71,17 +71,9 @@ else
   SUDO=(sudo -E)
 fi
 
-# Fetch HAB_AUTH_TOKEN from AWS SSM if not already provided.
-if [[ -z "${HAB_AUTH_TOKEN:-}" ]]; then
-  echo "--- :key: Fetching HAB_AUTH_TOKEN from AWS SSM"
-  HAB_AUTH_TOKEN=$(aws ssm get-parameter \
-    --name 'habitat-prod-auth-token' \
-    --with-decryption \
-    --query Parameter.Value \
-    --output text \
-    --region "${AWS_REGION:-us-west-2}" 2>/dev/null) || HAB_AUTH_TOKEN=""
-fi
-export HAB_AUTH_TOKEN
+# HAB_AUTH_TOKEN is exported by .buildkite/hooks/pre-command in CI. Set it
+# yourself when running this script locally.
+export HAB_AUTH_TOKEN="${HAB_AUTH_TOKEN:-}"
 export HAB_STUDIO_SECRET_HAB_AUTH_TOKEN="${HAB_AUTH_TOKEN}"
 export HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL="${HAB_BLDR_CHANNEL}"
 export HAB_STUDIO_SECRET_GIT_CONFIG_COUNT=1
