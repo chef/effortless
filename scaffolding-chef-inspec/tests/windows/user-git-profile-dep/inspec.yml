@@ -1,7 +1,7 @@
 name: windows-audit
 title: Effortless Windows Audit
 maintainer: humans@habitat.sh
-copyright: Chef Software Inc.
+copyright: Copyright (c) 2019-2025 Progress Software Corporation and/or its subsidiaries or affiliates. All Rights Reserved.
 copyright_email: humans@habitat.sh
 license: Apache-2.0
 summary: Effortless Audit Windows Baseline
