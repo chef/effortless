@@ -67,3 +67,23 @@ If you are new to the `Effortless` pattern checkout some of the below examples a
 
 1. [Effortless Audit](examples/effortless_audit/Readme.md)
 1. [Effortless Config](examples/effortless_config/Readme.md)
+
+
+## Release
+
+We release `Effortless` as a set of Habitat packages. These packages are available from [Chef Habitat Builder](https://bldr.habitat.sh).
+
+### Release Packages
+
+[chef/scaffolding-chef-infra](https://bldr.habitat.sh/#/pkgs/chef/scaffolding-chef-infra/latest)
+
+[chef/scaffolding-chef-inspec](https://bldr.habitat.sh/#/pkgs/chef/scaffolding-chef-inspec/latest)
+
+
+## Documentation
+
+- [Chef Infra Docs](https://docs.chef.io/)
+- [Chef InSpec Docs](https://www.inspec.io/docs/)
+- [Chef Habitat Docs](https://habitat.sh/docs)
+- [Learn Chef](https://learn.chef.io/)
+- [Chef Software Inc. Website](https://www.chef.io/)
