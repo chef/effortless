@@ -198,7 +198,7 @@ function Invoke-DefaultInstall {
     "target_id": "{{ sys.member_id }}",
     "reporter": {
         "cli": {
-          "stdout": true
+          {{#if cfg.cli.stdout}}"stdout": true{{/if}}
         }{{#if cfg.output.json}},
         "json" : {
           "file" : "c:/hab/svc/$pkg_name/results.json",
