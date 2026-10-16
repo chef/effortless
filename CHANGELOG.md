@@ -1,9 +1,14 @@
-<!-- latest_release 0.26.3 -->
+<!-- latest_release unreleased -->
+## Unreleased
+
+#### Merged Pull Requests
+- Add Progress Chef Effortless license notice to LICENSE [#318](https://github.com/chef/effortless/pull/318) ([neha-p6](https://github.com/neha-p6))
+<!-- latest_release -->
+
 ## [v0.26.3](https://github.com/chef/effortless/tree/v0.26.3) (2026-09-03)
 
 #### Merged Pull Requests
 - Run integration-test pipeline on real per-arch platforms instead of Docker [#316](https://github.com/chef/effortless/pull/316) ([neha-p6](https://github.com/neha-p6))
-<!-- latest_release -->
 
 ## [v0.26.2](https://github.com/chef/effortless/tree/v0.26.2) (2026-09-01)
 
