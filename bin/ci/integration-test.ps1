@@ -69,8 +69,9 @@ $UNSTABLE_CHANNEL = "unstable"
 $env:HAB_STUDIO_SECRET_HAB_BLDR_CHANNEL = $env:HAB_BLDR_CHANNEL
 $env:HAB_STUDIO_SECRET_HAB_AUTH_TOKEN = $env:HAB_AUTH_TOKEN
 
-Write-Host "--- :habicat: Installing latest Habitat"
-Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/habitat-sh/habitat/main/components/hab/install.ps1) } -Channel stable"
+$HabVersion = if ($env:HAB_VERSION) { $env:HAB_VERSION } else { "2.1.23" }
+Write-Host "--- :habicat: Installing Habitat $HabVersion"
+Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/habitat-sh/habitat/main/components/hab/install.ps1) } -Version $HabVersion"
 
 Write-Host "--- :key: Generating fake origin key"
 hab origin key generate $env:HAB_ORIGIN
