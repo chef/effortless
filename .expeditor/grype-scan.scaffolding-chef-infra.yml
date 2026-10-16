@@ -1,0 +1,70 @@
+# Grype Scan Pipeline: scaffolding-chef-infra
+#
+# PURPOSE:
+#   Scans the PUBLISHED chef/scaffolding-chef-infra package with grype on every
+#   supported platform. For each platform the package is installed on top of a
+#   clean Habitat install and the entire hab tree (hab, the package, and all
+#   transitive dependencies) is scanned. Reports are attached to the build as
+#   Buildkite artifacts:
+#     grype-reports/<os>-<arch>-<package-identifier>.txt   (table)
+#     grype-reports/<os>-<arch>-<package-identifier>.json  (json)
+#
+# TRIGGER:
+#   Triggered by the buildkite_hab_build_group_published workload subscription
+#   in .expeditor/config.yml, alongside the integration-test pipeline, once
+#   habitat/build has published the packages to unstable.
+#
+# WHY A SEPARATE PIPELINE:
+#   habitat/build is an Expeditor built-in pipeline with no hook for extra
+#   post-build steps, so scan artifacts cannot be attached to those builds
+#   directly.
+#
+# This pipeline reports findings only; it does not gate promotion.
+#
+expeditor:
+  defaults:
+    buildkite:
+      timeout_in_minutes: 60
+      retry:
+        automatic:
+          limit: 1
+
+steps:
+  - label: "[grype] :linux: x86_64 :habicat: scaffolding-chef-infra"
+    command:
+      - bin/ci/grype-scan.sh scaffolding-chef-infra x86_64-linux
+    artifact_paths:
+      - "grype-reports/*"
+    expeditor:
+      executor:
+        linux:
+          privileged: true
+          single-use: true
+
+  - label: "[grype] :linux: aarch64 :habicat: scaffolding-chef-infra"
+    command:
+      - bin/ci/grype-scan.sh scaffolding-chef-infra aarch64-linux
+    artifact_paths:
+      - "grype-reports/*"
+    agents:
+      queue: default-privileged-aarch64
+
+  - label: "[grype] :windows: x86_64 :habicat: scaffolding-chef-infra"
+    env:
+      HAB_LICENSE: "accept-no-persist"
+    command:
+      - ./bin/ci/grype-scan.ps1 scaffolding-chef-infra
+    artifact_paths:
+      - "grype-reports/*"
+    expeditor:
+      # The Windows executor may not have the aws CLI available, so inject
+      # HAB_AUTH_TOKEN directly from Vault (same as the integration-test pipeline).
+      secrets:
+        HAB_AUTH_TOKEN:
+          path: account/static/habitat/chef-ci
+          field: auth_token
+      executor:
+        windows:
+          privileged: true
+          single-use: true
+          shell: [ "powershell", "-Command" ]
