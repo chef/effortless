@@ -2,6 +2,7 @@
 ## Unreleased
 
 #### Merged Pull Requests
+- Remove core/git, core/gcc, core/make from scaffolding-chef-infra runtime deps [#321](https://github.com/chef/effortless/pull/321) ([neha-p6](https://github.com/neha-p6))
 - Add Progress Chef Effortless license notice to LICENSE [#318](https://github.com/chef/effortless/pull/318) ([neha-p6](https://github.com/neha-p6))
 <!-- latest_release -->
 
