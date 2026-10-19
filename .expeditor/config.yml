@@ -30,6 +30,8 @@ pipelines:
   - verify:
       public: true
       definition: .expeditor/verify.scaffolding-chef-infra.yml
+  - grype-scan:
+      definition: .expeditor/grype-scan.scaffolding-chef-infra.yml
 
 artifact_channels:
   - unstable
@@ -71,11 +73,13 @@ subscriptions:
 
   # Promote the Habitat packages to current if the build was successful,
   # and trigger the integration test pipeline to validate the just-published
-  # packages against the latest chef-infra-client from unstable.
+  # packages against the latest chef-infra-client from unstable. Also trigger the
+  # grype scan pipeline, which publishes scan reports as build artifacts.
   - workload: buildkite_hab_build_group_published:{{agent_id}}:*
     actions:
       - built_in:promote_habitat_packages
       - trigger_pipeline:integration-test
+      - trigger_pipeline:grype-scan
 
   # Promote the Habitat packages to stable via `/expeditor promote effortless <VERSION>` in Slack
   - workload: project_promoted:{{agent_id}}:*
