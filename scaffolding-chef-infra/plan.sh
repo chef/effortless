@@ -7,8 +7,9 @@ pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
 pkg_upstream_url="https://www.chef.sh"
 pkg_deps=(
-  core/git
   core/ruby3_4
+)
+pkg_build_deps=(
   core/make
   core/gcc
 )
